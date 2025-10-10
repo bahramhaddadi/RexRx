@@ -1,0 +1,255 @@
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0;
+  position: relative;
+}
+
+/* Header */
+.header {
+  padding: 20px 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cart-btn {
+  background: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cart-btn i {
+  font-size: 20px;
+  color: #495057;
+}
+
+.login-btn {
+  background: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #495057;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #f8f9fa;
+}
+
+/* Carousel Section */
+.carousel-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+  position: relative;
+}
+
+.dotted-line {
+  width: 80%;
+  height: 2px;
+  background-image: repeating-linear-gradient(
+      to right,
+      #000 0,
+      #000 10px,
+      transparent 10px,
+      transparent 20px
+  );
+  margin: 20px 0;
+}
+
+.dotted-line-top {
+  margin-bottom: 40px;
+}
+
+.dotted-line-middle {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.dotted-line-bottom {
+  margin-top: 0;
+}
+
+.carousel-container {
+  width: 90%;
+  max-width: 1400px;
+  background: white;
+  border-radius: 16px;
+  padding: 60px 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+::ng-deep .custom-carousel .p-carousel-content {
+  padding: 20px 0;
+}
+
+::ng-deep .custom-carousel .p-carousel-prev,
+::ng-deep .custom-carousel .p-carousel-next {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #3B82F6;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-carousel .p-carousel-prev:hover,
+::ng-deep .custom-carousel .p-carousel-next:hover {
+  background: #2563EB;
+  transform: scale(1.1);
+}
+
+::ng-deep .custom-carousel .p-carousel-indicators {
+  padding: 1rem 0;
+}
+
+::ng-deep .custom-carousel .p-carousel-indicator button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d1d5db;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .custom-carousel .p-carousel-indicator.p-highlight button {
+  background: #3B82F6;
+  width: 14px;
+  height: 14px;
+}
+
+/* Category Cards */
+.category-card {
+  margin: 0 15px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-10px);
+}
+
+.card-content {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-content:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.card-image-container {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-placeholder {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 12px;
+}
+
+.card-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .carousel-container {
+    width: 95%;
+    padding: 40px 30px;
+  }
+
+  .card-content {
+    height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+  }
+
+  .carousel-container {
+    padding: 30px 20px;
+  }
+
+  .dotted-line {
+    width: 90%;
+  }
+
+  .card-content {
+    height: 340px;
+    padding: 25px 15px;
+  }
+
+  .card-title {
+    font-size: 20px;
+  }
+
+  .category-card {
+    margin: 0 10px;
+  }
+}

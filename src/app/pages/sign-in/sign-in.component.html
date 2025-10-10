@@ -1,0 +1,60 @@
+<div class="signin-container">
+  <div class="signin-card">
+    <h1 class="signin-title">Sign in to your account</h1>
+    <p class="signin-subtitle">
+      Don't have an account?<a href="#" class="signup-link" (click)="onSignUp(); $event.preventDefault()">Sign up</a>
+    </p>
+
+    <form class="signin-form">
+      <div class="field">
+        <input
+          type="email"
+          pInputText
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Email"
+          class="input-field"
+        />
+      </div>
+
+      <div class="field">
+        <p-password
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Password"
+          [toggleMask]="true"
+          [feedback]="false"
+          styleClass="input-field-password"
+          inputStyleClass="input-field"
+        ></p-password>
+      </div>
+
+      <div class="forgot-password-container">
+        <a href="#" class="forgot-password-link" (click)="onForgotPassword(); $event.preventDefault()">
+          Forgot password
+        </a>
+      </div>
+
+      <div class="button-container">
+        <p-button
+          label="Sign-in"
+          (onClick)="onSignIn()"
+          styleClass="signin-button"
+        ></p-button>
+      </div>
+    </form>
+
+    <div class="terms-container">
+      <p class="terms-text">
+        By continuing, you agree to and have read the
+        <a href="#" class="terms-link">Terms and Conditions</a>,
+        <a href="#" class="terms-link">Professional Disclosure</a>,
+        <a href="#" class="terms-link">Privacy Policy</a> and
+        <a href="#" class="terms-link">Telehealth Consent</a>
+      </p>
+      <p class="privacy-text">
+        We respect your privacy. All of your information is securely stored on our PIPEDA Compliant server.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="home-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-right">
+      <button class="cart-btn" (click)="onCartClick()">
+        <i class="pi pi-shopping-cart"></i>
+      </button>
+      <button class="login-btn" (click)="onLoginClick()">
+        Login
+      </button>
+    </div>
+  </div>
+
+  <!-- Carousel Section -->
+  <div class="carousel-section">
+
+    <div class="carousel-container">
+      <p-carousel
+        [value]="categories"
+        [numVisible]="4"
+        [numScroll]="1"
+        [circular]="true"
+        [autoplayInterval]="5000"
+        [responsiveOptions]="responsiveOptions"
+        styleClass="custom-carousel"
+      >
+        <ng-template let-category pTemplate="item">
+          <div class="category-card" (click)="onCategoryClick(category)">
+            <div class="card-content">
+              <h3 class="card-title">{{ category.title }}</h3>
+
+              <div class="card-image-container" *ngIf="category.image">
+                <img [src]="category.image" [alt]="category.title" class="card-image">
+              </div>
+
+              <div class="card-placeholder" *ngIf="!category.image"></div>
+
+              <p class="card-description">{{ category.description }}</p>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+
+  </div>
+</div>
