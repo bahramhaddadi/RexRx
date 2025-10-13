@@ -2,6 +2,10 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'home'
+  },
+  {
     path: 'sign-in',
     loadComponent: () => import('./pages/sign-in/sign-in.component').then(mod => mod.SignInComponent)
   },
