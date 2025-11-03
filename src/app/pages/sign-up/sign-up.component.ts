@@ -38,7 +38,7 @@ export class SignUpComponent {
   confirmPassword: string = '';
   selectedSource: HearAboutUs | null = null;
 
-  hearAboutUsOptions: HearAboutUs[] = [
+  readonly hearAboutUsOptions: HearAboutUs[] = [
     { label: 'Facebook', value: 'facebook' },
     { label: 'Instagram', value: 'instagram' },
     { label: 'X (Twitter)', value: 'twitter' },

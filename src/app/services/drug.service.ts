@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Drug, GetDrugListRequest } from '../models/drug.model';
@@ -8,7 +8,7 @@ import { ApiResponse } from '../models/drug-category.model';
   providedIn: 'root'
 })
 export class DrugService {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
   /**
    * Generates a random security session ID

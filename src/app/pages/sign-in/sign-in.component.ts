@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,6 +25,10 @@ import { CaptchaResponse } from '../../models/auth.model';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+  private readonly captchaService = inject(CaptchaService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   email: string = '';
   password: string = '';
   captchaCode: string = '';
@@ -34,12 +38,6 @@ export class SignInComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
   captchaLoading: boolean = false;
-
-  constructor(
-    private captchaService: CaptchaService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.loadCaptcha();

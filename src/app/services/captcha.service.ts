@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ApiService } from './api.service';
 import { CaptchaResponse } from '../models/auth.model';
@@ -7,9 +7,8 @@ import { CaptchaResponse } from '../models/auth.model';
   providedIn: 'root'
 })
 export class CaptchaService {
+  private readonly apiService = inject(ApiService);
   private readonly CAPTCHA_ENDPOINT = '/Pharma/Security/GetCaptcha';
-
-  constructor(private apiService: ApiService) {}
 
   /**
    * Get CAPTCHA image and reference ID

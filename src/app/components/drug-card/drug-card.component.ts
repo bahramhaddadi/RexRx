@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { Drug } from '../../models/drug.model';
@@ -11,5 +11,5 @@ import { Drug } from '../../models/drug.model';
   styleUrls: ['./drug-card.component.scss']
 })
 export class DrugCardComponent {
-  @Input() drug!: Drug;
+  drug = input.required<Drug>();
 }

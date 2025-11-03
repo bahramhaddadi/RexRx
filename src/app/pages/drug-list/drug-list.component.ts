@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DrugCardComponent } from '../../components/drug-card/drug-card.component';
@@ -20,18 +20,16 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrls: ['./drug-list.component.scss']
 })
 export class DrugListComponent implements OnInit {
+  private readonly drugService = inject(DrugService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
   drugs: Drug[] = [];
   filteredDrugs: Drug[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
   categoryId?: number;
   categoryName: string = '';
-
-  constructor(
-    private drugService: DrugService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

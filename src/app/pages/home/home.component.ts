@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
@@ -25,6 +25,9 @@ interface Category {
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  private readonly drugCategoryService = inject(DrugCategoryService);
+  private readonly router = inject(Router);
+
   categories: Category[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -51,11 +54,6 @@ export class HomeComponent implements OnInit {
       numScroll: 1
     }
   ];
-
-  constructor(
-    private drugCategoryService: DrugCategoryService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.loadDrugCategories();
