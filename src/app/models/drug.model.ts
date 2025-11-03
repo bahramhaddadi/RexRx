@@ -22,3 +22,21 @@ export interface GetDrugListRequest {
   securitySessionID: string;
   body: null;
 }
+
+export interface DrugDose {
+  itemId: string;
+  dose: string;
+  quantityInPack: number;
+  price: number;
+  imageUrl: string;
+  state: number;
+  id: number;
+  isSerializing: number;
+  rowCount: number;
+  pageCount: number;
+}
+
+export interface GetItemDoseListRequest {
+  securitySessionID: string;
+  body: string; // Drug eid
+}

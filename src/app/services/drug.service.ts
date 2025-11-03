@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -36,6 +36,23 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<Drug[]>>(
       '/Pharma/Drug/GetDrugList',
+      request
+    );
+  }
+
+  /**
+   * Fetches the list of available doses for a specific drug
+   * @param drugEid The drug's eid (unique identifier)
+   * @returns Observable of API response containing drug doses array
+   */
+  getItemDoseList(drugEid: string): Observable<ApiResponse<DrugDose[]>> {
+    const request: GetItemDoseListRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      body: drugEid
+    };
+
+    return this.apiService.post<ApiResponse<DrugDose[]>>(
+      '/Pharma/Drug/GetItemDoseList',
       request
     );
   }

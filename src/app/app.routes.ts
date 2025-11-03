@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/drug-list/drug-list.component').then(mod => mod.DrugListComponent)
   },
   {
+    path: 'drug-doses',
+    loadComponent: () => import('./pages/drug-dose-selection/drug-dose-selection.component').then(mod => mod.DrugDoseSelectionComponent)
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
