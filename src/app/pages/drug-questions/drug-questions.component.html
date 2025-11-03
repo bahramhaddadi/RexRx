@@ -1,0 +1,181 @@
+<div class="questions-container">
+  <!-- Header -->
+  <div class="header">
+    <p-button
+      icon="pi pi-arrow-right"
+      [text]="true"
+      styleClass="back-button"
+      (onClick)="onBackClick()">
+    </p-button>
+    <h1>{{ drugName }} - Questions</h1>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p-progressSpinner
+      styleClass="custom-spinner"
+      strokeWidth="4"
+      animationDuration="1s">
+    </p-progressSpinner>
+    <p>Loading questions...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <i class="pi pi-exclamation-triangle"></i>
+    <p>{{ errorMessage }}</p>
+    <p-button
+      label="Try Again"
+      icon="pi pi-refresh"
+      (onClick)="loadQuestions()">
+    </p-button>
+  </div>
+
+  <!-- Questions -->
+  <div *ngIf="!isLoading && !errorMessage && currentQuestion" class="question-content">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      <span>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</span>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="((currentQuestionIndex + 1) / questions.length) * 100"></div>
+      </div>
+    </div>
+
+    <!-- Question Card -->
+    <p-card class="question-card">
+      <div class="question-header">
+        <h2>{{ currentQuestion.title }}</h2>
+        <p *ngIf="currentQuestion.note" class="question-note">{{ currentQuestion.note }}</p>
+        <img *ngIf="currentQuestion.imageURL" [src]="currentQuestion.imageURL" alt="Question image" class="question-image">
+      </div>
+
+      <!-- Single Choice Question (Radio Buttons) -->
+      <div *ngIf="currentQuestion.questionTypeID === 1" class="choices-container">
+        <div *ngFor="let choice of currentQuestion.choices" class="choice-item">
+          <p-radioButton
+            [name]="'question_' + currentQuestion.id"
+            [value]="choice.id"
+            [(ngModel)]="currentQuestion.selectedChoiceId"
+            [inputId]="'choice_' + choice.id">
+          </p-radioButton>
+          <label [for]="'choice_' + choice.id" class="choice-label">
+            {{ choice.title }}
+          </label>
+
+          <!-- Extra Info Input for Single Choice -->
+          <div *ngIf="choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id" class="extra-info">
+            <label>{{ choice.extraInfoTitle }}</label>
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="currentQuestion.textAnswer"
+              [placeholder]="choice.extraInfoTitle || 'Enter details'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi Choice Question (Checkboxes) -->
+      <div *ngIf="currentQuestion.questionTypeID === 2" class="choices-container">
+        <div *ngFor="let choice of currentQuestion.choices" class="choice-item">
+          <p-checkbox
+            [name]="'question_' + currentQuestion.id"
+            [value]="choice.id"
+            [inputId]="'choice_' + choice.id"
+            [binary]="true"
+            [ngModel]="isChoiceSelected(choice.id)"
+            (onChange)="onMultiChoiceToggle(choice.id, $event)">
+          </p-checkbox>
+          <label [for]="'choice_' + choice.id" class="choice-label">
+            {{ choice.title }}
+          </label>
+
+          <!-- Extra Info Input for Multi Choice -->
+          <div *ngIf="choice.hasExtraInfo && isChoiceSelected(choice.id)" class="extra-info">
+            <label>{{ choice.extraInfoTitle }}</label>
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="currentQuestion.textAnswer"
+              [placeholder]="choice.extraInfoTitle || 'Enter details'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Text Input Question -->
+      <div *ngIf="currentQuestion.questionTypeID === 3" class="text-input-container">
+        <label>{{ currentQuestion.title }}</label>
+        <textarea
+          pInputTextarea
+          [(ngModel)]="currentQuestion.textAnswer"
+          [rows]="5"
+          placeholder="Type your answer here...">
+        </textarea>
+      </div>
+
+      <!-- Form Field Question (can have choices with input fields) -->
+      <div *ngIf="currentQuestion.questionTypeID === 4" class="choices-container">
+        <div *ngFor="let choice of currentQuestion.choices" class="choice-item">
+          <label>{{ choice.title }}</label>
+          <input
+            *ngIf="choice.hasExtraInfo"
+            type="text"
+            pInputText
+            [(ngModel)]="choice.extraInfoTitle"
+            [placeholder]="choice.extraInfoTitle || 'Enter details'">
+        </div>
+      </div>
+
+      <!-- Default rendering for unknown question types -->
+      <div *ngIf="currentQuestion.questionTypeID > 4" class="choices-container">
+        <p class="info-message">Question type {{ currentQuestion.questionTypeID }} - Custom rendering needed</p>
+        <div *ngFor="let choice of currentQuestion.choices" class="choice-item">
+          <p-radioButton
+            [name]="'question_' + currentQuestion.id"
+            [value]="choice.id"
+            [(ngModel)]="currentQuestion.selectedChoiceId"
+            [inputId]="'choice_' + choice.id">
+          </p-radioButton>
+          <label [for]="'choice_' + choice.id" class="choice-label">
+            {{ choice.title }}
+          </label>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <p-button
+        *ngIf="!isFirstQuestion()"
+        label="Previous"
+        icon="pi pi-arrow-left"
+        styleClass="p-button-outlined"
+        (onClick)="onPreviousQuestion()">
+      </p-button>
+
+      <p-button
+        *ngIf="!isLastQuestion()"
+        label="Next"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        [disabled]="!isCurrentQuestionAnswered()"
+        (onClick)="onNextQuestion()">
+      </p-button>
+
+      <p-button
+        *ngIf="isLastQuestion()"
+        label="Submit"
+        icon="pi pi-check"
+        iconPos="right"
+        styleClass="p-button-success"
+        [disabled]="!isCurrentQuestionAnswered()"
+        (onClick)="onSubmit()">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- No Questions Available -->
+  <div *ngIf="!isLoading && !errorMessage && questions.length === 0" class="no-questions">
+    <i class="pi pi-info-circle"></i>
+    <p>No questions available for this drug</p>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -53,6 +53,40 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<DrugDose[]>>(
       '/Pharma/Drug/GetItemDoseList',
+      request
+    );
+  }
+
+  /**
+   * Fetches the list of questions for a specific drug
+   * @param drugEid The drug's eid (unique identifier)
+   * @returns Observable of API response containing questions array
+   */
+  getQuestions(drugEid: string): Observable<ApiResponse<Question[]>> {
+    const request: GetQuestionsRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      body: drugEid
+    };
+
+    return this.apiService.post<ApiResponse<Question[]>>(
+      '/Pharma/Drug/GetQuestions',
+      request
+    );
+  }
+
+  /**
+   * Fetches the list of choices for a specific question
+   * @param questionId The question's ID
+   * @returns Observable of API response containing question choices array
+   */
+  getChoices(questionId: number): Observable<ApiResponse<QuestionChoice[]>> {
+    const request: GetChoicesRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      body: questionId
+    };
+
+    return this.apiService.post<ApiResponse<QuestionChoice[]>>(
+      '/Pharma/Drug/GetChoices',
       request
     );
   }

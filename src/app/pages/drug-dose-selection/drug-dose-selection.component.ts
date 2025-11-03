@@ -73,7 +73,14 @@ export class DrugDoseSelectionComponent implements OnInit {
    */
   onDoseSelect(dose: DrugDose): void {
     console.log('Selected dose:', dose);
-    // TODO: Add to cart or navigate to next step
+    // Navigate to questions page
+    this.router.navigate(['/drug-questions'], {
+      queryParams: {
+        eid: this.drugEid,
+        name: this.drugName,
+        doseId: dose.id
+      }
+    });
   }
 
   /**
