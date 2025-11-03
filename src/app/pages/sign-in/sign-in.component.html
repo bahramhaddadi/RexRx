@@ -6,6 +6,11 @@
     </p>
 
     <form class="signin-form">
+      <!-- Error Message -->
+      <div class="field" *ngIf="errorMessage">
+        <p-message severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
+      </div>
+
       <div class="field">
         <input
           type="email"
@@ -14,6 +19,7 @@
           name="email"
           placeholder="Email"
           class="input-field"
+          [disabled]="isLoading"
         />
       </div>
 
@@ -26,7 +32,42 @@
           [feedback]="false"
           styleClass="input-field-password"
           inputStyleClass="input-field"
+          [disabled]="isLoading"
         ></p-password>
+      </div>
+
+      <!-- CAPTCHA Section -->
+      <div class="field captcha-container">
+        <div class="captcha-image-wrapper">
+          <img
+            *ngIf="captchaImageUrl && !captchaLoading"
+            [src]="captchaImageUrl"
+            alt="CAPTCHA"
+            class="captcha-image"
+          />
+          <div *ngIf="captchaLoading" class="captcha-loading">
+            Loading CAPTCHA...
+          </div>
+          <button
+            type="button"
+            class="captcha-refresh-btn"
+            (click)="refreshCaptcha()"
+            [disabled]="captchaLoading || isLoading"
+            title="Refresh CAPTCHA"
+          >
+            ↻
+          </button>
+        </div>
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="captchaCode"
+          name="captchaCode"
+          placeholder="Enter CAPTCHA code"
+          class="input-field captcha-input"
+          [disabled]="isLoading"
+          autocomplete="off"
+        />
       </div>
 
       <div class="forgot-password-container">
@@ -37,9 +78,11 @@
 
       <div class="button-container">
         <p-button
-          label="Sign-in"
+          [label]="isLoading ? 'Signing in...' : 'Sign-in'"
           (onClick)="onSignIn()"
           styleClass="signin-button"
+          [disabled]="isLoading"
+          [loading]="isLoading"
         ></p-button>
       </div>
     </form>

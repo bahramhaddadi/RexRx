@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { MessageModule } from 'primeng/message';
+import { CaptchaService } from '../../services/captcha.service';
+import { AuthService } from '../../services/auth.service';
+import { CaptchaResponse } from '../../models/auth.model';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,24 +18,109 @@ import { PasswordModule } from 'primeng/password';
     FormsModule,
     InputTextModule,
     ButtonModule,
-    PasswordModule
+    PasswordModule,
+    MessageModule
   ],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
   email: string = '';
   password: string = '';
+  captchaCode: string = '';
+  captchaImageUrl: string = '';
+  captchaRefId: string = '';
 
-  onSignIn() {
-    console.log('Sign in clicked', { email: this.email, password: this.password });
+  isLoading: boolean = false;
+  errorMessage: string = '';
+  captchaLoading: boolean = false;
+
+  constructor(
+    private captchaService: CaptchaService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCaptcha();
   }
 
-  onForgotPassword() {
+  /**
+   * Load CAPTCHA image
+   */
+  loadCaptcha(): void {
+    this.captchaLoading = true;
+    this.errorMessage = '';
+
+    this.captchaService.getCaptcha().subscribe({
+      next: (response: CaptchaResponse) => {
+        this.captchaRefId = response.refId;
+        this.captchaImageUrl = this.captchaService.getCaptchaImageUrl(response.imageBase64);
+        this.captchaLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading CAPTCHA:', error);
+        this.errorMessage = 'Failed to load CAPTCHA. Please try again.';
+        this.captchaLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Refresh CAPTCHA image
+   */
+  refreshCaptcha(): void {
+    this.captchaCode = '';
+    this.loadCaptcha();
+  }
+
+  /**
+   * Handle sign in
+   */
+  onSignIn(): void {
+    // Clear previous error
+    this.errorMessage = '';
+
+    // Validate inputs
+    if (!this.email || !this.password || !this.captchaCode) {
+      this.errorMessage = 'Please fill in all fields';
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.authService.authenticate({
+      email: this.email,
+      password: this.password,
+      refId: this.captchaRefId,
+      captchaCode: this.captchaCode
+    }).subscribe({
+      next: (response) => {
+        if (response.exceptionCode === 0) {
+          // Success - navigate to home or dashboard
+          console.log('Authentication successful:', response);
+          this.router.navigate(['/home']);
+        } else {
+          // Authentication failed with error
+          this.errorMessage = response.exceptionMessage || 'Authentication failed';
+          this.refreshCaptcha();
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Authentication error:', error);
+        this.errorMessage = error.error?.exceptionMessage || 'Authentication failed. Please try again.';
+        this.refreshCaptcha();
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onForgotPassword(): void {
     console.log('Forgot password clicked');
   }
 
-  onSignUp() {
-    console.log('Sign up clicked');
+  onSignUp(): void {
+    this.router.navigate(['/sign-up']);
   }
 }
