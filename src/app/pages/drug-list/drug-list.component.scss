@@ -1,0 +1,122 @@
+.drug-list-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  .back-btn {
+    flex-shrink: 0;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+
+  .error-icon {
+    font-size: 3rem;
+    color: #e74c3c;
+  }
+
+  .error-message {
+    color: #666;
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
+.drug-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 1rem 0;
+
+  .drug-item {
+    min-height: 150px;
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+
+    .empty-icon {
+      font-size: 3rem;
+      color: #999;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 1200px) {
+  .drug-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .drug-list-container {
+    padding: 1rem;
+  }
+
+  .header {
+    .page-title {
+      font-size: 1.4rem;
+    }
+  }
+
+  .drug-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { DrugCategoryService } from '../../services/drug-category.service';
@@ -51,7 +52,10 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  constructor(private drugCategoryService: DrugCategoryService) {}
+  constructor(
+    private drugCategoryService: DrugCategoryService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadDrugCategories();
@@ -96,6 +100,12 @@ export class HomeComponent implements OnInit {
 
   onCategoryClick(category: Category) {
     console.log('Category clicked:', category);
+    this.router.navigate(['/drugs'], {
+      queryParams: {
+        categoryId: category.id,
+        categoryName: category.title
+      }
+    });
   }
 
   onLoginClick() {

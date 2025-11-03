@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home.component').then(mod => mod.HomeComponent)
   },
   {
+    path: 'drugs',
+    loadComponent: () => import('./pages/drug-list/drug-list.component').then(mod => mod.DrugListComponent)
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
