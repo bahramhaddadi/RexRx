@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
+import { DrugCategoryService } from '../../services/drug-category.service';
+import { DrugCategory } from '../../models/drug-category.model';
 
 interface Category {
   id: number;
@@ -23,6 +25,8 @@ interface Category {
 })
 export class HomeComponent implements OnInit {
   categories: Category[] = [];
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
   responsiveOptions = [
     {
@@ -47,39 +51,47 @@ export class HomeComponent implements OnInit {
     }
   ];
 
+  constructor(private drugCategoryService: DrugCategoryService) {}
+
   ngOnInit() {
-    this.categories = [
-      {
-        id: 1,
-        title: 'Category 1',
-        description: 'Category Description Lorem ipsum dolor sit amet',
-        image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop'
+    this.loadDrugCategories();
+  }
+
+  /**
+   * Loads drug categories from the API
+   */
+  private loadDrugCategories(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.drugCategoryService.getDrugCategoryList().subscribe({
+      next: (response) => {
+        if (response.errorCode === 0) {
+          this.categories = this.mapDrugCategoriesToCategories(response.body);
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to load categories';
+          console.error('API Error:', response.errorMessage);
+        }
+        this.isLoading = false;
       },
-      {
-        id: 2,
-        title: 'Weight Loss',
-        description: 'Better Wellness, Through Science',
-        image: ''
-      },
-      {
-        id: 3,
-        title: 'Category 3',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        image: ''
-      },
-      {
-        id: 4,
-        title: 'Category 4',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        image: ''
-      },
-      {
-        id: 5,
-        title: 'Category 5',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        image: ''
+      error: (error) => {
+        this.errorMessage = 'Failed to load categories. Please try again later.';
+        console.error('Error loading drug categories:', error);
+        this.isLoading = false;
       }
-    ];
+    });
+  }
+
+  /**
+   * Maps DrugCategory objects from API to Category objects for the UI
+   */
+  private mapDrugCategoriesToCategories(drugCategories: DrugCategory[]): Category[] {
+    return drugCategories.map(drugCategory => ({
+      id: drugCategory.id,
+      title: drugCategory.title,
+      description: drugCategory.note || '',
+      image: drugCategory.imageUrl || ''
+    }));
   }
 
   onCategoryClick(category: Category) {
