@@ -136,6 +136,76 @@
   text-decoration: underline;
 }
 
+// CAPTCHA Styles
+.captcha-container {
+  margin-bottom: 30px;
+}
+
+.captcha-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  min-height: 100px;
+}
+
+.captcha-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
+.captcha-loading {
+  color: #6c757d;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+}
+
+.captcha-refresh-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover:not(:disabled) {
+    background-color: #2563EB;
+    transform: rotate(180deg);
+  }
+
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:active:not(:disabled) {
+    transform: rotate(180deg) scale(0.95);
+  }
+}
+
+.captcha-input {
+  margin-top: 8px;
+}
+
 @media (max-width: 768px) {
   .signin-card {
     padding: 40px 30px;
@@ -143,5 +213,11 @@
 
   .signin-title {
     font-size: 28px;
+  }
+
+  .captcha-refresh-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
   }
 }
