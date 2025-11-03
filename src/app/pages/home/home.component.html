@@ -29,11 +29,13 @@
             <div class="card-content">
               <h3 class="card-title">{{ category.title }}</h3>
 
-              <div class="card-image-container" *ngIf="category.image">
-                <img [src]="category.image" [alt]="category.title" class="card-image">
-              </div>
-
-              <div class="card-placeholder" *ngIf="!category.image"></div>
+              @if (category.image) {
+                <div class="card-image-container">
+                  <img [src]="category.image" [alt]="category.title" class="card-image">
+                </div>
+              } @else {
+                <div class="card-placeholder"></div>
+              }
 
               <p class="card-description">{{ category.description }}</p>
             </div>

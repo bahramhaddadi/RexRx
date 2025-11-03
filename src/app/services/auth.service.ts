@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthRequest, AuthResponse } from '../models/auth.model';
@@ -7,13 +7,14 @@ import { AuthRequest, AuthResponse } from '../models/auth.model';
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly apiService = inject(ApiService);
   private readonly AUTH_ENDPOINT = '/Pharma/Security/Authenticate';
   private readonly SESSION_STORAGE_KEY = 'pharma_session';
 
   private sessionSubject = new BehaviorSubject<AuthResponse | null>(null);
   public session$ = this.sessionSubject.asObservable();
 
-  constructor(private apiService: ApiService) {
+  constructor() {
     // Load session from storage on initialization
     this.loadSessionFromStorage();
   }
