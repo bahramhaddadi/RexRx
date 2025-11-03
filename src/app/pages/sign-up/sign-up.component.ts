@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
@@ -28,6 +29,7 @@ interface HearAboutUs {
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent {
+  private readonly router = inject(Router);
   firstName: string = '';
   lastName: string = '';
   email: string = '';
@@ -65,6 +67,6 @@ export class SignUpComponent {
   }
 
   onLogIn() {
-    console.log('Navigate to login');
+    this.router.navigate(['/sign-in']);
   }
 }

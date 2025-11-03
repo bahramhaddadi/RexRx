@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthRequest, AuthResponse } from '../models/auth.model';
 
@@ -11,8 +11,15 @@ export class AuthService {
   private readonly AUTH_ENDPOINT = '/Pharma/Security/Authenticate';
   private readonly SESSION_STORAGE_KEY = 'pharma_session';
 
-  private sessionSubject = new BehaviorSubject<AuthResponse | null>(null);
-  public session$ = this.sessionSubject.asObservable();
+  // Modern Angular 17: Use signal instead of BehaviorSubject
+  private sessionSignal = signal<AuthResponse | null>(null);
+
+  // Public read-only signal
+  public readonly session = this.sessionSignal.asReadonly();
+
+  // Computed signals for common checks
+  public readonly isAuthenticated = computed(() => !!this.sessionSignal()?.sessionID);
+  public readonly sessionId = computed(() => this.sessionSignal()?.sessionID || null);
 
   constructor() {
     // Load session from storage on initialization
@@ -48,7 +55,7 @@ export class AuthService {
    * @param session - Session data
    */
   private setSession(session: AuthResponse): void {
-    this.sessionSubject.next(session);
+    this.sessionSignal.set(session);
     sessionStorage.setItem(this.SESSION_STORAGE_KEY, JSON.stringify(session));
   }
 
@@ -60,7 +67,7 @@ export class AuthService {
     if (storedSession) {
       try {
         const session = JSON.parse(storedSession);
-        this.sessionSubject.next(session);
+        this.sessionSignal.set(session);
       } catch (error) {
         console.error('Error parsing stored session:', error);
         this.clearSession();
@@ -73,30 +80,23 @@ export class AuthService {
    * @returns Current session or null
    */
   getSession(): AuthResponse | null {
-    return this.sessionSubject.value;
+    return this.sessionSignal();
   }
 
   /**
-   * Get the session ID
+   * Get the session ID (deprecated - use sessionId signal instead)
    * @returns Session ID or null
+   * @deprecated Use sessionId computed signal instead
    */
   getSessionId(): string | null {
-    return this.sessionSubject.value?.sessionID || null;
-  }
-
-  /**
-   * Check if user is authenticated
-   * @returns True if authenticated, false otherwise
-   */
-  isAuthenticated(): boolean {
-    return !!this.sessionSubject.value?.sessionID;
+    return this.sessionSignal()?.sessionID || null;
   }
 
   /**
    * Clear the current session (logout)
    */
   clearSession(): void {
-    this.sessionSubject.next(null);
+    this.sessionSignal.set(null);
     sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
   }
 
