@@ -1,0 +1,33 @@
+<div class="drug-list-container">
+  <!-- Header -->
+  <div class="header">
+    <button pButton type="button" icon="pi pi-arrow-left" class="back-btn" (click)="onBackClick()" label="Back"></button>
+    <h1 class="page-title">{{ categoryName }}</h1>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading drugs...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="errorMessage && !isLoading">
+    <i class="pi pi-exclamation-triangle error-icon"></i>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button pButton type="button" label="Retry" (click)="loadDrugs()"></button>
+  </div>
+
+  <!-- Drug Grid -->
+  <div class="drug-grid" *ngIf="!isLoading && !errorMessage">
+    <div class="drug-item" *ngFor="let drug of filteredDrugs" (click)="onDrugClick(drug)">
+      <app-drug-card [drug]="drug"></app-drug-card>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredDrugs.length === 0">
+      <i class="pi pi-inbox empty-icon"></i>
+      <p>No drugs found in this category.</p>
+    </div>
+  </div>
+</div>
