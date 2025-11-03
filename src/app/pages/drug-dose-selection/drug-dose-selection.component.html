@@ -1,0 +1,67 @@
+<div class="dose-selection-container">
+  <!-- Header -->
+  <div class="header">
+    <p-button
+      icon="pi pi-arrow-right"
+      [text]="true"
+      styleClass="back-button"
+      (onClick)="onBackClick()">
+    </p-button>
+    <h1>{{ drugName }}</h1>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p-progressSpinner
+      styleClass="custom-spinner"
+      strokeWidth="4"
+      animationDuration="1s">
+    </p-progressSpinner>
+    <p>Loading doses...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <i class="pi pi-exclamation-triangle"></i>
+    <p>{{ errorMessage }}</p>
+    <p-button
+      label="Try Again"
+      icon="pi pi-refresh"
+      (onClick)="loadDoses()">
+    </p-button>
+  </div>
+
+  <!-- Dose List -->
+  <div *ngIf="!isLoading && !errorMessage" class="dose-grid">
+    <p-card
+      *ngFor="let dose of doses"
+      class="dose-card"
+      (click)="onDoseSelect(dose)">
+      <div class="dose-content">
+        <div class="dose-header">
+          <h3>{{ dose.dose }}</h3>
+          <span class="price">{{ dose.price | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="dose-details">
+          <p class="quantity">
+            <i class="pi pi-box"></i>
+            Quantity: {{ dose.quantityInPack }}
+          </p>
+        </div>
+        <div class="dose-footer">
+          <p-button
+            label="Select"
+            icon="pi pi-check"
+            styleClass="p-button-sm">
+          </p-button>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- No Doses Available -->
+  <div *ngIf="!isLoading && !errorMessage && doses.length === 0" class="no-doses">
+    <i class="pi pi-info-circle"></i>
+    <p>No doses available for this drug</p>
+  </div>
+</div>

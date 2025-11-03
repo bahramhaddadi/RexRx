@@ -84,10 +84,14 @@ export class DrugListComponent implements OnInit {
   }
 
   /**
-   * Handles drug card click
+   * Handles drug card click - navigates to dose selection page
    */
   onDrugClick(drug: Drug): void {
-    console.log('Drug clicked:', drug);
-    // TODO: Navigate to drug details page
+    this.router.navigate(['/drug-doses'], {
+      queryParams: {
+        eid: drug.eid,
+        name: drug.title
+      }
+    });
   }
 }
