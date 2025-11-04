@@ -1,4 +1,277 @@
-/* You can add global styles to this file, and also import other style files */
+/* Minimal Theme - Global Styles */
+
+// Import theme variables first
+@import "styles/theme-variables";
+
+// Import PrimeNG base styles (using minimal Lara Light theme)
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
+
+// ========================================
+// GLOBAL RESETS & BASE STYLES
+// ========================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  color: $gray-800;
+  background-color: $gray-50;
+  min-height: 100vh;
+}
+
+// ========================================
+// TYPOGRAPHY - Clean and minimal
+// ========================================
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-heading;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+  color: $primary-color;
+  margin-bottom: $spacing-md;
+}
+
+h1 { font-size: $font-size-3xl; }
+h2 { font-size: $font-size-2xl; }
+h3 { font-size: $font-size-xl; }
+h4 { font-size: $font-size-lg; }
+h5 { font-size: $font-size-base; }
+h6 { font-size: $font-size-sm; }
+
+p {
+  margin-bottom: $spacing-sm;
+  color: $gray-700;
+}
+
+a {
+  color: $accent-color;
+  text-decoration: none;
+  transition: color $transition-base;
+
+  &:hover {
+    color: $accent-hover;
+  }
+}
+
+// ========================================
+// PRIMENG COMPONENT OVERRIDES - Minimal style
+// ========================================
+
+// Cards - Cleaner, more minimal
+.p-card {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  transition: all $transition-base;
+
+  &:hover {
+    box-shadow: $card-shadow-hover;
+  }
+
+  .p-card-body {
+    padding: $card-padding;
+  }
+
+  .p-card-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $primary-color;
+    margin-bottom: $spacing-sm;
+  }
+
+  .p-card-subtitle {
+    color: $gray-600;
+    margin-bottom: $spacing-md;
+  }
+
+  .p-card-content {
+    padding: 0;
+    color: $gray-700;
+  }
+}
+
+// Buttons - Clean, minimal style
+.p-button {
+  background: $accent-color;
+  border: none;
+  color: $white;
+  padding: $button-padding-y $button-padding-x;
+  font-size: $font-size-base;
+  font-weight: $button-font-weight;
+  border-radius: $button-border-radius;
+  transition: all $transition-base;
+  box-shadow: none;
+
+  &:hover {
+    background: $accent-hover;
+    box-shadow: none;
+    transform: none;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+  }
+
+  &.p-button-secondary {
+    background: $white;
+    color: $primary-color;
+    border: 1px solid $border-color;
+
+    &:hover {
+      background: $gray-100;
+      border-color: $gray-400;
+    }
+  }
+
+  &.p-button-outlined {
+    background: transparent;
+    border: 1px solid $accent-color;
+    color: $accent-color;
+
+    &:hover {
+      background: $accent-light;
+    }
+  }
+
+  &.p-button-text {
+    background: transparent;
+    color: $accent-color;
+    border: none;
+
+    &:hover {
+      background: $accent-light;
+    }
+  }
+}
+
+// Input fields - Minimal borders and focus
+.p-inputtext {
+  background: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  padding: $input-padding-y $input-padding-x;
+  font-size: $input-font-size;
+  color: $gray-800;
+  transition: all $transition-base;
+
+  &:focus {
+    border-color: $input-focus-border;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $gray-500;
+  }
+}
+
+// Dropdown - Cleaner style
+.p-dropdown {
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  transition: all $transition-base;
+
+  &:not(.p-disabled):hover {
+    border-color: $gray-400;
+  }
+
+  &:not(.p-disabled).p-focus {
+    border-color: $input-focus-border;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+}
+
+// Radio & Checkbox - Minimal accent
+.p-radiobutton .p-radiobutton-box,
+.p-checkbox .p-checkbox-box {
+  border-color: $input-border;
+
+  &.p-highlight {
+    background: $accent-color;
+    border-color: $accent-color;
+  }
+}
+
+// Progress Spinner - Minimal
+.p-progress-spinner {
+  .p-progress-spinner-circle {
+    stroke: $accent-color;
+  }
+}
+
+// Messages - Clean, subtle
+.p-message {
+  border-radius: $border-radius-md;
+  border: 1px solid;
+
+  &.p-message-success {
+    background: $success-light;
+    border-color: $success-color;
+    color: darken($success-color, 10%);
+  }
+
+  &.p-message-error {
+    background: $error-light;
+    border-color: $error-color;
+    color: darken($error-color, 10%);
+  }
+
+  &.p-message-warn {
+    background: $warning-light;
+    border-color: $warning-color;
+    color: darken($warning-color, 10%);
+  }
+
+  &.p-message-info {
+    background: $info-light;
+    border-color: $info-color;
+    color: darken($info-color, 10%);
+  }
+}
+
+// ========================================
+// UTILITY CLASSES
+// ========================================
+
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: $spacing-xs; }
+.mt-2 { margin-top: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
+.mt-4 { margin-top: $spacing-lg; }
+.mt-5 { margin-top: $spacing-xl; }
+
+.mb-1 { margin-bottom: $spacing-xs; }
+.mb-2 { margin-bottom: $spacing-sm; }
+.mb-3 { margin-bottom: $spacing-md; }
+.mb-4 { margin-bottom: $spacing-lg; }
+.mb-5 { margin-bottom: $spacing-xl; }
+
+.p-1 { padding: $spacing-xs; }
+.p-2 { padding: $spacing-sm; }
+.p-3 { padding: $spacing-md; }
+.p-4 { padding: $spacing-lg; }
+.p-5 { padding: $spacing-xl; }

@@ -1,193 +1,187 @@
+@import "../../styles/theme-variables";
+
+// Minimal Home Page Design
 .home-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: $white;
   padding: 0;
   position: relative;
 }
 
-/* Header */
+/* Header - Clean and minimal */
 .header {
-  padding: 20px 40px;
+  padding: $spacing-lg $spacing-xl;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  background: $white;
+  border-bottom: 1px solid $gray-200;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: $spacing-sm;
 }
 
 .cart-btn {
-  background: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
+  background: $white;
+  border: 1px solid $gray-300;
+  padding: 0.625rem 1rem;
+  border-radius: $border-radius-md;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+  transition: all $transition-base;
 
-.cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  &:hover {
+    background: $gray-100;
+    border-color: $gray-400;
+  }
 }
 
 .cart-btn i {
-  font-size: 20px;
-  color: #495057;
+  font-size: 1.25rem;
+  color: $gray-700;
 }
 
 .login-btn {
-  background: white;
+  background: $accent-color;
   border: none;
-  padding: 10px 30px;
-  border-radius: 8px;
+  padding: 0.625rem 1.5rem;
+  border-radius: $border-radius-md;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  color: #495057;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $white;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $accent-hover;
+  }
 }
 
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background: #f8f9fa;
-}
-
-/* Carousel Section */
+/* Carousel Section - Clean minimal design */
 .carousel-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 100px);
-  padding: 40px 20px;
+  padding: $spacing-3xl $spacing-lg;
   position: relative;
+  background: $gray-50;
 }
 
 .dotted-line {
-  width: 80%;
-  height: 2px;
-  background-image: repeating-linear-gradient(
-      to right,
-      #000 0,
-      #000 10px,
-      transparent 10px,
-      transparent 20px
-  );
-  margin: 20px 0;
+  display: none; // Remove dotted lines for cleaner look
 }
 
-.dotted-line-top {
-  margin-bottom: 40px;
-}
-
-.dotted-line-middle {
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
+.dotted-line-top,
+.dotted-line-middle,
 .dotted-line-bottom {
-  margin-top: 0;
+  display: none;
 }
 
 .carousel-container {
-  width: 90%;
-  max-width: 1400px;
-  background: white;
-  border-radius: 16px;
-  padding: 60px 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: $container-max-width;
+  background: $white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-3xl $spacing-xl;
+  box-shadow: $shadow-sm;
+  border: 1px solid $gray-200;
 }
 
+// Carousel controls - minimal style
 ::ng-deep .custom-carousel .p-carousel-content {
-  padding: 20px 0;
+  padding: $spacing-lg 0;
 }
 
 ::ng-deep .custom-carousel .p-carousel-prev,
 ::ng-deep .custom-carousel .p-carousel-next {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
-  background: #3B82F6;
-  color: white;
-  transition: all 0.3s ease;
-}
+  background: $white;
+  color: $accent-color;
+  border: 1px solid $gray-300;
+  transition: all $transition-base;
 
-::ng-deep .custom-carousel .p-carousel-prev:hover,
-::ng-deep .custom-carousel .p-carousel-next:hover {
-  background: #2563EB;
-  transform: scale(1.1);
+  &:hover {
+    background: $accent-color;
+    color: $white;
+    border-color: $accent-color;
+  }
 }
 
 ::ng-deep .custom-carousel .p-carousel-indicators {
-  padding: 1rem 0;
+  padding: $spacing-md 0;
 }
 
 ::ng-deep .custom-carousel .p-carousel-indicator button {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #d1d5db;
-  transition: all 0.3s ease;
+  background: $gray-300;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $gray-400;
+  }
 }
 
 ::ng-deep .custom-carousel .p-carousel-indicator.p-highlight button {
-  background: #3B82F6;
-  width: 14px;
-  height: 14px;
+  background: $accent-color;
+  width: 10px;
+  height: 10px;
 }
 
-/* Category Cards */
+/* Category Cards - Clean minimal design */
 .category-card {
-  margin: 0 15px;
+  margin: 0 $spacing-sm;
   cursor: pointer;
-  transition: transform 0.3s ease;
-}
+  transition: transform $transition-base;
 
-.category-card:hover {
-  transform: translateY(-10px);
+  &:hover {
+    transform: translateY(-4px);
+  }
 }
 
 .card-content {
-  background: white;
-  border: 2px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 30px 20px;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl $spacing-lg;
   text-align: center;
-  height: 380px;
+  height: 360px;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+  transition: all $transition-base;
+  box-shadow: $shadow-xs;
 
-.card-content:hover {
-  border-color: #3B82F6;
-  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+  &:hover {
+    border-color: $accent-color;
+    box-shadow: $shadow-md;
+  }
 }
 
 .card-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 20px 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $primary-color;
+  margin: 0 0 $spacing-md 0;
+  font-family: $font-family-heading;
 }
 
 .card-image-container {
   width: 100%;
-  height: 200px;
-  margin-bottom: 20px;
-  border-radius: 12px;
+  height: 180px;
+  margin-bottom: $spacing-md;
+  border-radius: $border-radius-md;
   overflow: hidden;
+  background: $gray-100;
 }
 
 .card-image {
@@ -198,16 +192,20 @@
 
 .card-placeholder {
   width: 100%;
-  height: 200px;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  border-radius: 12px;
+  height: 180px;
+  margin-bottom: $spacing-md;
+  background: $gray-100;
+  border-radius: $border-radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $gray-400;
 }
 
 .card-description {
-  font-size: 14px;
-  color: #6b7280;
-  line-height: 1.6;
+  font-size: $font-size-sm;
+  color: $gray-600;
+  line-height: $line-height-normal;
   margin: 0;
   flex-grow: 1;
   display: flex;
@@ -215,41 +213,68 @@
   justify-content: center;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
+/* Responsive - Minimal design */
+@media (max-width: $breakpoint-lg) {
   .carousel-container {
-    width: 95%;
-    padding: 40px 30px;
-  }
-
-  .card-content {
-    height: 360px;
-  }
-}
-
-@media (max-width: 768px) {
-  .header {
-    padding: 15px 20px;
-  }
-
-  .carousel-container {
-    padding: 30px 20px;
-  }
-
-  .dotted-line {
-    width: 90%;
+    padding: $spacing-xl $spacing-lg;
   }
 
   .card-content {
     height: 340px;
-    padding: 25px 15px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .header {
+    padding: $spacing-md $spacing-lg;
+  }
+
+  .carousel-section {
+    padding: $spacing-xl $spacing-md;
+  }
+
+  .carousel-container {
+    padding: $spacing-lg $spacing-md;
+  }
+
+  .card-content {
+    height: 320px;
+    padding: $spacing-lg $spacing-md;
   }
 
   .card-title {
-    font-size: 20px;
+    font-size: $font-size-lg;
+  }
+
+  .card-image-container,
+  .card-placeholder {
+    height: 160px;
   }
 
   .category-card {
-    margin: 0 10px;
+    margin: 0 $spacing-xs;
+  }
+
+  .login-btn {
+    padding: 0.5rem 1rem;
+    font-size: $font-size-sm;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .header {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .carousel-section {
+    padding: $spacing-lg $spacing-sm;
+  }
+
+  .carousel-container {
+    padding: $spacing-md;
+  }
+
+  .card-content {
+    height: 300px;
   }
 }

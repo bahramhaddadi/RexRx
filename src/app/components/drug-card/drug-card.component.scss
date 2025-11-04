@@ -1,18 +1,26 @@
+@import "../../styles/theme-variables";
+
+// Minimal Drug Card Design
 .drug-card {
   height: 100%;
 
   ::ng-deep .p-card {
     height: 100%;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all $transition-base;
+    background: $white;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-xs;
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+      border-color: $accent-color;
     }
 
     .p-card-body {
-      padding: 1.5rem;
+      padding: $spacing-lg;
     }
   }
 }
@@ -20,20 +28,21 @@
 .drug-card-content {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $spacing-sm;
 }
 
 .drug-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $primary-color;
   margin: 0;
-  line-height: 1.4;
+  line-height: $line-height-tight;
 }
 
 .drug-brand {
-  font-size: 0.95rem;
-  color: #666;
+  font-size: $font-size-sm;
+  color: $gray-600;
   margin: 0;
-  font-style: italic;
+  font-style: normal;
+  font-weight: $font-weight-normal;
 }
