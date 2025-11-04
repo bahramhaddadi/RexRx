@@ -1,24 +1,31 @@
+@import "../../../styles/theme-variables";
+
+// Minimal Dose Selection Page Design
 .dose-selection-container {
-  padding: 1.5rem;
-  max-width: 1400px;
+  padding: $spacing-xl;
+  max-width: $container-max-width;
   margin: 0 auto;
   direction: rtl;
+  min-height: 100vh;
+  background: $gray-50;
 
   .header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $gray-300;
 
     h1 {
       margin: 0;
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: var(--text-color);
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
+      color: $primary-color;
     }
 
     .back-button {
-      font-size: 1.25rem;
+      font-size: $font-size-xl;
     }
   }
 
@@ -28,11 +35,11 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: 1rem;
+    gap: $spacing-md;
 
     p {
-      color: var(--text-color-secondary);
-      font-size: 1rem;
+      color: $gray-600;
+      font-size: $font-size-base;
     }
   }
 
@@ -42,59 +49,65 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: 1rem;
+    gap: $spacing-md;
     text-align: center;
 
     i {
       font-size: 3rem;
-      color: var(--red-500);
+      color: $error-color;
     }
 
     p {
-      color: var(--text-color-secondary);
-      font-size: 1rem;
+      color: $gray-700;
+      font-size: $font-size-base;
     }
   }
 
   .dose-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    gap: $grid-gap;
 
     .dose-card {
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all $transition-base;
       height: 100%;
+      background: $white;
+      border: 1px solid $gray-300;
+      border-radius: $border-radius-lg;
+      box-shadow: $shadow-xs;
 
       &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+        border-color: $accent-color;
       }
 
       .dose-content {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: $spacing-md;
         height: 100%;
+        padding: $spacing-lg;
 
         .dose-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--surface-border);
+          padding-bottom: $spacing-md;
+          border-bottom: 1px solid $gray-200;
 
           h3 {
             margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-size: $font-size-xl;
+            font-weight: $font-weight-semibold;
+            color: $primary-color;
           }
 
           .price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--green-600);
+            font-size: $font-size-lg;
+            font-weight: $font-weight-bold;
+            color: $success-color;
           }
         }
 
@@ -104,12 +117,13 @@
           .quantity {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: $spacing-sm;
             margin: 0;
-            color: var(--text-color-secondary);
+            color: $gray-600;
+            font-size: $font-size-base;
 
             i {
-              color: var(--primary-color);
+              color: $accent-color;
             }
           }
         }
@@ -117,8 +131,8 @@
         .dose-footer {
           display: flex;
           justify-content: flex-end;
-          padding-top: 1rem;
-          border-top: 1px solid var(--surface-border);
+          padding-top: $spacing-md;
+          border-top: 1px solid $gray-200;
         }
       }
     }
@@ -130,34 +144,65 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: 1rem;
+    gap: $spacing-md;
     text-align: center;
 
     i {
       font-size: 3rem;
-      color: var(--text-color-secondary);
+      color: $gray-400;
     }
 
     p {
-      color: var(--text-color-secondary);
-      font-size: 1.1rem;
+      color: $gray-600;
+      font-size: $font-size-lg;
     }
   }
 }
 
 // Responsive Design
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .dose-selection-container {
-    padding: 1rem;
+    padding: $spacing-lg;
 
     .header {
       h1 {
-        font-size: 1.5rem;
+        font-size: $font-size-xl;
       }
     }
 
     .dose-grid {
       grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .dose-selection-container {
+    padding: $spacing-md;
+
+    .header {
+      h1 {
+        font-size: $font-size-lg;
+      }
+    }
+
+    .dose-grid {
+      .dose-card {
+        .dose-content {
+          padding: $spacing-md;
+
+          .dose-header {
+            h3 {
+              font-size: $font-size-lg;
+            }
+
+            .price {
+              font-size: $font-size-base;
+            }
+          }
+        }
+      }
     }
   }
 }
