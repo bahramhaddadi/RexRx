@@ -107,7 +107,7 @@ export class HomeComponent implements OnInit {
   }
 
   onLoginClick() {
-    console.log('Login clicked');
+    this.router.navigate(['/login']);
   }
 
   onCartClick() {
