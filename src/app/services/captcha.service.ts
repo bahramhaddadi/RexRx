@@ -15,7 +15,7 @@ export class CaptchaService {
    * @returns Observable with CAPTCHA data
    */
   getCaptcha(): Observable<CaptchaResponse> {
-    return this.apiService.post<string[]>(this.CAPTCHA_ENDPOINT, '').pipe(
+    return this.apiService.get<string[]>(this.CAPTCHA_ENDPOINT).pipe(
       map(response => ({
         refId: response[0],
         imageBase64: response[1]
