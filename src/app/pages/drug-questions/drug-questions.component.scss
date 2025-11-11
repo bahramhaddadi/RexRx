@@ -1,6 +1,5 @@
 @import "../../../styles/theme-variables";
 
-// Minimal Drug Questions Page Design
 .questions-container {
   max-width: 800px;
   margin: 0 auto;
@@ -19,10 +18,7 @@
     .back-button {
       transform: rotate(180deg);
       transition: background-color $transition-base;
-
-      &:hover {
-        background-color: $gray-100;
-      }
+      &:hover { background-color: $gray-100; }
     }
 
     h1 {
@@ -33,39 +29,38 @@
     }
   }
 
-  .loading-container {
+  .loading-container, .error-container, .no-questions {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: $spacing-3xl 0;
-    gap: $spacing-md;
+    text-align: center;
 
     p {
       color: $gray-600;
       font-size: $font-size-base;
     }
-  }
-
-  .error-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: $spacing-xl;
-    text-align: center;
-    background-color: $error-light;
-    border-radius: $border-radius-lg;
-    border: 1px solid $error-color;
 
     i {
       font-size: 3rem;
-      color: $error-color;
       margin-bottom: $spacing-md;
     }
+  }
 
+  .loading-container {
+    padding: $spacing-3xl 0;
+    gap: $spacing-md;
+  }
+
+  .error-container {
+    padding: $spacing-xl;
+    background: $error-light;
+    border-radius: $border-radius-lg;
+    border: 1px solid $error-color;
+
+    i { color: $error-color; }
     p {
-      color: darken($error-color, 15%);
+      color: $error-color;
       margin-bottom: $spacing-md;
       font-size: $font-size-lg;
     }
@@ -84,11 +79,9 @@
       }
 
       .progress-bar {
-        width: 100%;
         height: 6px;
-        background-color: $gray-200;
+        background: $gray-200;
         border-radius: $border-radius-sm;
-        overflow: hidden;
 
         .progress-fill {
           height: 100%;
@@ -124,7 +117,6 @@
 
         .question-image {
           max-width: 100%;
-          height: auto;
           margin-top: $spacing-md;
           border-radius: $border-radius-md;
         }
@@ -144,19 +136,16 @@
           border-radius: $border-radius-md;
           transition: all $transition-base;
           flex-wrap: wrap;
-          background: $white;
 
           &:hover {
             border-color: $accent-color;
-            background-color: $gray-50;
+            background: $gray-50;
           }
 
           .choice-label {
             flex: 1;
             cursor: pointer;
             color: $gray-800;
-            font-size: $font-size-base;
-            line-height: $line-height-normal;
             margin: 0;
           }
 
@@ -164,67 +153,53 @@
             width: 100%;
             margin-top: $spacing-md;
             padding-left: $spacing-xl;
-
-            label {
-              display: block;
-              margin-bottom: $spacing-sm;
-              color: $gray-700;
-              font-size: $font-size-sm;
-              font-weight: $font-weight-medium;
-            }
-
-            input,
-            textarea {
-              width: 100%;
-              padding: $input-padding-y $input-padding-x;
-              border: 1px solid $input-border;
-              border-radius: $input-border-radius;
-              font-size: $font-size-base;
-              font-family: $font-family-base;
-
-              &:focus {
-                outline: none;
-                border-color: $input-focus-border;
-                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-              }
-            }
           }
         }
       }
 
-      .text-input-container {
-        label {
-          display: block;
-          margin-bottom: $spacing-sm;
-          color: $gray-800;
-          font-weight: $font-weight-medium;
-          font-size: $font-size-base;
-        }
+      .text-input-container label {
+        display: block;
+        margin-bottom: $spacing-sm;
+        color: $gray-800;
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+      }
 
-        textarea {
-          width: 100%;
-          resize: vertical;
-          min-height: 120px;
-          padding: $input-padding-y $input-padding-x;
-          border: 1px solid $input-border;
-          border-radius: $input-border-radius;
-          font-size: $font-size-base;
-          font-family: $font-family-base;
+      .choice-item .extra-info label {
+        display: block;
+        margin-bottom: $spacing-sm;
+        color: $gray-700;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+      }
 
-          &:focus {
-            outline: none;
-            border-color: $input-focus-border;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-          }
+      .text-input-container textarea,
+      .choice-item .extra-info input,
+      .choice-item .extra-info textarea {
+        width: 100%;
+        padding: $input-padding-y $input-padding-x;
+        border: 1px solid $input-border;
+        border-radius: $input-border-radius;
+        font: $font-size-base $font-family-base;
+
+        &:focus {
+          outline: 0;
+          border-color: $input-focus-border;
+          box-shadow: 0 0 0 3px rgba(52,152,219,.1);
         }
+      }
+
+      .text-input-container textarea {
+        resize: vertical;
+        min-height: 120px;
       }
 
       .info-message {
         padding: $spacing-md;
-        background-color: $info-light;
+        background: $info-light;
         border: 1px solid $info-color;
         border-radius: $border-radius-md;
-        color: darken($info-color, 15%);
+        color: $info-color;
         margin-bottom: $spacing-md;
         font-size: $font-size-sm;
       }
@@ -239,74 +214,35 @@
       p-button {
         flex: 1;
         max-width: 200px;
-
-        &:only-child {
-          margin-left: auto;
-        }
+        &:only-child { margin-left: auto; }
       }
     }
   }
 
   .no-questions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     padding: $spacing-3xl;
-    text-align: center;
-    background-color: $white;
+    background: $white;
     border-radius: $border-radius-lg;
     border: 1px solid $gray-300;
 
-    i {
-      font-size: 3rem;
-      color: $gray-400;
-      margin-bottom: $spacing-md;
-    }
-
-    p {
-      color: $gray-700;
-      font-size: $font-size-lg;
-    }
+    i { color: $gray-400; }
+    p { color: $gray-700; }
   }
 }
 
-// Responsive Design
 @media (max-width: $breakpoint-md) {
   .questions-container {
     padding: $spacing-lg;
-
-    .header {
-      h1 {
-        font-size: $font-size-xl;
-      }
-    }
-
+    .header h1 { font-size: $font-size-xl; }
     .question-content {
       .question-card {
         padding: $spacing-lg;
-
-        .question-header {
-          h2 {
-            font-size: $font-size-lg;
-          }
-        }
-
-        .choices-container {
-          .choice-item {
-            .extra-info {
-              padding-left: 0;
-            }
-          }
-        }
+        .question-header h2 { font-size: $font-size-lg; }
+        .choices-container .choice-item .extra-info { padding-left: 0; }
       }
-
       .navigation-buttons {
         flex-direction: column;
-
-        p-button {
-          max-width: 100%;
-        }
+        p-button { max-width: 100%; }
       }
     }
   }
@@ -315,32 +251,16 @@
 @media (max-width: $breakpoint-sm) {
   .questions-container {
     padding: $spacing-md;
-
-    .header {
-      h1 {
-        font-size: $font-size-lg;
+    .header h1 { font-size: $font-size-lg; }
+    .question-content .question-card {
+      padding: $spacing-md;
+      .question-header {
+        margin-bottom: $spacing-lg;
+        h2 { font-size: $font-size-base; }
       }
-    }
-
-    .question-content {
-      .question-card {
-        padding: $spacing-md;
-
-        .question-header {
-          margin-bottom: $spacing-lg;
-
-          h2 {
-            font-size: $font-size-base;
-          }
-        }
-
-        .choices-container {
-          gap: $spacing-sm;
-
-          .choice-item {
-            padding: $spacing-sm;
-          }
-        }
+      .choices-container {
+        gap: $spacing-sm;
+        .choice-item { padding: $spacing-sm; }
       }
     }
   }

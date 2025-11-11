@@ -95,8 +95,8 @@ export class DrugQuestionsComponent implements OnInit {
             }
           });
         } else {
-          this.errorMessage = response.errorMessage || 'No questions available for this drug';
           this.isLoading = false;
+          this.router.navigate(['/checkout']);
         }
       },
       error: (error) => {
