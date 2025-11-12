@@ -86,7 +86,7 @@ export class DrugService {
     };
 
     return this.apiService.post<ApiResponse<QuestionChoice[]>>(
-      '/Pharma/Drug/GetChoices',
+      '/Pharma/Drug/GetQuestionChoices',
       request
     );
   }
