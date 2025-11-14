@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -104,6 +104,25 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<PlaceholderItem>>(
       '/Pharma/Drug/GetPlaceHolderItem',
+      request
+    );
+  }
+
+  /**
+   * Fetches drugs by category with optional search criteria
+   * @param categoryId The category ID to filter by
+   * @param searchCriteria Optional search criteria to filter drugs
+   * @returns Observable of API response containing drugs array
+   */
+  getDrugsByCategory(categoryId: number, searchCriteria: string = ''): Observable<ApiResponse<Drug[]>> {
+    const request: GetDrugsByCategoryRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      categoryID: categoryId,
+      searchCriteria: searchCriteria
+    };
+
+    return this.apiService.post<ApiResponse<Drug[]>>(
+      '/Pharma/Drug/GetDrugsByCategory',
       request
     );
   }

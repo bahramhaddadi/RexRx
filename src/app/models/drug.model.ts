@@ -112,3 +112,9 @@ export interface GetPlaceHolderItemRequest {
   securitySessionID: string;
   body: number; // Category ID
 }
+
+export interface GetDrugsByCategoryRequest {
+  securitySessionID: string;
+  categoryID: number;
+  searchCriteria: string;
+}

@@ -28,7 +28,6 @@ export class DrugListComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  drugs: Drug[] = [];
   filteredDrugs: Drug[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -44,17 +43,21 @@ export class DrugListComponent implements OnInit {
   }
 
   /**
-   * Loads drugs from the API and filters by category if provided
+   * Loads drugs from the API using category filter
    */
   loadDrugs(): void {
+    if (!this.categoryId) {
+      this.errorMessage = 'Category ID is required';
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.drugService.getDrugList().subscribe({
+    this.drugService.getDrugsByCategory(this.categoryId).subscribe({
       next: (response) => {
         if (response.errorCode === 0) {
-          this.drugs = response.body;
-          this.filterDrugsByCategory();
+          this.filteredDrugs = response.body;
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load drugs';
           console.error('API Error:', response.errorMessage);
@@ -67,17 +70,6 @@ export class DrugListComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  /**
-   * Filters drugs by the selected category
-   */
-  private filterDrugsByCategory(): void {
-    if (this.categoryId !== undefined) {
-      this.filteredDrugs = this.drugs.filter(drug => drug.categoryID === this.categoryId);
-    } else {
-      this.filteredDrugs = this.drugs;
-    }
   }
 
   /**
