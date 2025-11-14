@@ -1,9 +1,7 @@
 @import "../../../styles/theme-variables";
 
 .questions-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: $spacing-xl;
+  padding: $spacing-xl $spacing-2xl;
   min-height: 100vh;
   background: $gray-50;
 

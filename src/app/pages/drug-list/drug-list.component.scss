@@ -2,9 +2,7 @@
 
 // Minimal Drug List Page Design
 .drug-list-container {
-  padding: $spacing-xl;
-  max-width: $container-max-width;
-  margin: 0 auto;
+  padding: $spacing-xl $spacing-2xl;
   min-height: 100vh;
   background: $gray-50;
 }
@@ -34,7 +32,7 @@
   margin-bottom: $spacing-2xl;
 
   .info-card {
-    max-width: 500px;
+    max-width: 800px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     .info-content {
