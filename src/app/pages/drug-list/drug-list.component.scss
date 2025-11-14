@@ -1,69 +1,68 @@
-@import "../../../styles/theme-variables";
-
-// Minimal Drug List Page Design
+@import "../../../styles/variables";
+// Drug List Page Design
 .drug-list-container {
-  padding: $spacing-xl $spacing-2xl;
+  padding: 3rem 4rem;
   min-height: 100vh;
-  background: $gray-50;
+  background: var(--surface-ground);
 }
 
 .header {
   display: flex;
   align-items: center;
-  gap: $spacing-md;
-  margin-bottom: $spacing-xl;
-  padding-bottom: $spacing-md;
-  border-bottom: 1px solid $gray-300;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--surface-border);
 
   .back-btn {
     flex-shrink: 0;
   }
 
   .page-title {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-semibold;
-    color: $primary-color;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
     margin: 0;
   }
 }
 
 // Introduction / Banner Section
 .intro-section {
-  margin-bottom: $spacing-2xl;
+  margin-bottom: 4rem;
 
   .info-card {
     max-width: 800px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     .info-content {
-      padding: $spacing-md;
+      padding: 1.5rem;
 
       .info-title {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
-        color: $gray-900;
-        margin: 0 0 $spacing-lg 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        margin: 0 0 2rem 0;
       }
 
       .features-list {
         list-style: none;
         padding: 0;
-        margin: 0 0 $spacing-xl 0;
+        margin: 0 0 3rem 0;
 
         li {
           position: relative;
-          padding-left: $spacing-lg;
-          margin-bottom: $spacing-sm;
-          color: $gray-700;
-          font-size: $font-size-base;
+          padding-left: 2rem;
+          margin-bottom: 1rem;
+          color: var(--text-color-secondary);
+          font-size: 1rem;
           line-height: 1.6;
 
           &::before {
             content: '•';
             position: absolute;
             left: 0;
-            color: $primary-color;
-            font-weight: $font-weight-bold;
+            color: var(--primary-color);
+            font-weight: 700;
             font-size: 1.2em;
           }
         }
@@ -78,13 +77,13 @@
 
 // Selection Section
 .selection-section {
-  margin-top: $spacing-2xl;
+  margin-top: 4rem;
 
   .section-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-semibold;
-    color: $gray-900;
-    margin: 0 0 $spacing-lg 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 2rem 0;
   }
 }
 
@@ -93,12 +92,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $spacing-3xl $spacing-lg;
-  gap: $spacing-md;
+  padding: 6rem 2rem;
+  gap: 1.5rem;
 
   p {
-    color: $gray-600;
-    font-size: $font-size-base;
+    color: var(--text-color-secondary);
+    font-size: 1rem;
   }
 }
 
@@ -107,17 +106,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $spacing-3xl $spacing-lg;
-  gap: $spacing-md;
+  padding: 6rem 2rem;
+  gap: 1.5rem;
 
   .error-icon {
     font-size: 3rem;
-    color: $error-color;
+    color: var(--red-500);
   }
 
   .error-message {
-    color: $gray-700;
-    font-size: $font-size-base;
+    color: var(--text-color);
+    font-size: 1rem;
     text-align: center;
   }
 }
@@ -125,8 +124,8 @@
 .drug-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: $grid-gap;
-  padding: $spacing-md 0;
+  gap: 2rem;
+  padding: 1.5rem 0;
 
   .drug-item {
     min-height: 150px;
@@ -138,36 +137,36 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: $spacing-3xl $spacing-lg;
-    gap: $spacing-md;
+    padding: 6rem 2rem;
+    gap: 1.5rem;
 
     .empty-icon {
       font-size: 3rem;
-      color: $gray-400;
+      color: var(--surface-400);
     }
 
     p {
-      color: $gray-600;
-      font-size: $font-size-base;
+      color: var(--text-color-secondary);
+      font-size: 1rem;
     }
   }
 }
 
 // Responsive design
-@media (max-width: $breakpoint-lg) {
+@media (max-width: 1024px) {
   .drug-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: $breakpoint-md) {
+@media (max-width: 768px) {
   .drug-list-container {
-    padding: $spacing-lg;
+    padding: 2rem;
   }
 
   .header {
     .page-title {
-      font-size: $font-size-xl;
+      font-size: 1.5rem;
     }
   }
 
@@ -179,41 +178,41 @@
 
   .drug-grid {
     grid-template-columns: 1fr;
-    gap: $spacing-md;
+    gap: 1.5rem;
   }
 }
 
-@media (max-width: $breakpoint-sm) {
+@media (max-width: 640px) {
   .drug-list-container {
-    padding: $spacing-md;
+    padding: 1.5rem;
   }
 
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: $spacing-sm;
+    gap: 1rem;
 
     .page-title {
-      font-size: $font-size-lg;
+      font-size: 1.125rem;
     }
   }
 
   .intro-section {
-    margin-bottom: $spacing-lg;
+    margin-bottom: 2rem;
 
     .info-card {
       .info-content {
-        padding: $spacing-sm;
+        padding: 1rem;
 
         .info-title {
-          font-size: $font-size-lg;
+          font-size: 1.125rem;
         }
 
         .features-list {
-          margin-bottom: $spacing-lg;
+          margin-bottom: 2rem;
 
           li {
-            font-size: $font-size-sm;
+            font-size: 0.875rem;
           }
         }
       }
@@ -221,16 +220,16 @@
   }
 
   .selection-section {
-    margin-top: $spacing-lg;
+    margin-top: 2rem;
 
     .section-title {
-      font-size: $font-size-lg;
+      font-size: 1.125rem;
     }
   }
 
   .loading-container,
   .error-container,
   .empty-state {
-    padding: $spacing-xl $spacing-md;
+    padding: 3rem 1.5rem;
   }
 }
