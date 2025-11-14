@@ -7,6 +7,7 @@ import { DrugService } from '../../services/drug.service';
 import { Drug } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-drug-list',
@@ -16,6 +17,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DrugCardComponent,
     ButtonModule,
     ProgressSpinnerModule,
+    CardModule,
     PageLayoutComponent
   ],
   templateUrl: './drug-list.component.html',
@@ -93,6 +95,41 @@ export class DrugListComponent implements OnInit {
       queryParams: {
         eid: drug.eid,
         name: drug.title
+      }
+    });
+  }
+
+  /**
+   * Handles "Help me choose" button click
+   * Fetches placeholder item and navigates to questionnaire
+   */
+  onHelpMeChoose(): void {
+    if (!this.categoryId) {
+      console.error('Category ID is required');
+      return;
+    }
+
+    this.isLoading = true;
+    this.drugService.getPlaceHolderItem(this.categoryId).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          // Navigate to questionnaire with eid and doseID
+          this.router.navigate(['/questionnaire'], {
+            queryParams: {
+              catId: response.body.eid,
+              doseId: response.body.doseID
+            }
+          });
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to get placeholder item';
+          console.error('API Error:', response.errorMessage);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to process request. Please try again later.';
+        console.error('Error getting placeholder item:', error);
+        this.isLoading = false;
       }
     });
   }

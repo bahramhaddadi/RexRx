@@ -29,6 +29,67 @@
   }
 }
 
+// Introduction / Banner Section
+.intro-section {
+  margin-bottom: $spacing-2xl;
+
+  .info-card {
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .info-content {
+      padding: $spacing-md;
+
+      .info-title {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $gray-900;
+        margin: 0 0 $spacing-lg 0;
+      }
+
+      .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 $spacing-xl 0;
+
+        li {
+          position: relative;
+          padding-left: $spacing-lg;
+          margin-bottom: $spacing-sm;
+          color: $gray-700;
+          font-size: $font-size-base;
+          line-height: 1.6;
+
+          &::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: $primary-color;
+            font-weight: $font-weight-bold;
+            font-size: 1.2em;
+          }
+        }
+      }
+
+      .help-button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Selection Section
+.selection-section {
+  margin-top: $spacing-2xl;
+
+  .section-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $gray-900;
+    margin: 0 0 $spacing-lg 0;
+  }
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -112,6 +173,12 @@
     }
   }
 
+  .intro-section {
+    .info-card {
+      max-width: 100%;
+    }
+  }
+
   .drug-grid {
     grid-template-columns: 1fr;
     gap: $spacing-md;
@@ -129,6 +196,36 @@
     gap: $spacing-sm;
 
     .page-title {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .intro-section {
+    margin-bottom: $spacing-lg;
+
+    .info-card {
+      .info-content {
+        padding: $spacing-sm;
+
+        .info-title {
+          font-size: $font-size-lg;
+        }
+
+        .features-list {
+          margin-bottom: $spacing-lg;
+
+          li {
+            font-size: $font-size-sm;
+          }
+        }
+      }
+    }
+  }
+
+  .selection-section {
+    margin-top: $spacing-lg;
+
+    .section-title {
       font-size: $font-size-lg;
     }
   }

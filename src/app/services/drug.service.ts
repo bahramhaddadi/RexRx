@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -87,6 +87,23 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<QuestionChoice[]>>(
       '/Pharma/Drug/GetQuestionChoices',
+      request
+    );
+  }
+
+  /**
+   * Fetches placeholder item for a category (used for "Help me choose" feature)
+   * @param categoryId The category ID
+   * @returns Observable of API response containing placeholder item
+   */
+  getPlaceHolderItem(categoryId: number): Observable<ApiResponse<PlaceholderItem>> {
+    const request: GetPlaceHolderItemRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      body: categoryId
+    };
+
+    return this.apiService.post<ApiResponse<PlaceholderItem>>(
+      '/Pharma/Drug/GetPlaceHolderItem',
       request
     );
   }

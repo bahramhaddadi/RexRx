@@ -85,3 +85,30 @@ export interface GetChoicesRequest {
   securitySessionID: string;
   body: number; // Question ID
 }
+
+export interface PlaceholderItem {
+  doseID: number;
+  eid: string;
+  title: string | null;
+  brandName: string | null;
+  note: string | null;
+  isGeneric: boolean;
+  categoryID: number;
+  categoryName: string | null;
+  imageURL: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  relatedCategory: any | null;
+  relatedQuestionnaires: any[];
+  dosages: any[];
+  state: number;
+  id: number;
+  isSerializing: number;
+  rowCount: number;
+  pageCount: number;
+}
+
+export interface GetPlaceHolderItemRequest {
+  securitySessionID: string;
+  body: number; // Category ID
+}
