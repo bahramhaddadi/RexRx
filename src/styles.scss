@@ -130,6 +130,17 @@ a {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
   }
 
+  // Icon spacing - 4px gap between icon and label
+  .p-button-icon {
+    &.p-button-icon-left {
+      margin-right: 4px;
+    }
+
+    &.p-button-icon-right {
+      margin-left: 4px;
+    }
+  }
+
   &.p-button-secondary {
     background: $white;
     color: $primary-color;
