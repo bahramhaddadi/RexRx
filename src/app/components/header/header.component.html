@@ -37,7 +37,13 @@
               <i class="pi pi-chevron-down" style="margin-left: 0.5rem; font-size: 0.875rem;"></i>
             </ng-template>
           </p-button>
-          <p-menu #menu [model]="menuItems" [popup]="true" styleClass="user-menu-popup"></p-menu>
+          <p-menu
+            #menu
+            [model]="menuItems"
+            [popup]="true"
+            appendTo="body"
+            styleClass="user-menu-popup"
+          ></p-menu>
         </div>
       } @else {
         <!-- Guest Navigation -->

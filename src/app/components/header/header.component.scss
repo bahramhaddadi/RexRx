@@ -8,6 +8,7 @@
   top: 0;
   z-index: 1000;
   width: 100%;
+  overflow: visible;
 }
 
 .header-container {
@@ -18,6 +19,7 @@
   align-items: center;
   justify-content: space-between;
   height: 64px;
+  overflow: visible;
 }
 
 // Brand
@@ -124,11 +126,12 @@
 }
 
 ::ng-deep .user-menu-popup {
-  margin-top: $spacing-xs;
-  min-width: 200px;
+  min-width: 200px !important;
   border-radius: $border-radius-md;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid $gray-200;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid $gray-200 !important;
+  z-index: 9999 !important;
+  margin-top: 0.5rem !important;
 
   .p-menu-list {
     padding: $spacing-xs;
