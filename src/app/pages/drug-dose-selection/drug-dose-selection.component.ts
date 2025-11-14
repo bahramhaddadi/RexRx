@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { DrugDose } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +15,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     CommonModule,
     ButtonModule,
     CardModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    PageLayoutComponent
   ],
   templateUrl: './drug-dose-selection.component.html',
   styleUrls: ['./drug-dose-selection.component.scss']

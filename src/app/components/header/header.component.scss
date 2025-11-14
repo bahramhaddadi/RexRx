@@ -1,0 +1,189 @@
+@import "../../../styles/theme-variables";
+
+.app-header {
+  background: $white;
+  border-bottom: 1px solid $gray-200;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+// Brand
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  transition: opacity $transition-base;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.brand-icon {
+  font-size: 1.75rem;
+  color: $accent-color;
+}
+
+.brand-name {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  font-family: $font-family-heading;
+}
+
+// Navigation
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xl;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  color: $gray-700;
+  text-decoration: none;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-md;
+  transition: all $transition-base;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background: $gray-100;
+    color: $primary-color;
+  }
+
+  &.active {
+    background: rgba($accent-color, 0.1);
+    color: $accent-color;
+  }
+}
+
+// User Menu
+.user-menu {
+  position: relative;
+}
+
+::ng-deep .user-button {
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+
+  &:hover {
+    background: $gray-100;
+  }
+}
+
+::ng-deep .user-menu-popup {
+  margin-top: $spacing-xs;
+}
+
+// Auth Buttons
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+::ng-deep .login-button {
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+
+  &:hover {
+    background: $gray-100;
+    color: $primary-color;
+  }
+}
+
+::ng-deep .signup-button {
+  background: $accent-color;
+  border: none;
+  color: $white;
+  font-weight: $font-weight-medium;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $border-radius-md;
+
+  &:hover {
+    background: $accent-hover;
+  }
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .header-container {
+    padding: 0 $spacing-lg;
+  }
+
+  .brand-name {
+    font-size: $font-size-lg;
+  }
+
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-link {
+    padding: $spacing-sm;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .header-container {
+    padding: 0 $spacing-md;
+    height: 56px;
+  }
+
+  .brand-icon {
+    font-size: 1.5rem;
+  }
+
+  .brand-name {
+    font-size: $font-size-base;
+  }
+
+  .header-nav {
+    gap: $spacing-md;
+  }
+
+  .nav-items {
+    gap: $spacing-xs;
+  }
+
+  ::ng-deep .user-button .p-button-label {
+    display: none;
+  }
+
+  ::ng-deep .login-button .p-button-label,
+  ::ng-deep .signup-button .p-button-label {
+    font-size: $font-size-sm;
+  }
+
+  ::ng-deep .signup-button {
+    padding: $spacing-xs $spacing-sm;
+  }
+}

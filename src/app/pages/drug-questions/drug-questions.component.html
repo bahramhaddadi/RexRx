@@ -1,14 +1,9 @@
-<div class="questions-container">
-  <!-- Header -->
-  <div class="header">
-    <p-button
-      icon="pi pi-arrow-right"
-      [text]="true"
-      styleClass="back-button"
-      (onClick)="onBackClick()">
-    </p-button>
-    <h1>{{ drugName }} - Questions</h1>
-  </div>
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Doses'">
+  <div class="questions-container">
+    <!-- Page Title -->
+    <div class="header">
+      <h1>{{ drugName }} - Questions</h1>
+    </div>
 
   <!-- Loading Spinner -->
   @if (isLoading) {
@@ -216,4 +211,5 @@
       <p>No questions available for this drug</p>
     </div>
   }
-</div>
+  </div>
+</app-page-layout>

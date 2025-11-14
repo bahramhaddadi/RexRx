@@ -1,0 +1,53 @@
+<header class="app-header">
+  <div class="header-container">
+    <!-- Logo/Brand -->
+    <div class="header-brand" (click)="navigateToHome()">
+      <i class="pi pi-heart-fill brand-icon"></i>
+      <span class="brand-name">Pharma</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="header-nav">
+      @if (isAuthenticated()) {
+        <!-- Authenticated Navigation -->
+        <div class="nav-items">
+          <a routerLink="/home" routerLinkActive="active" class="nav-link">
+            <i class="pi pi-home"></i>
+            <span>Home</span>
+          </a>
+          <a routerLink="/drugs" routerLinkActive="active" class="nav-link">
+            <i class="pi pi-shopping-cart"></i>
+            <span>Products</span>
+          </a>
+        </div>
+
+        <!-- User Menu -->
+        <div class="user-menu">
+          <p-button
+            [label]="username()"
+            icon="pi pi-user"
+            [text]="true"
+            styleClass="user-button"
+            (onClick)="menu.toggle($event)"
+          ></p-button>
+          <p-menu #menu [model]="menuItems" [popup]="true" styleClass="user-menu-popup"></p-menu>
+        </div>
+      } @else {
+        <!-- Guest Navigation -->
+        <div class="auth-buttons">
+          <p-button
+            label="Login"
+            [text]="true"
+            (onClick)="navigateToLogin()"
+            styleClass="login-button"
+          ></p-button>
+          <p-button
+            label="Sign Up"
+            (onClick)="navigateToSignUp()"
+            styleClass="signup-button"
+          ></p-button>
+        </div>
+      }
+    </nav>
+  </div>
+</header>

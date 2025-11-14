@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DrugCardComponent } from '../../components/drug-card/drug-card.component';
+import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { Drug } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +15,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     CommonModule,
     DrugCardComponent,
     ButtonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    PageLayoutComponent
   ],
   templateUrl: './drug-list.component.html',
   styleUrls: ['./drug-list.component.scss']

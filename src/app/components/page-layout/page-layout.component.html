@@ -1,20 +1,27 @@
 <div class="page-layout" [style.background]="backgroundColor">
-  <!-- Header with back button -->
-  @if (showBackButton) {
-    <div class="page-header">
-      <p-button
-        icon="pi pi-arrow-left"
-        [text]="true"
-        [rounded]="true"
-        (onClick)="onBack()"
-        styleClass="back-button"
-        severity="secondary"
-      ></p-button>
-    </div>
+  <!-- Header -->
+  @if (showHeader) {
+    <app-header></app-header>
   }
 
-  <!-- Page content -->
-  <div class="page-content">
-    <ng-content></ng-content>
+  <!-- Page container with optional back button -->
+  <div class="page-container">
+    @if (showBackButton) {
+      <div class="page-back-button">
+        <p-button
+          [icon]="'pi pi-arrow-left'"
+          [label]="backButtonLabel"
+          [text]="true"
+          (onClick)="onBack()"
+          styleClass="back-btn"
+          severity="secondary"
+        ></p-button>
+      </div>
+    }
+
+    <!-- Page content -->
+    <div class="page-content" [class.with-back-button]="showBackButton">
+      <ng-content></ng-content>
+    </div>
   </div>
 </div>

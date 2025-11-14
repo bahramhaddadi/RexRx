@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { Question, QuestionChoice } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
@@ -32,7 +33,8 @@ interface QuestionWithChoices extends Question {
     RadioButtonModule,
     CheckboxModule,
     InputTextModule,
-    InputTextareaModule
+    InputTextareaModule,
+    PageLayoutComponent
   ],
   templateUrl: './drug-questions.component.html',
   styleUrls: ['./drug-questions.component.scss']

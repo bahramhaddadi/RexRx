@@ -1,18 +1,7 @@
-<div class="home-container">
-  <!-- Header -->
-  <div class="header">
-    <div class="header-right">
-      <button class="cart-btn" (click)="onCartClick()">
-        <i class="pi pi-shopping-cart"></i>
-      </button>
-      <button class="login-btn" (click)="onLoginClick()">
-        Login
-      </button>
-    </div>
-  </div>
-
-  <!-- Carousel Section -->
-  <div class="carousel-section">
+<app-page-layout [showHeader]="true" [showBackButton]="false" backgroundColor="var(--surface-50)">
+  <div class="home-container">
+    <!-- Carousel Section -->
+    <div class="carousel-section">
 
     <div class="carousel-container">
       <p-carousel
@@ -43,6 +32,6 @@
         </ng-template>
       </p-carousel>
     </div>
-
+    </div>
   </div>
-</div>
+</app-page-layout>
