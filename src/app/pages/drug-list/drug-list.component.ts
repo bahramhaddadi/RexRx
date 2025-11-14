@@ -105,11 +105,12 @@ export class DrugListComponent implements OnInit {
     this.drugService.getPlaceHolderItem(this.categoryId).subscribe({
       next: (response) => {
         if (response.errorCode === 0 && response.body) {
-          // Navigate to questionnaire with eid and doseID
-          this.router.navigate(['/questionnaire'], {
+          // Navigate to drug questions with eid and doseID
+          this.router.navigate(['/drug-questions'], {
             queryParams: {
-              catId: response.body.eid,
-              doseId: response.body.doseID
+              eid: response.body.eid,
+              doseId: response.body.doseID,
+              name: this.categoryName
             }
           });
         } else {
