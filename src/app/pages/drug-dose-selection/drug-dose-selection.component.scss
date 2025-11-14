@@ -3,7 +3,7 @@
 // Minimal Dose Selection Page Design
 .dose-selection-container {
   padding: $spacing-xl;
-  max-width: $container-max-width;
+  width: 100%;
   margin: 0 auto;
   direction: rtl;
   min-height: 100vh;
@@ -64,18 +64,20 @@
   }
 
   .dose-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: $grid-gap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: $spacing-lg;
 
     .dose-card {
       cursor: pointer;
       transition: all $transition-base;
-      height: 100%;
+      flex: 0 1 calc(25% - $spacing-lg);
+      min-width: 250px;
       background: $white;
-      border: 1px solid $gray-300;
-      border-radius: $border-radius-lg;
-      box-shadow: $shadow-xs;
+      border: 1px solid $gray-200;
+      border-radius: $border-radius-md;
+      box-shadow: $shadow-sm;
 
       &:hover {
         transform: translateY(-2px);
@@ -86,26 +88,26 @@
       .dose-content {
         display: flex;
         flex-direction: column;
-        gap: $spacing-md;
+        gap: $spacing-sm;
         height: 100%;
-        padding: $spacing-lg;
+        padding: $spacing-md;
 
         .dose-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding-bottom: $spacing-md;
+          padding-bottom: $spacing-sm;
           border-bottom: 1px solid $gray-200;
 
           h3 {
             margin: 0;
-            font-size: $font-size-xl;
+            font-size: $font-size-lg;
             font-weight: $font-weight-semibold;
             color: $primary-color;
           }
 
           .price {
-            font-size: $font-size-lg;
+            font-size: $font-size-base;
             font-weight: $font-weight-bold;
             color: $success-color;
           }
@@ -117,13 +119,14 @@
           .quantity {
             display: flex;
             align-items: center;
-            gap: $spacing-sm;
+            gap: $spacing-xs;
             margin: 0;
             color: $gray-600;
-            font-size: $font-size-base;
+            font-size: $font-size-sm;
 
             i {
               color: $accent-color;
+              font-size: 0.875rem;
             }
           }
         }
@@ -131,8 +134,7 @@
         .dose-footer {
           display: flex;
           justify-content: flex-end;
-          padding-top: $spacing-md;
-          border-top: 1px solid $gray-200;
+          padding-top: $spacing-sm;
         }
       }
     }
@@ -171,8 +173,12 @@
     }
 
     .dose-grid {
-      grid-template-columns: 1fr;
       gap: $spacing-md;
+
+      .dose-card {
+        flex: 0 1 calc(50% - $spacing-md);
+        min-width: 200px;
+      }
     }
   }
 }
@@ -188,17 +194,22 @@
     }
 
     .dose-grid {
+      gap: $spacing-sm;
+
       .dose-card {
+        flex: 0 1 100%;
+        min-width: 100%;
+
         .dose-content {
-          padding: $spacing-md;
+          padding: $spacing-sm;
 
           .dose-header {
             h3 {
-              font-size: $font-size-lg;
+              font-size: $font-size-base;
             }
 
             .price {
-              font-size: $font-size-base;
+              font-size: $font-size-sm;
             }
           }
         }
