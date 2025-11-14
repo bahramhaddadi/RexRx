@@ -1,0 +1,20 @@
+<div class="page-layout" [style.background]="backgroundColor">
+  <!-- Header with back button -->
+  @if (showBackButton) {
+    <div class="page-header">
+      <p-button
+        icon="pi pi-arrow-left"
+        [text]="true"
+        [rounded]="true"
+        (onClick)="onBack()"
+        styleClass="back-button"
+        severity="secondary"
+      ></p-button>
+    </div>
+  }
+
+  <!-- Page content -->
+  <div class="page-content">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+@import "../../../styles/theme-variables";
+
+.page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.page-header {
+  position: absolute;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  z-index: 10;
+}
+
+::ng-deep .back-button {
+  width: 3rem;
+  height: 3rem;
+  background: $white;
+  border: 1px solid $gray-300;
+  box-shadow: $shadow-sm;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $gray-50;
+    border-color: $gray-400;
+    transform: translateX(-2px);
+  }
+
+  &:active {
+    transform: translateX(-2px) scale(0.95);
+  }
+
+  .pi {
+    color: $gray-700;
+    font-size: 1.2rem;
+  }
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .page-header {
+    top: $spacing-md;
+    right: $spacing-md;
+  }
+
+  .page-content {
+    padding: $spacing-lg;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .page-header {
+    top: $spacing-sm;
+    right: $spacing-sm;
+  }
+
+  ::ng-deep .back-button {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    .pi {
+      font-size: 1rem;
+    }
+  }
+
+  .page-content {
+    padding: $spacing-md;
+  }
+}

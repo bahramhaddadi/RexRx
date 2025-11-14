@@ -30,3 +30,27 @@ export interface AuthResponse {
   exceptionCode: number;
   exceptionMessage: string | null;
 }
+
+/**
+ * Sign-up request model
+ */
+export interface SignUpRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  dateOfBirth: string;  // Format: YYYY-MM-DD
+  howDidYouFindUs: string;
+  captcha: string;
+  captchaRef: string;
+}
+
+/**
+ * Sign-up response model
+ */
+export interface SignUpResponse {
+  exceptionCode: number;
+  exceptionMessage: string | null;
+  success?: boolean;
+}
