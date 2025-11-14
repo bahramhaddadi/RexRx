@@ -7,6 +7,7 @@ import { DrugService } from '../../services/drug.service';
 import { Drug } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-drug-list',
@@ -16,6 +17,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DrugCardComponent,
     ButtonModule,
     ProgressSpinnerModule,
+    CardModule,
     PageLayoutComponent
   ],
   templateUrl: './drug-list.component.html',
@@ -26,7 +28,6 @@ export class DrugListComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  drugs: Drug[] = [];
   filteredDrugs: Drug[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -42,17 +43,21 @@ export class DrugListComponent implements OnInit {
   }
 
   /**
-   * Loads drugs from the API and filters by category if provided
+   * Loads drugs from the API using category filter
    */
   loadDrugs(): void {
+    if (!this.categoryId) {
+      this.errorMessage = 'Category ID is required';
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.drugService.getDrugList().subscribe({
+    this.drugService.getDrugsByCategory(this.categoryId).subscribe({
       next: (response) => {
         if (response.errorCode === 0) {
-          this.drugs = response.body;
-          this.filterDrugsByCategory();
+          this.filteredDrugs = response.body;
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load drugs';
           console.error('API Error:', response.errorMessage);
@@ -65,17 +70,6 @@ export class DrugListComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  /**
-   * Filters drugs by the selected category
-   */
-  private filterDrugsByCategory(): void {
-    if (this.categoryId !== undefined) {
-      this.filteredDrugs = this.drugs.filter(drug => drug.categoryID === this.categoryId);
-    } else {
-      this.filteredDrugs = this.drugs;
-    }
   }
 
   /**
@@ -93,6 +87,42 @@ export class DrugListComponent implements OnInit {
       queryParams: {
         eid: drug.eid,
         name: drug.title
+      }
+    });
+  }
+
+  /**
+   * Handles "Help me choose" button click
+   * Fetches placeholder item and navigates to questionnaire
+   */
+  onHelpMeChoose(): void {
+    if (!this.categoryId) {
+      console.error('Category ID is required');
+      return;
+    }
+
+    this.isLoading = true;
+    this.drugService.getPlaceHolderItem(this.categoryId).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          // Navigate to drug questions with eid and doseID
+          this.router.navigate(['/drug-questions'], {
+            queryParams: {
+              eid: response.body.eid,
+              doseId: response.body.doseID,
+              name: this.categoryName
+            }
+          });
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to get placeholder item';
+          console.error('API Error:', response.errorMessage);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to process request. Please try again later.';
+        console.error('Error getting placeholder item:', error);
+        this.isLoading = false;
       }
     });
   }

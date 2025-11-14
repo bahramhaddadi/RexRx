@@ -1,9 +1,7 @@
-@import "../../../styles/theme-variables";
+@import "../../../styles/variables";
 
 .questions-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: $spacing-xl;
+  padding: $spacing-xl $spacing-2xl;
   min-height: 100vh;
   background: $gray-50;
 
@@ -210,7 +208,6 @@
       margin-top: $spacing-xl;
 
       p-button {
-        flex: 1;
         max-width: 200px;
         &:only-child { margin-left: auto; }
       }

@@ -1,10 +1,8 @@
-@import "../../../styles/theme-variables";
+@import "../../../styles/variables";
 
 // Minimal Dose Selection Page Design
 .dose-selection-container {
-  padding: $spacing-xl;
-  width: 100%;
-  margin: 0 auto;
+  padding: $spacing-xl $spacing-2xl;
   direction: ltr;
   min-height: 100vh;
   background: $gray-50;
