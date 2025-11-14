@@ -12,13 +12,25 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageModule } from 'primeng/message';
 import { forkJoin } from 'rxjs';
+
+// Question Type Enum
+enum QuestionType {
+  SingleChoice = 1,           // Radio buttons - must select one
+  MultipleChoice = 2,         // Checkboxes - must select at least one
+  MultipleChoiceWithNone = 3, // Checkboxes - "None of these apply" option
+  FormFill = 4,              // Text input fields
+  Terminate = 5,             // User cannot get this drug
+  LastQuestion = 10          // Last question marker
+}
 
 interface QuestionWithChoices extends Question {
   choices: QuestionChoice[];
   selectedChoiceId?: number;
   selectedChoiceIds?: number[];
-  textAnswer?: string;
+  textAnswers?: { [key: number]: string }; // For FormFill - choice id to answer mapping
+  noneSelected?: boolean; // For MultipleChoiceWithNone
 }
 
 @Component({
@@ -34,6 +46,7 @@ interface QuestionWithChoices extends Question {
     CheckboxModule,
     InputTextModule,
     InputTextareaModule,
+    MessageModule,
     PageLayoutComponent
   ],
   templateUrl: './drug-questions.component.html',
@@ -50,6 +63,11 @@ export class DrugQuestionsComponent implements OnInit {
   currentQuestionIndex: number = 0;
   isLoading: boolean = false;
   errorMessage: string = '';
+  isTerminated: boolean = false;
+  terminationMessage: string = '';
+
+  // Expose QuestionType enum to template
+  readonly QuestionType = QuestionType;
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -86,7 +104,9 @@ export class DrugQuestionsComponent implements OnInit {
                 choices: choicesResponses[index].errorCode === 0
                   ? choicesResponses[index].body.filter(choice => choice.questionID === question.id)
                   : [],
-                selectedChoiceIds: []
+                selectedChoiceIds: [],
+                textAnswers: {},
+                noneSelected: false
               }));
               this.isLoading = false;
             },
@@ -123,34 +143,60 @@ export class DrugQuestionsComponent implements OnInit {
     const question = this.currentQuestion;
     if (!question) return false;
 
-    // For single choice questions (questionTypeID === 1, typically radio buttons)
-    if (question.questionTypeID === 1) {
-      return !!question.selectedChoiceId;
-    }
+    switch (question.questionTypeID) {
+      case QuestionType.SingleChoice:
+        // Must select one option
+        return !!question.selectedChoiceId;
 
-    // For multi-choice questions (questionTypeID === 2, typically checkboxes)
-    if (question.questionTypeID === 2) {
-      return !!question.selectedChoiceIds && question.selectedChoiceIds.length > 0;
-    }
+      case QuestionType.MultipleChoice:
+        // Must select at least one option
+        return !!question.selectedChoiceIds && question.selectedChoiceIds.length > 0;
 
-    // For text/form field questions (questionTypeID === 3)
-    if (question.questionTypeID === 3) {
-      return !!question.textAnswer && question.textAnswer.trim().length > 0;
-    }
+      case QuestionType.MultipleChoiceWithNone:
+        // Can select none (noneSelected) or select choices
+        return question.noneSelected || (!!question.selectedChoiceIds && question.selectedChoiceIds.length > 0);
 
-    // Default: assume answered if any selection is made
-    return !!question.selectedChoiceId ||
-           (!!question.selectedChoiceIds && question.selectedChoiceIds.length > 0) ||
-           (!!question.textAnswer && question.textAnswer.trim().length > 0);
+      case QuestionType.FormFill:
+        // Check if all choices with input fields have been filled
+        if (!question.textAnswers) return false;
+        const hasAnswers = question.choices.some(choice => {
+          const answer = question.textAnswers![choice.id];
+          return answer && answer.trim().length > 0;
+        });
+        return hasAnswers;
+
+      case QuestionType.Terminate:
+        // Terminate questions always proceed
+        return true;
+
+      default:
+        return false;
+    }
   }
 
   /**
    * Navigates to the next question
    */
   onNextQuestion(): void {
+    const currentQ = this.currentQuestion;
+
+    // Check if current question is a Terminate type
+    if (currentQ && currentQ.questionTypeID === QuestionType.Terminate) {
+      this.handleTermination();
+      return;
+    }
+
     if (this.currentQuestionIndex < this.questions.length - 1) {
       this.currentQuestionIndex++;
     }
+  }
+
+  /**
+   * Handles termination flow when user fails a Terminate question
+   */
+  handleTermination(): void {
+    this.isTerminated = true;
+    this.terminationMessage = 'Unfortunately, based on your answers, this medication may not be suitable for you. Please consult with a healthcare professional for alternative options.';
   }
 
   /**
@@ -182,12 +228,24 @@ export class DrugQuestionsComponent implements OnInit {
 
       if (event.checked) {
         this.currentQuestion.selectedChoiceIds.push(choiceId);
+        // If selecting a choice, clear "none selected" flag
+        this.currentQuestion.noneSelected = false;
       } else {
         const index = this.currentQuestion.selectedChoiceIds.indexOf(choiceId);
         if (index > -1) {
           this.currentQuestion.selectedChoiceIds.splice(index, 1);
         }
       }
+    }
+  }
+
+  /**
+   * Handles "None of these apply" option for MultipleChoiceWithNone
+   */
+  onNoneOfTheseApply(): void {
+    if (this.currentQuestion) {
+      this.currentQuestion.noneSelected = true;
+      this.currentQuestion.selectedChoiceIds = [];
     }
   }
 
@@ -223,7 +281,35 @@ export class DrugQuestionsComponent implements OnInit {
    * Checks if we're on the last question
    */
   isLastQuestion(): boolean {
-    return this.currentQuestionIndex === this.questions.length - 1;
+    const currentQ = this.currentQuestion;
+    return this.currentQuestionIndex === this.questions.length - 1 ||
+           (currentQ?.questionTypeID === QuestionType.LastQuestion);
+  }
+
+  /**
+   * Gets the submit button label based on question type
+   */
+  getSubmitButtonLabel(): string {
+    const currentQ = this.currentQuestion;
+
+    if (!currentQ) return 'Next';
+
+    if (this.isLastQuestion()) {
+      return 'Submit';
+    }
+
+    if (currentQ.questionTypeID === QuestionType.MultipleChoiceWithNone && currentQ.noneSelected) {
+      return 'None of these apply';
+    }
+
+    return 'Next';
+  }
+
+  /**
+   * Navigates back to home or drugs list
+   */
+  goBackHome(): void {
+    this.router.navigate(['/home']);
   }
 
   /**

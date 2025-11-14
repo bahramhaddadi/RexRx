@@ -30,8 +30,22 @@
     </div>
   }
 
+  <!-- Termination Message -->
+  @if (isTerminated) {
+    <div class="termination-container">
+      <p-message severity="warn" [text]="terminationMessage" styleClass="w-full"></p-message>
+      <div class="termination-actions">
+        <p-button
+          label="Back to Home"
+          icon="pi pi-home"
+          (onClick)="goBackHome()">
+        </p-button>
+      </div>
+    </div>
+  }
+
   <!-- Questions -->
-  @if (!isLoading && !errorMessage && currentQuestion) {
+  @if (!isLoading && !errorMessage && !isTerminated && currentQuestion) {
     <div class="question-content">
     <!-- Progress Indicator -->
     <div class="progress-indicator">
@@ -53,8 +67,8 @@
         }
       </div>
 
-      <!-- Single Choice Question (Radio Buttons) -->
-      @if (currentQuestion.questionTypeID === 1) {
+      <!-- SingleChoice = 1: Radio Buttons (must select one) -->
+      @if (currentQuestion.questionTypeID === QuestionType.SingleChoice) {
         <div class="choices-container">
           @for (choice of currentQuestion.choices; track choice.id) {
             <div class="choice-item">
@@ -67,26 +81,15 @@
               <label [for]="'choice_' + choice.id" class="choice-label">
                 {{ choice.title }}
               </label>
-
-              <!-- Extra Info Input for Single Choice -->
-              @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
-                <div class="extra-info">
-                  <label>{{ choice.extraInfoTitle }}</label>
-                  <input
-                    type="text"
-                    pInputText
-                    [(ngModel)]="currentQuestion.textAnswer"
-                    [placeholder]="choice.extraInfoTitle || 'Enter details'">
-                </div>
-              }
             </div>
           }
         </div>
       }
 
-      <!-- Multi Choice Question (Checkboxes) -->
-      @if (currentQuestion.questionTypeID === 2) {
+      <!-- MultipleChoice = 2: Checkboxes (must select at least one) -->
+      @if (currentQuestion.questionTypeID === QuestionType.MultipleChoice) {
         <div class="choices-container">
+          <p class="instruction-text">Select at least one option</p>
           @for (choice of currentQuestion.choices; track choice.id) {
             <div class="choice-item">
               <p-checkbox
@@ -100,71 +103,86 @@
               <label [for]="'choice_' + choice.id" class="choice-label">
                 {{ choice.title }}
               </label>
-
-              <!-- Extra Info Input for Multi Choice -->
-              @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
-                <div class="extra-info">
-                  <label>{{ choice.extraInfoTitle }}</label>
-                  <input
-                    type="text"
-                    pInputText
-                    [(ngModel)]="currentQuestion.textAnswer"
-                    [placeholder]="choice.extraInfoTitle || 'Enter details'">
-                </div>
-              }
             </div>
           }
         </div>
       }
 
-      <!-- Text Input Question -->
-      @if (currentQuestion.questionTypeID === 3) {
-        <div class="text-input-container">
-          <label>{{ currentQuestion.title }}</label>
-          <textarea
-            pInputTextarea
-            [(ngModel)]="currentQuestion.textAnswer"
-            [rows]="5"
-            placeholder="Type your answer here...">
-          </textarea>
-        </div>
-      }
-
-      <!-- Form Field Question (can have choices with input fields) -->
-      @if (currentQuestion.questionTypeID === 4) {
+      <!-- MultipleChoiceWithNone = 3: Checkboxes with "None of these apply" -->
+      @if (currentQuestion.questionTypeID === QuestionType.MultipleChoiceWithNone) {
         <div class="choices-container">
+          <p class="instruction-text">Select all that apply, or choose "None of these apply"</p>
           @for (choice of currentQuestion.choices; track choice.id) {
             <div class="choice-item">
-              <label>{{ choice.title }}</label>
-              @if (choice.hasExtraInfo) {
-                <input
-                  type="text"
-                  pInputText
-                  [(ngModel)]="choice.extraInfoTitle"
-                  [placeholder]="choice.extraInfoTitle || 'Enter details'">
-              }
-            </div>
-          }
-        </div>
-      }
-
-      <!-- Default rendering for unknown question types -->
-      @if (currentQuestion.questionTypeID > 4) {
-        <div class="choices-container">
-          <p class="info-message">Question type {{ currentQuestion.questionTypeID }} - Custom rendering needed</p>
-          @for (choice of currentQuestion.choices; track choice.id) {
-            <div class="choice-item">
-              <p-radioButton
+              <p-checkbox
                 [name]="'question_' + currentQuestion.id"
                 [value]="choice.id"
-                [(ngModel)]="currentQuestion.selectedChoiceId"
-                [inputId]="'choice_' + choice.id">
-              </p-radioButton>
+                [inputId]="'choice_' + choice.id"
+                [binary]="true"
+                [ngModel]="isChoiceSelected(choice.id)"
+                [disabled]="!!currentQuestion.noneSelected"
+                (onChange)="onMultiChoiceToggle(choice.id, $event)">
+              </p-checkbox>
               <label [for]="'choice_' + choice.id" class="choice-label">
                 {{ choice.title }}
               </label>
             </div>
           }
+
+          <!-- None of These Apply Button -->
+          <div class="none-option">
+            <p-button
+              [label]="currentQuestion.noneSelected ? 'None selected' : 'None of these apply'"
+              [outlined]="!currentQuestion.noneSelected"
+              severity="secondary"
+              icon="pi pi-times-circle"
+              (onClick)="onNoneOfTheseApply()"
+              styleClass="none-button">
+            </p-button>
+          </div>
+        </div>
+      }
+
+      <!-- FormFill = 4: Text input fields -->
+      @if (currentQuestion.questionTypeID === QuestionType.FormFill) {
+        <div class="form-fill-container">
+          @for (choice of currentQuestion.choices; track choice.id) {
+            <div class="form-field">
+              <label>{{ choice.title }}</label>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="currentQuestion.textAnswers![choice.id]"
+                [placeholder]="'Enter ' + choice.title.toLowerCase()"
+                class="form-input">
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Terminate = 5: Termination message -->
+      @if (currentQuestion.questionTypeID === QuestionType.Terminate) {
+        <div class="terminate-container">
+          <p-message
+            severity="error"
+            text="Based on your previous answers, this medication may not be suitable for you."
+            styleClass="w-full">
+          </p-message>
+          <div class="terminate-choices">
+            @for (choice of currentQuestion.choices; track choice.id) {
+              <div class="choice-item">
+                <p-radioButton
+                  [name]="'question_' + currentQuestion.id"
+                  [value]="choice.id"
+                  [(ngModel)]="currentQuestion.selectedChoiceId"
+                  [inputId]="'choice_' + choice.id">
+                </p-radioButton>
+                <label [for]="'choice_' + choice.id" class="choice-label">
+                  {{ choice.title }}
+                </label>
+              </div>
+            }
+          </div>
         </div>
       }
     </p-card>
@@ -182,7 +200,7 @@
 
       @if (!isLastQuestion()) {
         <p-button
-          label="Next"
+          [label]="getSubmitButtonLabel()"
           icon="pi pi-arrow-right"
           iconPos="right"
           [disabled]="!isCurrentQuestionAnswered()"
@@ -205,7 +223,7 @@
   }
 
   <!-- No Questions Available -->
-  @if (!isLoading && !errorMessage && questions.length === 0) {
+  @if (!isLoading && !errorMessage && !isTerminated && questions.length === 0) {
     <div class="no-questions">
       <i class="pi pi-info-circle"></i>
       <p>No questions available for this drug</p>
