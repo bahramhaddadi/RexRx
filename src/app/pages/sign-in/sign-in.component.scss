@@ -196,40 +196,47 @@
   padding: $spacing-lg;
 }
 
-.captcha-refresh-btn {
+::ng-deep .captcha-refresh-btn {
   position: absolute;
   top: $spacing-xs;
   right: $spacing-xs;
-  background-color: $white;
-  color: $accent-color;
-  border: 1px solid $gray-300;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 1.125rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all $transition-base;
-  box-shadow: $shadow-xs;
 
-  &:hover:not(:disabled) {
-    background-color: $accent-color;
-    color: $white;
-    border-color: $accent-color;
-    transform: rotate(180deg);
-  }
+  .p-button {
+    background-color: $white;
+    color: $accent-color;
+    border: 1px solid $gray-300;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    transition: all $transition-base;
+    box-shadow: $shadow-xs;
 
-  &:disabled {
-    background-color: $gray-200;
-    color: $gray-500;
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
+    &:hover:not(:disabled) {
+      background-color: $accent-color;
+      color: $white;
+      border-color: $accent-color;
 
-  &:active:not(:disabled) {
-    transform: rotate(180deg) scale(0.95);
+      .p-button-icon {
+        transform: rotate(180deg);
+      }
+    }
+
+    &:disabled {
+      background-color: $gray-200;
+      color: $gray-500;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &:active:not(:disabled) {
+      .p-button-icon {
+        transform: rotate(180deg) scale(0.95);
+      }
+    }
+
+    .p-button-icon {
+      transition: transform $transition-base;
+    }
   }
 }
 
@@ -261,10 +268,9 @@
     font-size: $font-size-xl;
   }
 
-  .captcha-refresh-btn {
+  ::ng-deep .captcha-refresh-btn .p-button {
     width: 32px;
     height: 32px;
-    font-size: 1rem;
   }
 
   ::ng-deep .signin-button {

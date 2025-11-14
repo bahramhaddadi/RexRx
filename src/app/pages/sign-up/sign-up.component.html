@@ -162,15 +162,15 @@
                 Loading CAPTCHA...
               </div>
             }
-            <button
-              type="button"
-              class="captcha-refresh-btn"
-              (click)="refreshCaptcha()"
+            <p-button
+              icon="pi pi-refresh"
+              (onClick)="refreshCaptcha()"
               [disabled]="captchaLoading || isLoading"
-              title="Refresh CAPTCHA"
-            >
-              ↻
-            </button>
+              [text]="true"
+              [rounded]="true"
+              styleClass="captcha-refresh-btn"
+              [title]="'Refresh CAPTCHA'"
+            ></p-button>
           </div>
           <input
             type="text"
