@@ -26,10 +26,17 @@
           <p-button
             [label]="username()"
             icon="pi pi-user"
+            iconPos="left"
             [text]="true"
             styleClass="user-button"
             (onClick)="menu.toggle($event)"
-          ></p-button>
+          >
+            <ng-template pTemplate="content">
+              <i class="pi pi-user"></i>
+              <span class="p-button-label">{{ username() }}</span>
+              <i class="pi pi-chevron-down" style="margin-left: 0.5rem; font-size: 0.875rem;"></i>
+            </ng-template>
+          </p-button>
           <p-menu #menu [model]="menuItems" [popup]="true" styleClass="user-menu-popup"></p-menu>
         </div>
       } @else {
