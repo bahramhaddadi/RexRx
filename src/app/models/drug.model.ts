@@ -118,3 +118,8 @@ export interface GetDrugsByCategoryRequest {
   categoryID: number;
   searchCriteria: string;
 }
+
+export interface GetRecommendedDrugsRequest {
+  securitySessionID: string;
+  body: number; // ItemDoseID
+}

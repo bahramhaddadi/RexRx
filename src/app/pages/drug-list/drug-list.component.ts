@@ -105,12 +105,13 @@ export class DrugListComponent implements OnInit {
     this.drugService.getPlaceHolderItem(this.categoryId).subscribe({
       next: (response) => {
         if (response.errorCode === 0 && response.body) {
-          // Navigate to drug questions with eid and doseID
+          // Navigate to drug questions with eid, doseID, and placeholder flag
           this.router.navigate(['/drug-questions'], {
             queryParams: {
               eid: response.body.eid,
               doseId: response.body.doseID,
-              name: this.categoryName
+              name: this.categoryName,
+              isPlaceholder: 'true'
             }
           });
         } else {

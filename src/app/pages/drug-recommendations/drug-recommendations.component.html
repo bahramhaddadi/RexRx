@@ -1,0 +1,57 @@
+<app-page-layout>
+  <div class="recommendations-container">
+    <div class="header">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBackHome()"
+        label="Back to Home"
+      ></button>
+      <h1>Recommended Drugs</h1>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <p-progressSpinner></p-progressSpinner>
+      <p>Loading recommended drugs...</p>
+    </div>
+
+    <!-- Error State -->
+    <p-message
+      *ngIf="errorMessage && !isLoading"
+      severity="error"
+      [text]="errorMessage"
+    ></p-message>
+
+    <!-- Results State -->
+    <div *ngIf="!isLoading && !errorMessage && recommendedDrugs.length > 0" class="results-container">
+      <p class="results-info">
+        Based on your answers, we found {{ recommendedDrugs.length }} recommended drug(s) for you.
+      </p>
+
+      <!-- TODO: Replace with proper drug display once API response structure is known -->
+      <div class="drugs-list">
+        <p-card *ngFor="let drug of recommendedDrugs" class="drug-card">
+          <pre>{{ drug | json }}</pre>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- No Results State -->
+    <div *ngIf="!isLoading && !errorMessage && recommendedDrugs.length === 0" class="no-results">
+      <p-message
+        severity="info"
+        text="No recommended drugs found based on your answers."
+      ></p-message>
+      <button
+        pButton
+        type="button"
+        label="Back to Home"
+        class="p-button-primary"
+        (click)="goBackHome()"
+      ></button>
+    </div>
+  </div>
+</app-page-layout>

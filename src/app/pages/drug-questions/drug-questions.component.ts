@@ -59,6 +59,8 @@ export class DrugQuestionsComponent implements OnInit {
 
   drugEid: string = '';
   drugName: string = '';
+  doseId?: number; // ItemDoseID from placeholder API
+  isPlaceholder: boolean = false; // Flag to indicate if this item is from placeholder
   questions: QuestionWithChoices[] = [];
   currentQuestionIndex: number = 0;
   isLoading: boolean = false;
@@ -73,6 +75,8 @@ export class DrugQuestionsComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.drugEid = params['eid'] || '';
       this.drugName = params['name'] || 'Drug';
+      this.doseId = params['doseId'] ? +params['doseId'] : undefined;
+      this.isPlaceholder = params['isPlaceholder'] === 'true';
 
       if (this.drugEid) {
         this.loadQuestions();
@@ -261,8 +265,20 @@ export class DrugQuestionsComponent implements OnInit {
    */
   onSubmit(): void {
     console.log('Submitting answers:', this.questions);
-    // TODO: Send answers to API and navigate to next step
-    alert('Questionnaire completed! Answers logged to console.');
+    console.log('Is Placeholder:', this.isPlaceholder);
+    console.log('Dose ID:', this.doseId);
+
+    // If this is from placeholder flow, navigate to recommendations page
+    if (this.isPlaceholder && this.doseId) {
+      this.router.navigate(['/drug-recommendations'], {
+        queryParams: {
+          doseId: this.doseId
+        }
+      });
+    } else {
+      // TODO: Handle non-placeholder flow (regular drug selection)
+      alert('Questionnaire completed! Answers logged to console.');
+    }
   }
 
   /**

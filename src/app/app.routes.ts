@@ -38,6 +38,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'drug-recommendations',
+    loadComponent: () => import('./pages/drug-recommendations/drug-recommendations.component').then(mod => mod.DrugRecommendationsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'checkout',
     loadComponent: () => import('./pages/checkout/checkout.component').then(mod => mod.CheckoutComponent),
     canActivate: [authGuard]

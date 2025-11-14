@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, GetRecommendedDrugsRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -123,6 +123,23 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<Drug[]>>(
       '/Pharma/Drug/GetDrugsByCategory',
+      request
+    );
+  }
+
+  /**
+   * Fetches recommended drugs based on answered questions
+   * @param itemDoseId The item dose ID (from placeholder API)
+   * @returns Observable of API response containing recommended drugs
+   */
+  getRecommendedDrugs(itemDoseId: number): Observable<ApiResponse<any>> {
+    const request: GetRecommendedDrugsRequest = {
+      securitySessionID: this.generateSecuritySessionID(),
+      body: itemDoseId
+    };
+
+    return this.apiService.post<ApiResponse<any>>(
+      '/Pharma/Drug/GetRecommendedDrugs',
       request
     );
   }
