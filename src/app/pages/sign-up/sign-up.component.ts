@@ -184,13 +184,15 @@ export class SignUpComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
 
+        // Check for success (errorCode === 0)
         if (response.exceptionCode === 0) {
-          this.successMessage = 'Account created successfully! Redirecting to login...';
-          // Redirect to login page after 2 seconds
+          this.successMessage = 'Account created successfully! Redirecting to sign-in...';
+          // Redirect to sign-in page (the page that routes to sign-up)
           setTimeout(() => {
             this.router.navigate(['/login']);
-          }, 2000);
+          }, 1500);
         } else {
+          // Sign up failed - show error message
           this.errorMessage = response.exceptionMessage || 'Sign up failed. Please try again.';
           this.refreshCaptcha();
         }
