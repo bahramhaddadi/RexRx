@@ -8,6 +8,7 @@
   top: 0;
   z-index: 1000;
   width: 100%;
+  overflow: visible;
 }
 
 .header-container {
@@ -18,13 +19,14 @@
   align-items: center;
   justify-content: space-between;
   height: 64px;
+  overflow: visible;
 }
 
 // Brand
 .header-brand {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
+  gap: 8px;
   cursor: pointer;
   transition: opacity $transition-base;
 
@@ -61,7 +63,7 @@
 .nav-link {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: 4px;
   padding: $spacing-sm $spacing-md;
   color: $gray-700;
   text-decoration: none;
@@ -93,14 +95,102 @@
 ::ng-deep .user-button {
   color: $gray-700;
   font-weight: $font-weight-medium;
+  border-radius: $border-radius-md;
+  transition: all $transition-base;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
 
   &:hover {
     background: $gray-100;
+    color: $primary-color;
+  }
+
+  .p-button-icon {
+    color: $primary-color;
+  }
+
+  .pi-user {
+    color: $primary-color;
+    font-size: 1rem;
+  }
+
+  .pi-chevron-down {
+    color: $gray-500;
+    transition: transform $transition-base;
+  }
+
+  &:hover .pi-chevron-down {
+    color: $primary-color;
   }
 }
 
 ::ng-deep .user-menu-popup {
-  margin-top: $spacing-xs;
+  min-width: 200px !important;
+  border-radius: $border-radius-md;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid $gray-200 !important;
+  z-index: 9999 !important;
+  margin-top: 0.5rem !important;
+
+  .p-menu-list {
+    padding: $spacing-xs;
+  }
+
+  .p-menuitem {
+    margin: 2px 0;
+
+    .p-menuitem-link {
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius-sm;
+      transition: all $transition-base;
+      color: $gray-700;
+
+      &:hover {
+        background: rgba($primary-color, 0.1);
+        color: $primary-color;
+
+        .p-menuitem-icon {
+          color: $primary-color;
+        }
+      }
+
+      .p-menuitem-icon {
+        color: $gray-600;
+        font-size: 1rem;
+        margin-right: 4px;
+        transition: color $transition-base;
+      }
+
+      .p-menuitem-text {
+        font-weight: $font-weight-medium;
+        font-size: $font-size-sm;
+      }
+    }
+
+    // Logout item styling
+    &:last-child .p-menuitem-link {
+      color: #e74c3c;
+
+      &:hover {
+        background: rgba(#e74c3c, 0.1);
+        color: #e74c3c;
+
+        .p-menuitem-icon {
+          color: #e74c3c;
+        }
+      }
+
+      .p-menuitem-icon {
+        color: #e74c3c;
+      }
+    }
+  }
+
+  .p-menuitem-separator {
+    margin: $spacing-xs 0;
+    border-top: 1px solid $gray-200;
+  }
 }
 
 // Auth Buttons
@@ -174,8 +264,11 @@
     gap: $spacing-xs;
   }
 
-  ::ng-deep .user-button .p-button-label {
-    display: none;
+  ::ng-deep .user-button {
+    .p-button-label,
+    .pi-chevron-down {
+      display: none;
+    }
   }
 
   ::ng-deep .login-button .p-button-label,

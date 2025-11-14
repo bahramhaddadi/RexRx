@@ -26,11 +26,23 @@
           <p-button
             [label]="username()"
             icon="pi pi-user"
+            iconPos="left"
             [text]="true"
             styleClass="user-button"
             (onClick)="menu.toggle($event)"
-          ></p-button>
-          <p-menu #menu [model]="menuItems" [popup]="true" styleClass="user-menu-popup"></p-menu>
+          >
+            <ng-template pTemplate="content">
+              <span class="p-button-label">{{ username() }}</span>
+              <i class="pi pi-chevron-down" style="margin-left: 4px; font-size: 0.875rem;"></i>
+            </ng-template>
+          </p-button>
+          <p-menu
+            #menu
+            [model]="menuItems"
+            [popup]="true"
+            appendTo="body"
+            styleClass="user-menu-popup"
+          ></p-menu>
         </div>
       } @else {
         <!-- Guest Navigation -->
