@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { AuthRequest, AuthResponse } from '../models/auth.model';
+import { AuthRequest, AuthResponse, SignUpRequest, SignUpResponse } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ import { AuthRequest, AuthResponse } from '../models/auth.model';
 export class AuthService {
   private readonly apiService = inject(ApiService);
   private readonly AUTH_ENDPOINT = '/Pharma/Security/Authenticate';
+  private readonly SIGNUP_ENDPOINT = '/Pharma/Security/Signup';
   private readonly SESSION_STORAGE_KEY = 'pharma_session';
 
   // Modern Angular 17: Use signal instead of BehaviorSubject
@@ -105,5 +106,14 @@ export class AuthService {
    */
   logout(): void {
     this.clearSession();
+  }
+
+  /**
+   * Register a new user
+   * @param signUpData - User registration data
+   * @returns Observable with sign-up response
+   */
+  signUp(signUpData: SignUpRequest): Observable<SignUpResponse> {
+    return this.apiService.post<SignUpResponse>(this.SIGNUP_ENDPOINT, signUpData);
   }
 }

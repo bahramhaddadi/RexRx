@@ -1,9 +1,9 @@
-<div class="drug-list-container">
-  <!-- Header -->
-  <div class="header">
-    <button pButton type="button" icon="pi pi-arrow-left" class="back-btn" (click)="onBackClick()" label="Back"></button>
-    <h1 class="page-title">{{ categoryName }}</h1>
-  </div>
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Home'" [backButtonRoute]="'/home'">
+  <div class="drug-list-container">
+    <!-- Page Title -->
+    <div class="header">
+      <h1 class="page-title">{{ categoryName }}</h1>
+    </div>
 
   <!-- Loading State -->
   @if (isLoading) {
@@ -40,4 +40,5 @@
       }
     </div>
   }
-</div>
+  </div>
+</app-page-layout>

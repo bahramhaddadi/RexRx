@@ -1,148 +1,212 @@
-<div class="signup-container">
-  <div class="signup-card">
-    <h1 class="signup-title">Welcome to "Store name"</h1>
-    <p class="signup-subtitle">
-      Already have an account?<a href="#" class="login-link" (click)="onLogIn(); $event.preventDefault()">Log in</a>
-    </p>
+<app-page-layout [showHeader]="false" [showBackButton]="false" backgroundColor="var(--surface-50)">
+  <div class="signup-container">
+    <div class="signup-card">
+      <h1 class="signup-title">Welcome to Pharma</h1>
+      <p class="signup-subtitle">
+        Already have an account?<a href="#" class="login-link" (click)="onLogIn(); $event.preventDefault()">Log in</a>
+      </p>
 
-    <form class="signup-form">
-      <div class="form-row">
-        <div class="field">
+      <form class="signup-form">
+        <!-- Error Message -->
+        @if (errorMessage) {
+          <div class="field">
+            <p-message severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
+          </div>
+        }
+
+        <!-- Success Message -->
+        @if (successMessage) {
+          <div class="field">
+            <p-message severity="success" [text]="successMessage" styleClass="w-full"></p-message>
+          </div>
+        }
+
+        <div class="form-row">
+          <div class="field">
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="firstName"
+              name="firstName"
+              placeholder="First name"
+              class="input-field"
+              [disabled]="isLoading"
+            />
+          </div>
+
+          <div class="field">
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="lastName"
+              name="lastName"
+              placeholder="Last name"
+              class="input-field"
+              [disabled]="isLoading"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <input
+              type="email"
+              pInputText
+              [(ngModel)]="email"
+              name="email"
+              placeholder="Email"
+              class="input-field"
+              [disabled]="isLoading"
+            />
+          </div>
+
+          <div class="field">
+            <input
+              type="email"
+              pInputText
+              [(ngModel)]="confirmEmail"
+              name="confirmEmail"
+              placeholder="Confirm Email"
+              class="input-field"
+              [disabled]="isLoading"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <input
+              type="tel"
+              pInputText
+              [(ngModel)]="phone"
+              name="phone"
+              placeholder="Phone"
+              class="input-field"
+              [disabled]="isLoading"
+            />
+          </div>
+
+          <div class="field">
+            <p-calendar
+              [(ngModel)]="dob"
+              name="dob"
+              placeholder="Date of Birth"
+              [showIcon]="false"
+              dateFormat="mm/dd/yy"
+              inputStyleClass="input-field"
+              styleClass="custom-calendar"
+              [disabled]="isLoading"
+            ></p-calendar>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <p-password
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Password"
+              [toggleMask]="true"
+              [feedback]="false"
+              styleClass="input-field-password"
+              inputStyleClass="input-field"
+              [disabled]="isLoading"
+            ></p-password>
+          </div>
+
+          <div class="field">
+            <p-password
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              [toggleMask]="true"
+              [feedback]="false"
+              styleClass="input-field-password"
+              inputStyleClass="input-field"
+              [disabled]="isLoading"
+            ></p-password>
+          </div>
+        </div>
+
+        <div class="form-row source-row">
+          <div class="field source-label">
+            <label>How did you hear about us?</label>
+          </div>
+
+          <div class="field">
+            <p-dropdown
+              [(ngModel)]="selectedSource"
+              name="source"
+              [options]="hearAboutUsOptions"
+              optionLabel="label"
+              placeholder="Select an option"
+              styleClass="custom-dropdown"
+              [showClear]="false"
+              [disabled]="isLoading"
+            ></p-dropdown>
+          </div>
+        </div>
+
+        <!-- CAPTCHA Section -->
+        <div class="field captcha-container">
+          <div class="captcha-image-wrapper">
+            @if (captchaImageUrl && !captchaLoading) {
+              <img
+                [src]="captchaImageUrl"
+                alt="CAPTCHA"
+                class="captcha-image"
+              />
+            }
+            @if (captchaLoading) {
+              <div class="captcha-loading">
+                Loading CAPTCHA...
+              </div>
+            }
+            <button
+              type="button"
+              class="captcha-refresh-btn"
+              (click)="refreshCaptcha()"
+              [disabled]="captchaLoading || isLoading"
+              title="Refresh CAPTCHA"
+            >
+              ↻
+            </button>
+          </div>
           <input
             type="text"
             pInputText
-            [(ngModel)]="firstName"
-            name="firstName"
-            placeholder="First name"
-            class="input-field"
+            [(ngModel)]="captchaCode"
+            name="captchaCode"
+            placeholder="Enter CAPTCHA code"
+            class="input-field captcha-input"
+            [disabled]="isLoading"
+            autocomplete="off"
           />
         </div>
 
-        <div class="field">
-          <input
-            type="text"
-            pInputText
-            [(ngModel)]="lastName"
-            name="lastName"
-            placeholder="Last name"
-            class="input-field"
-          />
+        <div class="button-container">
+          <p-button
+            [label]="isLoading ? 'Creating account...' : 'Continue'"
+            (onClick)="onContinue()"
+            styleClass="continue-button"
+            [disabled]="isLoading"
+            [loading]="isLoading"
+          ></p-button>
         </div>
+      </form>
+
+      <div class="terms-container">
+        <p class="terms-text">
+          By continuing, you agree to and have read the
+          <a href="#" class="terms-link">Terms and Conditions</a>,
+          <a href="#" class="terms-link">Professional Disclosure</a>,
+          <a href="#" class="terms-link">Privacy Policy</a> and
+          <a href="#" class="terms-link">Telehealth Consent</a>
+        </p>
+        <p class="privacy-text">
+          We respect your privacy. All of your information is securely stored on our PIPEDA Compliant server.
+        </p>
       </div>
-
-      <div class="form-row">
-        <div class="field">
-          <input
-            type="email"
-            pInputText
-            [(ngModel)]="email"
-            name="email"
-            placeholder="Email"
-            class="input-field"
-          />
-        </div>
-
-        <div class="field">
-          <input
-            type="email"
-            pInputText
-            [(ngModel)]="confirmEmail"
-            name="confirmEmail"
-            placeholder="Confirm Email"
-            class="input-field"
-          />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="field">
-          <input
-            type="tel"
-            pInputText
-            [(ngModel)]="phone"
-            name="phone"
-            placeholder="Phone"
-            class="input-field"
-          />
-        </div>
-
-        <div class="field">
-          <p-calendar
-            [(ngModel)]="dob"
-            name="dob"
-            placeholder="DOB"
-            [showIcon]="false"
-            dateFormat="mm/dd/yy"
-            inputStyleClass="input-field"
-            styleClass="custom-calendar"
-          ></p-calendar>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="field">
-          <p-password
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Password"
-            [toggleMask]="true"
-            [feedback]="false"
-            styleClass="input-field-password"
-            inputStyleClass="input-field"
-          ></p-password>
-        </div>
-
-        <div class="field">
-          <p-password
-            [(ngModel)]="confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm password"
-            [toggleMask]="true"
-            [feedback]="false"
-            styleClass="input-field-password"
-            inputStyleClass="input-field"
-          ></p-password>
-        </div>
-      </div>
-
-      <div class="form-row source-row">
-        <div class="field source-label">
-          <label>How did you hear about us?</label>
-        </div>
-
-        <div class="field">
-          <p-dropdown
-            [(ngModel)]="selectedSource"
-            name="source"
-            [options]="hearAboutUsOptions"
-            optionLabel="label"
-            placeholder="Facebook / Instagram"
-            styleClass="custom-dropdown"
-            [showClear]="false"
-          ></p-dropdown>
-        </div>
-      </div>
-
-      <div class="button-container">
-        <p-button
-          label="Continue"
-          (onClick)="onContinue()"
-          styleClass="continue-button"
-        ></p-button>
-      </div>
-    </form>
-
-    <div class="terms-container">
-      <p class="terms-text">
-        By continuing, you agree to and have read the
-        <a href="#" class="terms-link">Terms and Conditions</a>,
-        <a href="#" class="terms-link">Professional Disclosure</a>,
-        <a href="#" class="terms-link">Privacy Policy</a> and
-        <a href="#" class="terms-link">Telehealth Consent</a>
-      </p>
-      <p class="privacy-text">
-        We respect your privacy. All of your information is securely stored on our PIPEDA Compliant server.
-      </p>
     </div>
   </div>
-</div>
+</app-page-layout>

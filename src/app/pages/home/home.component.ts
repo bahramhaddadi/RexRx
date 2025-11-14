@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
+import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugCategoryService } from '../../services/drug-category.service';
 import { DrugCategory } from '../../models/drug-category.model';
 
@@ -19,7 +20,8 @@ interface Category {
   imports: [
     CommonModule,
     CarouselModule,
-    ButtonModule
+    ButtonModule,
+    PageLayoutComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']

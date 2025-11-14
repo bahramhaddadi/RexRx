@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { MessageModule } from 'primeng/message';
+import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { CaptchaService } from '../../services/captcha.service';
 import { AuthService } from '../../services/auth.service';
 import { CaptchaResponse } from '../../models/auth.model';
@@ -19,7 +20,8 @@ import { CaptchaResponse } from '../../models/auth.model';
     InputTextModule,
     ButtonModule,
     PasswordModule,
-    MessageModule
+    MessageModule,
+    PageLayoutComponent
   ],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
