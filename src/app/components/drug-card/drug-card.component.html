@@ -1,8 +1,16 @@
 <div class="drug-card">
   <p-card>
     <div class="drug-card-content">
+      @if (drug().imageURL) {
+        <div class="drug-image-container">
+          <img [src]="drug().imageURL" [alt]="drug().title" class="drug-image">
+        </div>
+      }
       <h3 class="drug-title">{{ drug().title }}</h3>
       <p class="drug-brand">{{ drug().brandName }}</p>
+      @if (drug().note) {
+        <p class="drug-note">{{ drug().note }}</p>
+      }
     </div>
   </p-card>
 </div>

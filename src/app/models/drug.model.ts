@@ -3,6 +3,7 @@ export interface Drug {
   title: string;
   brandName: string;
   note: string;
+  imageURL: string;
   isGeneric: boolean;
   categoryID: number;
   categoryName: string;
