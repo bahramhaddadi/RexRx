@@ -99,6 +99,27 @@
       border: 1px solid $gray-300;
       box-shadow: $shadow-sm;
 
+      // Remove PrimeNG card decorations
+      ::ng-deep .p-card {
+        box-shadow: none;
+        border: none;
+        background: transparent;
+      }
+
+      ::ng-deep .p-card-body {
+        padding: 0;
+      }
+
+      ::ng-deep .p-card-content {
+        padding: 0;
+      }
+
+      // Remove any decorative elements
+      ::ng-deep .p-card::before,
+      ::ng-deep .p-card::after {
+        display: none !important;
+      }
+
       .question-header {
         margin-bottom: $spacing-xl;
 
