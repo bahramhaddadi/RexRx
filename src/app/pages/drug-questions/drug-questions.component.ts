@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -13,16 +13,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
-
-// Question Type Enum
-enum QuestionType {
-  SingleChoice = 1,           // Radio buttons - must select one
-  MultipleChoice = 2,         // Checkboxes - must select at least one
-  MultipleChoiceWithNone = 3, // Checkboxes - "None of these apply" option
-  FormFill = 4,              // Text input fields
-  Terminate = 5,             // User cannot get this drug
-  LastQuestion = 10          // Last question marker
-}
 
 interface ExtendedQuestion extends Question {
   selectedChoiceId?: number;
