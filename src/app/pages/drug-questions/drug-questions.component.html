@@ -25,7 +25,7 @@
       <p-button
         label="Try Again"
         icon="pi pi-refresh"
-        (onClick)="loadQuestions()">
+        (onClick)="loadFirstQuestion()">
       </p-button>
     </div>
   }
@@ -47,14 +47,6 @@
   <!-- Questions -->
   @if (!isLoading && !errorMessage && !isTerminated && currentQuestion) {
     <div class="question-content">
-    <!-- Progress Indicator -->
-    <div class="progress-indicator">
-      <span>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</span>
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="((currentQuestionIndex + 1) / questions.length) * 100"></div>
-      </div>
-    </div>
-
     <!-- Question Card -->
     <p-card class="question-card">
       <div class="question-header">
@@ -70,7 +62,7 @@
       <!-- SingleChoice = 1: Radio Buttons (must select one) -->
       @if (currentQuestion.questionTypeID === QuestionType.SingleChoice) {
         <div class="choices-container">
-          @for (choice of currentQuestion.choices; track choice.id) {
+          @for (choice of currentQuestion.questionChoices; track choice.id) {
             <div class="choice-item">
               <p-radioButton
                 [name]="'question_' + currentQuestion.id"
@@ -90,7 +82,7 @@
       @if (currentQuestion.questionTypeID === QuestionType.MultipleChoice) {
         <div class="choices-container">
           <p class="instruction-text">Select at least one option</p>
-          @for (choice of currentQuestion.choices; track choice.id) {
+          @for (choice of currentQuestion.questionChoices; track choice.id) {
             <div class="choice-item">
               <p-checkbox
                 [name]="'question_' + currentQuestion.id"
@@ -112,7 +104,7 @@
       @if (currentQuestion.questionTypeID === QuestionType.MultipleChoiceWithNone) {
         <div class="choices-container">
           <p class="instruction-text">Select all that apply, or choose "None of these apply"</p>
-          @for (choice of currentQuestion.choices; track choice.id) {
+          @for (choice of currentQuestion.questionChoices; track choice.id) {
             <div class="choice-item">
               <p-checkbox
                 [name]="'question_' + currentQuestion.id"
@@ -146,7 +138,7 @@
       <!-- FormFill = 4: Text input fields -->
       @if (currentQuestion.questionTypeID === QuestionType.FormFill) {
         <div class="form-fill-container">
-          @for (choice of currentQuestion.choices; track choice.id) {
+          @for (choice of currentQuestion.questionChoices; track choice.id) {
             <div class="form-field">
               <label>{{ choice.title }}</label>
               <input
@@ -169,7 +161,7 @@
             styleClass="w-full">
           </p-message>
           <div class="terminate-choices">
-            @for (choice of currentQuestion.choices; track choice.id) {
+            @for (choice of currentQuestion.questionChoices; track choice.id) {
               <div class="choice-item">
                 <p-radioButton
                   [name]="'question_' + currentQuestion.id"
@@ -189,41 +181,19 @@
 
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      @if (!isFirstQuestion()) {
-        <p-button
-          label="Previous"
-          icon="pi pi-arrow-left"
-          styleClass="p-button-outlined"
-          (onClick)="onPreviousQuestion()">
-        </p-button>
-      }
-
-      @if (!isLastQuestion()) {
-        <p-button
-          [label]="getSubmitButtonLabel()"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          [disabled]="!isCurrentQuestionAnswered()"
-          (onClick)="onNextQuestion()">
-        </p-button>
-      }
-
-      @if (isLastQuestion()) {
-        <p-button
-          label="Submit"
-          icon="pi pi-check"
-          iconPos="right"
-          styleClass="p-button-success"
-          [disabled]="!isCurrentQuestionAnswered()"
-          (onClick)="onSubmit()">
-        </p-button>
-      }
+      <p-button
+        [label]="getSubmitButtonLabel()"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        [disabled]="!isCurrentQuestionAnswered()"
+        (onClick)="onNextQuestion()">
+      </p-button>
     </div>
   </div>
   }
 
   <!-- No Questions Available -->
-  @if (!isLoading && !errorMessage && !isTerminated && questions.length === 0) {
+  @if (!isLoading && !errorMessage && !isTerminated && !currentQuestion) {
     <div class="no-questions">
       <i class="pi pi-info-circle"></i>
       <p>No questions available for this drug</p>

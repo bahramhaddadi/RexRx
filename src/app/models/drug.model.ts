@@ -123,3 +123,32 @@ export interface GetRecommendedDrugsRequest {
   securitySessionID: string;
   body: number; // ItemDoseID
 }
+
+export interface GetFirstQuestionRequest {
+  securitySessionID: string;
+  body: string; // ItemID (eid)
+}
+
+export interface QuestionWithAnswer {
+  Id: number;
+  QuestionnairID: number;
+  NextQuestionID: number | null;
+  QuestionTypeID: number;
+  Title: string;
+  Note: string;
+  QuestionChoices: QuestionChoiceAnswer[];
+}
+
+export interface QuestionChoiceAnswer {
+  HasExtraInfo: boolean;
+  ExtraInfoTitle: string | null;
+  ImageURL: string | null;
+  RelatedQuestion: any | null;
+  RelatedNextQuestion: any | null;
+  Id: number;
+}
+
+export interface GetNextQuestionRequest {
+  securitySessionID: string;
+  body: QuestionWithAnswer;
+}
