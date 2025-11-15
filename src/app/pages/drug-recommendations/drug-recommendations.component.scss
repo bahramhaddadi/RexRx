@@ -42,6 +42,7 @@
   .drugs-list {
     display: grid;
     gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
     .drug-card {
       pre {
@@ -61,8 +62,44 @@
   gap: 2rem;
   padding: 4rem 2rem;
 
+  .empty-card {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .empty-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+    opacity: 0.9;
+  }
+
+  .empty-title {
+    margin: 0.25rem 0 0;
+    font-size: 1.35rem;
+    color: var(--text-color);
+    font-weight: 600;
+  }
+
+  .empty-text {
+    margin: 0;
+    color: var(--text-color-secondary);
+  }
+
+  .actions {
+    margin-top: 0.5rem;
+  }
+
   button {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 }
 

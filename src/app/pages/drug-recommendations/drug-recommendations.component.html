@@ -41,17 +41,23 @@
 
     <!-- No Results State -->
     <div *ngIf="!isLoading && !errorMessage && recommendedDrugs.length === 0" class="no-results">
-      <p-message
-        severity="info"
-        text="No recommended drugs found based on your answers."
-      ></p-message>
-      <button
-        pButton
-        type="button"
-        label="Back to Home"
-        class="p-button-primary"
-        (click)="goBackHome()"
-      ></button>
+      <p-card class="empty-card">
+        <div class="empty-state">
+          <i class="pi pi-info-circle empty-icon" aria-hidden="true"></i>
+          <h3 class="empty-title">No recommended drugs</h3>
+          <p class="empty-text">We couldn't find any recommendations based on your answers. You can go back and try different inputs or return to the home page.</p>
+          <div class="actions">
+            <button
+              pButton
+              type="button"
+              label="Back to Home"
+              class="p-button-primary"
+              (click)="goBackHome()"
+              aria-label="Back to Home"
+            ></button>
+          </div>
+        </div>
+      </p-card>
     </div>
   </div>
 </app-page-layout>
