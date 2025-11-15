@@ -46,12 +46,13 @@ export interface Question {
   questionnairID: number;
   nextQuestionID: number | null;
   questionTypeID: number;
+  questionType: number;
   title: string;
   note: string;
-  imageURL: string;
+  imageURL: string | null;
   relatedQuestionType: any | null;
   nextQuestion: any | null;
-  relatedQuestionnair: any | null;
+  relatedQuestionnaire: any | null;
   questionChoices: QuestionChoice[];
   state: number;
   id: number;
