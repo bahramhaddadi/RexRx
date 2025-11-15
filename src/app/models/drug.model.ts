@@ -42,16 +42,27 @@ export interface GetItemDoseListRequest {
   body: string; // Drug eid
 }
 
+// Question Type Enum
+export enum QuestionType {
+  SingleChoice = 1,           // Radio buttons - must select one
+  MultipleChoice = 2,         // Checkboxes - must select at least one
+  MultipleChoiceWithNone = 3, // Checkboxes - "None of these apply" option
+  FormFill = 4,              // Text input fields
+  Terminate = 5,             // User cannot get this drug
+  LastQuestion = 10          // Last question marker
+}
+
 export interface Question {
   questionnairID: number;
   nextQuestionID: number | null;
-  questionTypeID: number;
+  questionTypeID: QuestionType;
+  questionType: QuestionType;
   title: string;
   note: string;
-  imageURL: string;
+  imageURL: string | null;
   relatedQuestionType: any | null;
   nextQuestion: any | null;
-  relatedQuestionnair: any | null;
+  relatedQuestionnaire: any | null;
   questionChoices: QuestionChoice[];
   state: number;
   id: number;
@@ -117,4 +128,38 @@ export interface GetDrugsByCategoryRequest {
   securitySessionID: string;
   categoryID: number;
   searchCriteria: string;
+}
+
+export interface GetRecommendedDrugsRequest {
+  securitySessionID: string;
+  body: number; // ItemDoseID
+}
+
+export interface GetFirstQuestionRequest {
+  securitySessionID: string;
+  body: string; // ItemID (eid)
+}
+
+export interface QuestionWithAnswer {
+  Id: number;
+  QuestionnairID: number;
+  NextQuestionID: number | null;
+  QuestionTypeID: QuestionType;
+  Title: string;
+  Note: string;
+  QuestionChoices: QuestionChoiceAnswer[];
+}
+
+export interface QuestionChoiceAnswer {
+  HasExtraInfo: boolean;
+  ExtraInfoTitle: string | null;
+  ImageURL: string | null;
+  RelatedQuestion: any | null;
+  RelatedNextQuestion: any | null;
+  Id: number;
+}
+
+export interface GetNextQuestionRequest {
+  securitySessionID: string;
+  body: QuestionWithAnswer;
 }

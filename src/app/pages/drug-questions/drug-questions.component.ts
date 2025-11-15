@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -13,20 +13,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
-import { forkJoin } from 'rxjs';
 
-// Question Type Enum
-enum QuestionType {
-  SingleChoice = 1,           // Radio buttons - must select one
-  MultipleChoice = 2,         // Checkboxes - must select at least one
-  MultipleChoiceWithNone = 3, // Checkboxes - "None of these apply" option
-  FormFill = 4,              // Text input fields
-  Terminate = 5,             // User cannot get this drug
-  LastQuestion = 10          // Last question marker
-}
-
-interface QuestionWithChoices extends Question {
-  choices: QuestionChoice[];
+interface ExtendedQuestion extends Question {
   selectedChoiceId?: number;
   selectedChoiceIds?: number[];
   textAnswers?: { [key: number]: string }; // For FormFill - choice id to answer mapping
@@ -59,8 +47,9 @@ export class DrugQuestionsComponent implements OnInit {
 
   drugEid: string = '';
   drugName: string = '';
-  questions: QuestionWithChoices[] = [];
-  currentQuestionIndex: number = 0;
+  doseId?: number; // ItemDoseID from placeholder API
+  isPlaceholder: boolean = false; // Flag to indicate if this item is from placeholder
+  currentQuestion: ExtendedQuestion | null = null;
   isLoading: boolean = false;
   errorMessage: string = '';
   isTerminated: boolean = false;
@@ -73,9 +62,11 @@ export class DrugQuestionsComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.drugEid = params['eid'] || '';
       this.drugName = params['name'] || 'Drug';
+      this.doseId = params['doseId'] ? +params['doseId'] : undefined;
+      this.isPlaceholder = params['isPlaceholder'] === 'true';
 
       if (this.drugEid) {
-        this.loadQuestions();
+        this.loadFirstQuestion();
       } else {
         this.errorMessage = 'Drug ID is missing';
       }
@@ -83,57 +74,33 @@ export class DrugQuestionsComponent implements OnInit {
   }
 
   /**
-   * Loads questions for the selected drug
+   * Loads the first question for the selected drug
    */
-  loadQuestions(): void {
+  loadFirstQuestion(): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.drugService.getQuestions(this.drugEid).subscribe({
+    this.drugService.getFirstQuestion(this.drugEid).subscribe({
       next: (response) => {
-        if (response.errorCode === 0 && response.body.length > 0) {
-          // Load choices for all questions
-          const choiceRequests = response.body.map(question =>
-            this.drugService.getChoices(question.id)
-          );
-
-          forkJoin(choiceRequests).subscribe({
-            next: (choicesResponses) => {
-              this.questions = response.body.map((question, index) => ({
-                ...question,
-                choices: choicesResponses[index].errorCode === 0
-                  ? choicesResponses[index].body.filter(choice => choice.questionID === question.id)
-                  : [],
-                selectedChoiceIds: [],
-                textAnswers: {},
-                noneSelected: false
-              }));
-              this.isLoading = false;
-            },
-            error: (error) => {
-              this.errorMessage = 'Failed to load question choices. Please try again later.';
-              console.error('Error loading choices:', error);
-              this.isLoading = false;
-            }
-          });
+        if (response.errorCode === 0 && response.body) {
+          this.currentQuestion = {
+            ...response.body,
+            selectedChoiceIds: [],
+            textAnswers: {},
+            noneSelected: false
+          };
         } else {
-          this.isLoading = false;
-          this.router.navigate(['/checkout']);
+          this.errorMessage = response.errorMessage || 'Failed to load question';
+          console.error('API Error:', response.errorMessage);
         }
+        this.isLoading = false;
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load questions. Please try again later.';
-        console.error('Error loading questions:', error);
+        this.errorMessage = 'Failed to load question. Please try again later.';
+        console.error('Error loading first question:', error);
         this.isLoading = false;
       }
     });
-  }
-
-  /**
-   * Gets the current question being displayed
-   */
-  get currentQuestion(): QuestionWithChoices | null {
-    return this.questions[this.currentQuestionIndex] || null;
   }
 
   /**
@@ -159,7 +126,7 @@ export class DrugQuestionsComponent implements OnInit {
       case QuestionType.FormFill:
         // Check if all choices with input fields have been filled
         if (!question.textAnswers) return false;
-        const hasAnswers = question.choices.some(choice => {
+        const hasAnswers = question.questionChoices.some(choice => {
           const answer = question.textAnswers![choice.id];
           return answer && answer.trim().length > 0;
         });
@@ -175,7 +142,66 @@ export class DrugQuestionsComponent implements OnInit {
   }
 
   /**
-   * Navigates to the next question
+   * Builds the question with answers object for API submission
+   */
+  buildQuestionWithAnswers(): QuestionWithAnswer {
+    const question = this.currentQuestion!;
+
+    // Build selected choices array
+    let selectedChoices: QuestionChoiceAnswer[] = [];
+
+    if (question.questionTypeID === QuestionType.SingleChoice && question.selectedChoiceId) {
+      // Single choice - find the selected choice
+      const choice = question.questionChoices.find(c => c.id === question.selectedChoiceId);
+      if (choice) {
+        selectedChoices = [{
+          Id: choice.id,
+          HasExtraInfo: choice.hasExtraInfo,
+          ExtraInfoTitle: choice.extraInfoTitle,
+          ImageURL: choice.imageURL,
+          RelatedQuestion: choice.relatedQuestion,
+          RelatedNextQuestion: choice.relatedNextQuestion
+        }];
+      }
+    } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
+                question.questionTypeID === QuestionType.MultipleChoiceWithNone) &&
+               question.selectedChoiceIds && question.selectedChoiceIds.length > 0) {
+      // Multiple choice - find all selected choices
+      selectedChoices = question.questionChoices
+        .filter(c => question.selectedChoiceIds!.includes(c.id))
+        .map(c => ({
+          Id: c.id,
+          HasExtraInfo: c.hasExtraInfo,
+          ExtraInfoTitle: c.extraInfoTitle,
+          ImageURL: c.imageURL,
+          RelatedQuestion: c.relatedQuestion,
+          RelatedNextQuestion: c.relatedNextQuestion
+        }));
+    } else if (question.questionTypeID === QuestionType.FormFill) {
+      // Form fill - include all choices (text answers will be in ExtraInfoTitle)
+      selectedChoices = question.questionChoices.map(c => ({
+        Id: c.id,
+        HasExtraInfo: c.hasExtraInfo,
+        ExtraInfoTitle: question.textAnswers?.[c.id] || c.extraInfoTitle,
+        ImageURL: c.imageURL,
+        RelatedQuestion: c.relatedQuestion,
+        RelatedNextQuestion: c.relatedNextQuestion
+      }));
+    }
+
+    return {
+      Id: question.id,
+      QuestionnairID: question.questionnairID,
+      NextQuestionID: question.nextQuestionID,
+      QuestionTypeID: question.questionTypeID,
+      Title: question.title,
+      Note: question.note,
+      QuestionChoices: selectedChoices
+    };
+  }
+
+  /**
+   * Submits current answer and loads next question
    */
   onNextQuestion(): void {
     const currentQ = this.currentQuestion;
@@ -186,8 +212,67 @@ export class DrugQuestionsComponent implements OnInit {
       return;
     }
 
-    if (this.currentQuestionIndex < this.questions.length - 1) {
-      this.currentQuestionIndex++;
+    if (!currentQ) return;
+
+    // Check if this is the last question (nextQuestionID is null)
+    if (currentQ.nextQuestionID === null) {
+      // Last question - navigate to recommendations
+      this.handleQuestionsComplete();
+      return;
+    }
+
+    // Build question with answers
+    const questionWithAnswers = this.buildQuestionWithAnswers();
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.drugService.getNextQuestion(questionWithAnswers).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+
+        if (response.errorCode === 0 && response.body) {
+          // Load next question
+          this.currentQuestion = {
+            ...response.body,
+            selectedChoiceIds: [],
+            textAnswers: {},
+            noneSelected: false
+          };
+        } else if (response.errorCode === 0 && !response.body) {
+          // No more questions - navigate to recommendations or checkout
+          this.handleQuestionsComplete();
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to load next question';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load next question. Please try again later.';
+        console.error('Error loading next question:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Handles completion of all questions
+   */
+  handleQuestionsComplete(): void {
+    console.log('All questions completed');
+    console.log('Is Placeholder:', this.isPlaceholder);
+    console.log('Dose ID:', this.doseId);
+
+    // If this is from placeholder flow, navigate to recommendations page
+    if (this.isPlaceholder && this.doseId) {
+      this.router.navigate(['/drug-recommendations'], {
+        queryParams: {
+          doseId: this.doseId
+        }
+      });
+    } else {
+      // TODO: Handle non-placeholder flow (regular drug selection)
+      this.router.navigate(['/checkout']);
     }
   }
 
@@ -197,15 +282,6 @@ export class DrugQuestionsComponent implements OnInit {
   handleTermination(): void {
     this.isTerminated = true;
     this.terminationMessage = 'Unfortunately, based on your answers, this medication may not be suitable for you. Please consult with a healthcare professional for alternative options.';
-  }
-
-  /**
-   * Navigates to the previous question
-   */
-  onPreviousQuestion(): void {
-    if (this.currentQuestionIndex > 0) {
-      this.currentQuestionIndex--;
-    }
   }
 
   /**
@@ -257,15 +333,6 @@ export class DrugQuestionsComponent implements OnInit {
   }
 
   /**
-   * Submits all answers
-   */
-  onSubmit(): void {
-    console.log('Submitting answers:', this.questions);
-    // TODO: Send answers to API and navigate to next step
-    alert('Questionnaire completed! Answers logged to console.');
-  }
-
-  /**
    * Navigates back to dose selection
    */
   onBackClick(): void {
@@ -278,23 +345,15 @@ export class DrugQuestionsComponent implements OnInit {
   }
 
   /**
-   * Checks if we're on the last question
-   */
-  isLastQuestion(): boolean {
-    const currentQ = this.currentQuestion;
-    return this.currentQuestionIndex === this.questions.length - 1 ||
-           (currentQ?.questionTypeID === QuestionType.LastQuestion);
-  }
-
-  /**
-   * Gets the submit button label based on question type
+   * Gets the submit button label
    */
   getSubmitButtonLabel(): string {
     const currentQ = this.currentQuestion;
 
     if (!currentQ) return 'Next';
 
-    if (this.isLastQuestion()) {
+    // If this is the last question, show Submit
+    if (currentQ.nextQuestionID === null) {
       return 'Submit';
     }
 
@@ -306,16 +365,16 @@ export class DrugQuestionsComponent implements OnInit {
   }
 
   /**
+   * Checks if current question is the last question
+   */
+  isLastQuestion(): boolean {
+    return this.currentQuestion?.nextQuestionID === null;
+  }
+
+  /**
    * Navigates back to home or drugs list
    */
   goBackHome(): void {
     this.router.navigate(['/home']);
-  }
-
-  /**
-   * Checks if we're on the first question
-   */
-  isFirstQuestion(): boolean {
-    return this.currentQuestionIndex === 0;
   }
 }
