@@ -214,13 +214,6 @@ export class DrugQuestionsComponent implements OnInit {
 
     if (!currentQ) return;
 
-    // Check if this is the last question (nextQuestionID is null)
-    if (currentQ.nextQuestionID === null) {
-      // Last question - navigate to recommendations
-      this.handleQuestionsComplete();
-      return;
-    }
-
     // Build question with answers
     const questionWithAnswers = this.buildQuestionWithAnswers();
 
@@ -352,23 +345,11 @@ export class DrugQuestionsComponent implements OnInit {
 
     if (!currentQ) return 'Next';
 
-    // If this is the last question, show Submit
-    if (currentQ.nextQuestionID === null) {
-      return 'Submit';
-    }
-
     if (currentQ.questionTypeID === QuestionType.MultipleChoiceWithNone && currentQ.noneSelected) {
       return 'None of these apply';
     }
 
     return 'Next';
-  }
-
-  /**
-   * Checks if current question is the last question
-   */
-  isLastQuestion(): boolean {
-    return this.currentQuestion?.nextQuestionID === null;
   }
 
   /**
