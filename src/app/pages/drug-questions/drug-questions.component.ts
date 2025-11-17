@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -54,6 +54,7 @@ export class DrugQuestionsComponent implements OnInit {
   errorMessage: string = '';
   isTerminated: boolean = false;
   terminationMessage: string = '';
+  questionnaireAnswers: QuestionnaireAnswer[] = []; // Store all answers for checkout
 
   // Expose QuestionType enum to template
   readonly QuestionType = QuestionType;
@@ -83,12 +84,23 @@ export class DrugQuestionsComponent implements OnInit {
     this.drugService.getFirstQuestion(this.drugEid).subscribe({
       next: (response) => {
         if (response.errorCode === 0 && response.body) {
-          this.currentQuestion = {
-            ...response.body,
-            selectedChoiceIds: [],
-            textAnswers: {},
-            noneSelected: false
-          };
+          // Check if the body contains a valid question (not just an empty object with null values)
+          const isValidQuestion = response.body.id > 0 || response.body.title !== null;
+
+          if (isValidQuestion) {
+            this.currentQuestion = {
+              ...response.body,
+              selectedChoiceIds: [],
+              textAnswers: {},
+              noneSelected: false
+            };
+          } else {
+            // Body exists but contains no valid question data - navigate based on placeholder flag
+            this.handleQuestionsComplete();
+          }
+        } else if (response.errorCode === 0 && !response.body) {
+          // No first question available - navigate based on placeholder flag
+          this.handleQuestionsComplete();
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load question';
           console.error('API Error:', response.errorMessage);
@@ -134,6 +146,10 @@ export class DrugQuestionsComponent implements OnInit {
 
       case QuestionType.Terminate:
         // Terminate questions always proceed
+        return true;
+
+      case QuestionType.LastQuestion:
+        // Last question - always allow proceeding to checkout
         return true;
 
       default:
@@ -208,6 +224,16 @@ export class DrugQuestionsComponent implements OnInit {
 
     if (!currentQ) return;
 
+    // Store the current question's answers
+    this.storeCurrentAnswer();
+
+    // Check if current question is the LastQuestion type
+    if (currentQ.questionTypeID === QuestionType.LastQuestion) {
+      // Navigate to checkout with all collected data
+      this.navigateToCheckout();
+      return;
+    }
+
     // Build question with answers
     const questionWithAnswers = this.buildQuestionWithAnswers();
 
@@ -219,15 +245,30 @@ export class DrugQuestionsComponent implements OnInit {
         this.isLoading = false;
 
         if (response.errorCode === 0 && response.body) {
-          // Load next question
-          this.currentQuestion = {
-            ...response.body,
-            selectedChoiceIds: [],
-            textAnswers: {},
-            noneSelected: false
-          };
+          // Check if the body contains a valid question (not just an empty object with null values)
+          const isValidQuestion = response.body.id > 0 || response.body.title !== null;
+
+          if (isValidQuestion) {
+            // Check if this is the LastQuestion
+            if (response.body.questionTypeID === QuestionType.LastQuestion) {
+              // LastQuestion received - navigate directly to checkout
+              console.log('LastQuestion received, navigating to checkout');
+              this.navigateToCheckout();
+            } else {
+              // Load next question
+              this.currentQuestion = {
+                ...response.body,
+                selectedChoiceIds: [],
+                textAnswers: {},
+                noneSelected: false
+              };
+            }
+          } else {
+            // Body exists but contains no valid question data - navigate based on placeholder flag
+            this.handleQuestionsComplete();
+          }
         } else if (response.errorCode === 0 && !response.body) {
-          // No more questions - navigate to recommendations or checkout
+          // No more questions - navigate based on placeholder flag
           this.handleQuestionsComplete();
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load next question';
@@ -238,6 +279,77 @@ export class DrugQuestionsComponent implements OnInit {
         this.errorMessage = 'Failed to load next question. Please try again later.';
         console.error('Error loading next question:', error);
         this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Stores the current question's answer(s) in the questionnaire answers array
+   */
+  storeCurrentAnswer(): void {
+    const question = this.currentQuestion;
+    if (!question) return;
+
+    // Based on question type, extract and store answers
+    if (question.questionTypeID === QuestionType.SingleChoice && question.selectedChoiceId) {
+      this.questionnaireAnswers.push({
+        questionId: question.id,
+        choiceId: question.selectedChoiceId,
+        extraText: ''
+      });
+    } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
+                question.questionTypeID === QuestionType.MultipleChoiceWithNone) &&
+               question.selectedChoiceIds && question.selectedChoiceIds.length > 0) {
+      // For multiple choice, add each selected choice as a separate answer
+      question.selectedChoiceIds.forEach(choiceId => {
+        this.questionnaireAnswers.push({
+          questionId: question.id,
+          choiceId: choiceId,
+          extraText: ''
+        });
+      });
+    } else if (question.questionTypeID === QuestionType.MultipleChoiceWithNone && question.noneSelected) {
+      // If "none selected", use -1 as choice ID
+      this.questionnaireAnswers.push({
+        questionId: question.id,
+        choiceId: -1,
+        extraText: ''
+      });
+    } else if (question.questionTypeID === QuestionType.FormFill && question.textAnswers) {
+      // For form fill, store each choice with its text answer
+      Object.entries(question.textAnswers).forEach(([choiceIdStr, text]) => {
+        if (text && text.trim().length > 0) {
+          this.questionnaireAnswers.push({
+            questionId: question.id,
+            choiceId: parseInt(choiceIdStr),
+            extraText: text
+          });
+        }
+      });
+    } else if (question.questionTypeID === QuestionType.LastQuestion) {
+      // LastQuestion might have choices or just be an informational message
+      if (question.selectedChoiceId) {
+        // Store last question answer if a choice was selected
+        this.questionnaireAnswers.push({
+          questionId: question.id,
+          choiceId: question.selectedChoiceId,
+          extraText: ''
+        });
+      }
+      // If no choices available, don't store anything - it's just an informational message
+    }
+  }
+
+  /**
+   * Navigates to checkout page with drug info and questionnaire answers
+   */
+  navigateToCheckout(): void {
+    // Pass data to checkout via navigation state
+    this.router.navigate(['/checkout'], {
+      state: {
+        drugName: this.drugName,
+        doseId: this.doseId,
+        questionnaireAnswers: this.questionnaireAnswers
       }
     });
   }

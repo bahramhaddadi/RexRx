@@ -1,6 +1,233 @@
-<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Questions'">
+<app-page-layout [showHeader]="true" [showBackButton]="false">
   <div class="checkout-container">
     <h1>Checkout</h1>
-    <p>Your order summary and payment information will appear here.</p>
+
+    <!-- Drug Information -->
+    <p-card header="Order Summary" styleClass="mb-4">
+      <div class="order-summary">
+        <p><strong>Drug:</strong> {{ drugName }}</p>
+        <p><strong>Quantity:</strong> 1</p>
+      </div>
+    </p-card>
+
+    <!-- Error Message -->
+    @if (errorMessage) {
+      <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
+    }
+
+    <!-- Success Message -->
+    @if (successMessage) {
+      <p-message severity="success" [text]="successMessage" styleClass="w-full mb-4"></p-message>
+    }
+
+    <!-- Patient Information Form -->
+    @if (!successMessage) {
+      <p-card header="Patient Information" styleClass="mb-4">
+        <form (ngSubmit)="onSubmit()" #checkoutForm="ngForm">
+          <div class="form-grid">
+            <!-- First Name -->
+            <div class="form-field">
+              <label for="firstName">First Name <span class="required">*</span></label>
+              <input
+                id="firstName"
+                type="text"
+                pInputText
+                [(ngModel)]="firstName"
+                name="firstName"
+                required
+                class="w-full"
+              />
+            </div>
+
+            <!-- Middle Name -->
+            <div class="form-field">
+              <label for="middleName">Middle Name</label>
+              <input
+                id="middleName"
+                type="text"
+                pInputText
+                [(ngModel)]="middleName"
+                name="middleName"
+                class="w-full"
+              />
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-field">
+              <label for="lastName">Last Name <span class="required">*</span></label>
+              <input
+                id="lastName"
+                type="text"
+                pInputText
+                [(ngModel)]="lastName"
+                name="lastName"
+                required
+                class="w-full"
+              />
+            </div>
+
+            <!-- Sex -->
+            <div class="form-field">
+              <label for="sex">Sex <span class="required">*</span></label>
+              <p-dropdown
+                id="sex"
+                [options]="sexOptions"
+                [(ngModel)]="sex"
+                name="sex"
+                placeholder="Select sex"
+                optionLabel="label"
+                optionValue="value"
+                required
+                styleClass="w-full"
+              ></p-dropdown>
+            </div>
+
+            <!-- Birth Date -->
+            <div class="form-field">
+              <label for="birthDate">Birth Date <span class="required">*</span></label>
+              <p-calendar
+                id="birthDate"
+                [(ngModel)]="birthDate"
+                name="birthDate"
+                [showIcon]="true"
+                dateFormat="yy-mm-dd"
+                placeholder="Select date"
+                required
+                styleClass="w-full"
+              ></p-calendar>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-field">
+              <label for="phone">Phone <span class="required">*</span></label>
+              <input
+                id="phone"
+                type="tel"
+                pInputText
+                [(ngModel)]="phone"
+                name="phone"
+                placeholder="(123) 456-7890"
+                required
+                class="w-full"
+              />
+            </div>
+
+            <!-- Weight -->
+            <div class="form-field">
+              <label for="weight">Weight (lbs) <span class="required">*</span></label>
+              <input
+                id="weight"
+                type="text"
+                pInputText
+                [(ngModel)]="weight"
+                name="weight"
+                placeholder="e.g., 140"
+                required
+                class="w-full"
+              />
+            </div>
+
+            <!-- Health Card Number -->
+            <div class="form-field">
+              <label for="healthCardNumber">Health Card Number</label>
+              <input
+                id="healthCardNumber"
+                type="text"
+                pInputText
+                [(ngModel)]="healthCardNumber"
+                name="healthCardNumber"
+                class="w-full"
+              />
+            </div>
+
+            <!-- Allergies -->
+            <div class="form-field full-width">
+              <label for="allergies">Allergies</label>
+              <textarea
+                id="allergies"
+                pInputTextarea
+                [(ngModel)]="allergies"
+                name="allergies"
+                rows="3"
+                placeholder="List any allergies..."
+                class="w-full"
+              ></textarea>
+            </div>
+
+            <!-- Current Medications -->
+            <div class="form-field full-width">
+              <label for="medications">Current Medications</label>
+              <textarea
+                id="medications"
+                pInputTextarea
+                [(ngModel)]="medications"
+                name="medications"
+                rows="3"
+                placeholder="List any current medications..."
+                class="w-full"
+              ></textarea>
+            </div>
+
+            <!-- Surgeries -->
+            <div class="form-field full-width">
+              <label for="surgeries">Past Surgeries</label>
+              <textarea
+                id="surgeries"
+                pInputTextarea
+                [(ngModel)]="surgeries"
+                name="surgeries"
+                rows="3"
+                placeholder="List any past surgeries..."
+                class="w-full"
+              ></textarea>
+            </div>
+
+            <!-- Other Medical Conditions -->
+            <div class="form-field full-width">
+              <label for="otherMedicalConditions">Other Medical Conditions</label>
+              <textarea
+                id="otherMedicalConditions"
+                pInputTextarea
+                [(ngModel)]="otherMedicalConditions"
+                name="otherMedicalConditions"
+                rows="3"
+                placeholder="List any other medical conditions..."
+                class="w-full"
+              ></textarea>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="form-field">
+              <label for="promoCode">Promo Code</label>
+              <input
+                id="promoCode"
+                type="text"
+                pInputText
+                [(ngModel)]="promoCode"
+                name="promoCode"
+                placeholder="Enter promo code"
+                class="w-full"
+              />
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <p-button
+              label="Cancel"
+              severity="secondary"
+              (onClick)="onCancel()"
+              [disabled]="isLoading"
+            ></p-button>
+            <p-button
+              label="Submit Order"
+              type="submit"
+              [disabled]="!checkoutForm.form.valid || isLoading"
+              [loading]="isLoading"
+            ></p-button>
+          </div>
+        </form>
+      </p-card>
+    }
   </div>
 </app-page-layout>

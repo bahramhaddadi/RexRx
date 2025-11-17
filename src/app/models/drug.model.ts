@@ -161,3 +161,39 @@ export interface GetNextQuestionRequest {
   securitySessionID: string;
   body: QuestionWithAnswer;
 }
+
+export interface QuestionnaireAnswer {
+  questionId: number;
+  choiceId: number;
+  extraText: string;
+}
+
+export interface CartItem {
+  itemDosageId: number;
+  quantity: number;
+  questionnaireAnswers: QuestionnaireAnswer[];
+}
+
+export interface SaveCart2Body {
+  isPatientSameAsUser: boolean;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  sex: string;
+  phone: string;
+  weight: string;
+  birthDate: string;
+  healthCardNumber: string;
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherMedicalConditions: string;
+  orderDate: string;
+  promoCode: string;
+  items: CartItem[];
+}
+
+export interface SaveCart2Request {
+  securitySessionID: string;
+  body: SaveCart2Body;
+}
