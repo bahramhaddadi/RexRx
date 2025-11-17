@@ -148,6 +148,10 @@ export class DrugQuestionsComponent implements OnInit {
         // Terminate questions always proceed
         return true;
 
+      case QuestionType.LastQuestion:
+        // Last question - always allow proceeding to checkout
+        return true;
+
       default:
         return false;
     }
@@ -315,13 +319,17 @@ export class DrugQuestionsComponent implements OnInit {
           });
         }
       });
-    } else if (question.questionTypeID === QuestionType.LastQuestion && question.selectedChoiceId) {
-      // Store last question answer
-      this.questionnaireAnswers.push({
-        questionId: question.id,
-        choiceId: question.selectedChoiceId,
-        extraText: ''
-      });
+    } else if (question.questionTypeID === QuestionType.LastQuestion) {
+      // LastQuestion might have choices or just be an informational message
+      if (question.selectedChoiceId) {
+        // Store last question answer if a choice was selected
+        this.questionnaireAnswers.push({
+          questionId: question.id,
+          choiceId: question.selectedChoiceId,
+          extraText: ''
+        });
+      }
+      // If no choices available, don't store anything - it's just an informational message
     }
   }
 
