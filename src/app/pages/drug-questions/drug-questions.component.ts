@@ -89,6 +89,9 @@ export class DrugQuestionsComponent implements OnInit {
             textAnswers: {},
             noneSelected: false
           };
+        } else if (response.errorCode === 0 && !response.body) {
+          // No first question available - navigate based on placeholder flag
+          this.handleQuestionsComplete();
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load question';
           console.error('API Error:', response.errorMessage);
@@ -219,15 +222,23 @@ export class DrugQuestionsComponent implements OnInit {
         this.isLoading = false;
 
         if (response.errorCode === 0 && response.body) {
-          // Load next question
-          this.currentQuestion = {
-            ...response.body,
-            selectedChoiceIds: [],
-            textAnswers: {},
-            noneSelected: false
-          };
+          // Check if this is the last question (nextQuestion and related fields are empty)
+          const hasNextQuestion = response.body.nextQuestion || response.body.nextQuestionID;
+
+          if (hasNextQuestion) {
+            // Load next question
+            this.currentQuestion = {
+              ...response.body,
+              selectedChoiceIds: [],
+              textAnswers: {},
+              noneSelected: false
+            };
+          } else {
+            // No nextQuestion field - questions complete, navigate based on placeholder flag
+            this.handleQuestionsComplete();
+          }
         } else if (response.errorCode === 0 && !response.body) {
-          // No more questions - navigate to recommendations or checkout
+          // No more questions - navigate based on placeholder flag
           this.handleQuestionsComplete();
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load next question';
