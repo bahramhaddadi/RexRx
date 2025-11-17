@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { QuestionnaireAnswer, SaveCart2Body } from '../../models/drug.model';
+import { QuestionnaireAnswer, SaveCartV2Body } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -111,7 +111,7 @@ export class CheckoutComponent implements OnInit {
       : '';
 
     // Build cart data
-    const cartData: SaveCart2Body = {
+    const cartData: SaveCartV2Body = {
       isPatientSameAsUser: this.isPatientSameAsUser,
       firstName: this.firstName,
       middleName: this.middleName,
@@ -138,7 +138,7 @@ export class CheckoutComponent implements OnInit {
 
     console.log('Submitting cart data:', cartData);
 
-    this.drugService.saveCart2(cartData).subscribe({
+    this.drugService.SaveCartV2(cartData).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response.errorCode === 0) {

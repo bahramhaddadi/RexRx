@@ -174,7 +174,7 @@ export interface CartItem {
   questionnaireAnswers: QuestionnaireAnswer[];
 }
 
-export interface SaveCart2Body {
+export interface SaveCartV2Body {
   isPatientSameAsUser: boolean;
   firstName: string;
   middleName: string;
@@ -193,7 +193,7 @@ export interface SaveCart2Body {
   items: CartItem[];
 }
 
-export interface SaveCart2Request {
+export interface SaveCartV2Request {
   securitySessionID: string;
-  body: SaveCart2Body;
+  body: SaveCartV2Body;
 }

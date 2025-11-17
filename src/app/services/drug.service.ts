@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCart2Request, SaveCart2Body } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -183,14 +183,14 @@ export class DrugService {
    * @param cartData The cart data with patient info and questionnaire answers
    * @returns Observable of API response
    */
-  saveCart2(cartData: SaveCart2Body): Observable<ApiResponse<any>> {
-    const request: SaveCart2Request = {
+  SaveCartV2(cartData: SaveCartV2Body): Observable<ApiResponse<any>> {
+    const request: SaveCartV2Request = {
       securitySessionID: this.generateSecuritySessionID(),
       body: cartData
     };
 
     return this.apiService.post<ApiResponse<any>>(
-      '/Pharma/Shopping/SaveCart2',
+      '/Pharma/Shopping/SaveCartV2',
       request
     );
   }
