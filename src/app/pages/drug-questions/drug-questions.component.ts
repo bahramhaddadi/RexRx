@@ -158,9 +158,7 @@ export class DrugQuestionsComponent implements OnInit {
           Id: choice.id,
           HasExtraInfo: choice.hasExtraInfo,
           ExtraInfoTitle: choice.extraInfoTitle,
-          ImageURL: choice.imageURL,
-          RelatedQuestion: choice.relatedQuestion,
-          RelatedNextQuestion: choice.relatedNextQuestion
+          NextQuestionID: choice.nextQuestionID
         }];
       }
     } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
@@ -173,9 +171,7 @@ export class DrugQuestionsComponent implements OnInit {
           Id: c.id,
           HasExtraInfo: c.hasExtraInfo,
           ExtraInfoTitle: c.extraInfoTitle,
-          ImageURL: c.imageURL,
-          RelatedQuestion: c.relatedQuestion,
-          RelatedNextQuestion: c.relatedNextQuestion
+          NextQuestionID: c.nextQuestionID
         }));
     } else if (question.questionTypeID === QuestionType.FormFill) {
       // Form fill - include all choices (text answers will be in ExtraInfoTitle)
@@ -183,9 +179,7 @@ export class DrugQuestionsComponent implements OnInit {
         Id: c.id,
         HasExtraInfo: c.hasExtraInfo,
         ExtraInfoTitle: question.textAnswers?.[c.id] || c.extraInfoTitle,
-        ImageURL: c.imageURL,
-        RelatedQuestion: c.relatedQuestion,
-        RelatedNextQuestion: c.relatedNextQuestion
+        NextQuestionID: c.nextQuestionID
       }));
     }
 
