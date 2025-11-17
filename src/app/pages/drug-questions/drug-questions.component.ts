@@ -83,12 +83,20 @@ export class DrugQuestionsComponent implements OnInit {
     this.drugService.getFirstQuestion(this.drugEid).subscribe({
       next: (response) => {
         if (response.errorCode === 0 && response.body) {
-          this.currentQuestion = {
-            ...response.body,
-            selectedChoiceIds: [],
-            textAnswers: {},
-            noneSelected: false
-          };
+          // Check if the body contains a valid question (not just an empty object with null values)
+          const isValidQuestion = response.body.id > 0 || response.body.title !== null;
+
+          if (isValidQuestion) {
+            this.currentQuestion = {
+              ...response.body,
+              selectedChoiceIds: [],
+              textAnswers: {},
+              noneSelected: false
+            };
+          } else {
+            // Body exists but contains no valid question data - navigate based on placeholder flag
+            this.handleQuestionsComplete();
+          }
         } else if (response.errorCode === 0 && !response.body) {
           // No first question available - navigate based on placeholder flag
           this.handleQuestionsComplete();
@@ -222,10 +230,10 @@ export class DrugQuestionsComponent implements OnInit {
         this.isLoading = false;
 
         if (response.errorCode === 0 && response.body) {
-          // Check if this is the last question (nextQuestion and related fields are empty)
-          const hasNextQuestion = response.body.nextQuestion || response.body.nextQuestionID;
+          // Check if the body contains a valid question (not just an empty object with null values)
+          const isValidQuestion = response.body.id > 0 || response.body.title !== null;
 
-          if (hasNextQuestion) {
+          if (isValidQuestion) {
             // Load next question
             this.currentQuestion = {
               ...response.body,
@@ -234,7 +242,7 @@ export class DrugQuestionsComponent implements OnInit {
               noneSelected: false
             };
           } else {
-            // No nextQuestion field - questions complete, navigate based on placeholder flag
+            // Body exists but contains no valid question data - navigate based on placeholder flag
             this.handleQuestionsComplete();
           }
         } else if (response.errorCode === 0 && !response.body) {
