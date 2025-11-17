@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -54,6 +54,7 @@ export class DrugQuestionsComponent implements OnInit {
   errorMessage: string = '';
   isTerminated: boolean = false;
   terminationMessage: string = '';
+  questionnaireAnswers: QuestionnaireAnswer[] = []; // Store all answers for checkout
 
   // Expose QuestionType enum to template
   readonly QuestionType = QuestionType;
@@ -219,6 +220,16 @@ export class DrugQuestionsComponent implements OnInit {
 
     if (!currentQ) return;
 
+    // Store the current question's answers
+    this.storeCurrentAnswer();
+
+    // Check if current question is the LastQuestion type
+    if (currentQ.questionTypeID === QuestionType.LastQuestion) {
+      // Navigate to checkout with all collected data
+      this.navigateToCheckout();
+      return;
+    }
+
     // Build question with answers
     const questionWithAnswers = this.buildQuestionWithAnswers();
 
@@ -257,6 +268,73 @@ export class DrugQuestionsComponent implements OnInit {
         this.errorMessage = 'Failed to load next question. Please try again later.';
         console.error('Error loading next question:', error);
         this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Stores the current question's answer(s) in the questionnaire answers array
+   */
+  storeCurrentAnswer(): void {
+    const question = this.currentQuestion;
+    if (!question) return;
+
+    // Based on question type, extract and store answers
+    if (question.questionTypeID === QuestionType.SingleChoice && question.selectedChoiceId) {
+      this.questionnaireAnswers.push({
+        questionId: question.id,
+        choiceId: question.selectedChoiceId,
+        extraText: ''
+      });
+    } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
+                question.questionTypeID === QuestionType.MultipleChoiceWithNone) &&
+               question.selectedChoiceIds && question.selectedChoiceIds.length > 0) {
+      // For multiple choice, add each selected choice as a separate answer
+      question.selectedChoiceIds.forEach(choiceId => {
+        this.questionnaireAnswers.push({
+          questionId: question.id,
+          choiceId: choiceId,
+          extraText: ''
+        });
+      });
+    } else if (question.questionTypeID === QuestionType.MultipleChoiceWithNone && question.noneSelected) {
+      // If "none selected", use -1 as choice ID
+      this.questionnaireAnswers.push({
+        questionId: question.id,
+        choiceId: -1,
+        extraText: ''
+      });
+    } else if (question.questionTypeID === QuestionType.FormFill && question.textAnswers) {
+      // For form fill, store each choice with its text answer
+      Object.entries(question.textAnswers).forEach(([choiceIdStr, text]) => {
+        if (text && text.trim().length > 0) {
+          this.questionnaireAnswers.push({
+            questionId: question.id,
+            choiceId: parseInt(choiceIdStr),
+            extraText: text
+          });
+        }
+      });
+    } else if (question.questionTypeID === QuestionType.LastQuestion && question.selectedChoiceId) {
+      // Store last question answer
+      this.questionnaireAnswers.push({
+        questionId: question.id,
+        choiceId: question.selectedChoiceId,
+        extraText: ''
+      });
+    }
+  }
+
+  /**
+   * Navigates to checkout page with drug info and questionnaire answers
+   */
+  navigateToCheckout(): void {
+    // Pass data to checkout via navigation state
+    this.router.navigate(['/checkout'], {
+      state: {
+        drugName: this.drugName,
+        doseId: this.doseId,
+        questionnaireAnswers: this.questionnaireAnswers
       }
     });
   }
