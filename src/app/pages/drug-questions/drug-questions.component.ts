@@ -249,13 +249,20 @@ export class DrugQuestionsComponent implements OnInit {
           const isValidQuestion = response.body.id > 0 || response.body.title !== null;
 
           if (isValidQuestion) {
-            // Load next question
-            this.currentQuestion = {
-              ...response.body,
-              selectedChoiceIds: [],
-              textAnswers: {},
-              noneSelected: false
-            };
+            // Check if this is the LastQuestion
+            if (response.body.questionTypeID === QuestionType.LastQuestion) {
+              // LastQuestion received - navigate directly to checkout
+              console.log('LastQuestion received, navigating to checkout');
+              this.navigateToCheckout();
+            } else {
+              // Load next question
+              this.currentQuestion = {
+                ...response.body,
+                selectedChoiceIds: [],
+                textAnswers: {},
+                noneSelected: false
+              };
+            }
           } else {
             // Body exists but contains no valid question data - navigate based on placeholder flag
             this.handleQuestionsComplete();
