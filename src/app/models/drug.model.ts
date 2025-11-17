@@ -153,9 +153,7 @@ export interface QuestionWithAnswer {
 export interface QuestionChoiceAnswer {
   HasExtraInfo: boolean;
   ExtraInfoTitle: string | null;
-  ImageURL: string | null;
-  RelatedQuestion: any | null;
-  RelatedNextQuestion: any | null;
+  NextQuestionID: number | null;
   Id: number;
 }
 
