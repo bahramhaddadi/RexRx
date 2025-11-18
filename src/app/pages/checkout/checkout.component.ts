@@ -105,9 +105,9 @@ export class CheckoutComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    // Format birth date
+    // Format birth date (date only, no time)
     const formattedBirthDate = this.birthDate
-      ? this.formatDate(this.birthDate)
+      ? this.formatDateOnly(this.birthDate)
       : '';
 
     // Build cart data
@@ -177,7 +177,18 @@ export class CheckoutComponent implements OnInit {
   }
 
   /**
-   * Formats a Date object to the required string format
+   * Formats a Date object to date-only format (YYYY-MM-DD)
+   */
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Formats a Date object to the required string format with time
    */
   formatDate(date: Date): string {
     const year = date.getFullYear();
