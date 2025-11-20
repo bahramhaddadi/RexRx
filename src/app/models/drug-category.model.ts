@@ -13,7 +13,7 @@ export interface DrugCategory {
 }
 
 export interface GetDrugCategoryListRequest {
-  securitySessionID: string;
+  // No fields needed - Authorization header will be added by interceptor
 }
 
 export interface ApiResponse<T> {
