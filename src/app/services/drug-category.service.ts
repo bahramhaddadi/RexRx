@@ -14,25 +14,12 @@ export class DrugCategoryService {
   private readonly apiService = inject(ApiService);
 
   /**
-   * Generates a random security session ID
-   * TODO: Replace with actual token from authentication service in the future
-   */
-  private generateSecuritySessionID(): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 24; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-  }
-
-  /**
    * Fetches the list of drug categories from the API
    * @returns Observable of API response containing drug categories array
    */
   getDrugCategoryList(): Observable<ApiResponse<DrugCategory[]>> {
     const request: GetDrugCategoryListRequest = {
-      securitySessionID: this.generateSecuritySessionID()
+      // Authorization header will be added by interceptor
     };
 
     return this.apiService.post<ApiResponse<DrugCategory[]>>(

@@ -11,26 +11,12 @@ export class DrugService {
   private readonly apiService = inject(ApiService);
 
   /**
-   * Generates a random security session ID
-   * TODO: Replace with actual token from authentication service in the future
-   */
-  private generateSecuritySessionID(): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 32; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-  }
-
-  /**
    * Fetches the list of drugs from the API
    * @param categoryId Optional category ID to filter drugs
    * @returns Observable of API response containing drugs array
    */
   getDrugList(categoryId?: number): Observable<ApiResponse<Drug[]>> {
     const request: GetDrugListRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: null
     };
 
@@ -47,7 +33,6 @@ export class DrugService {
    */
   getItemDoseList(drugEid: string): Observable<ApiResponse<DrugDose[]>> {
     const request: GetItemDoseListRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: drugEid
     };
 
@@ -64,7 +49,6 @@ export class DrugService {
    */
   getQuestions(drugEid: string): Observable<ApiResponse<Question[]>> {
     const request: GetQuestionsRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: drugEid
     };
 
@@ -81,7 +65,6 @@ export class DrugService {
    */
   getChoices(questionId: number): Observable<ApiResponse<QuestionChoice[]>> {
     const request: GetChoicesRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: questionId
     };
 
@@ -98,7 +81,6 @@ export class DrugService {
    */
   getPlaceHolderItem(categoryId: number): Observable<ApiResponse<PlaceholderItem>> {
     const request: GetPlaceHolderItemRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: categoryId
     };
 
@@ -116,7 +98,6 @@ export class DrugService {
    */
   getDrugsByCategory(categoryId: number, searchCriteria: string = ''): Observable<ApiResponse<Drug[]>> {
     const request: GetDrugsByCategoryRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       categoryID: categoryId,
       searchCriteria: searchCriteria
     };
@@ -134,7 +115,6 @@ export class DrugService {
    */
   getRecommendedDrugs(itemDoseId: number): Observable<ApiResponse<any>> {
     const request: GetRecommendedDrugsRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: itemDoseId
     };
 
@@ -151,7 +131,6 @@ export class DrugService {
    */
   getFirstQuestion(itemEid: string): Observable<ApiResponse<Question>> {
     const request: GetFirstQuestionRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: itemEid
     };
 
@@ -168,7 +147,6 @@ export class DrugService {
    */
   getNextQuestion(questionWithAnswers: QuestionWithAnswer): Observable<ApiResponse<Question>> {
     const request: GetNextQuestionRequest = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: questionWithAnswers
     };
 
@@ -185,7 +163,6 @@ export class DrugService {
    */
   SaveCartV2(cartData: SaveCartV2Body): Observable<ApiResponse<any>> {
     const request: SaveCartV2Request = {
-      securitySessionID: this.generateSecuritySessionID(),
       body: cartData
     };
 

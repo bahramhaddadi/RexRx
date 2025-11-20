@@ -20,7 +20,6 @@ export interface Drug {
 }
 
 export interface GetDrugListRequest {
-  securitySessionID: string;
   body: null;
 }
 
@@ -38,7 +37,6 @@ export interface DrugDose {
 }
 
 export interface GetItemDoseListRequest {
-  securitySessionID: string;
   body: string; // Drug eid
 }
 
@@ -88,12 +86,10 @@ export interface QuestionChoice {
 }
 
 export interface GetQuestionsRequest {
-  securitySessionID: string;
   body: string; // Drug eid
 }
 
 export interface GetChoicesRequest {
-  securitySessionID: string;
   body: number; // Question ID
 }
 
@@ -120,23 +116,19 @@ export interface PlaceholderItem {
 }
 
 export interface GetPlaceHolderItemRequest {
-  securitySessionID: string;
   body: number; // Category ID
 }
 
 export interface GetDrugsByCategoryRequest {
-  securitySessionID: string;
   categoryID: number;
   searchCriteria: string;
 }
 
 export interface GetRecommendedDrugsRequest {
-  securitySessionID: string;
   body: number; // ItemDoseID
 }
 
 export interface GetFirstQuestionRequest {
-  securitySessionID: string;
   body: string; // ItemID (eid)
 }
 
@@ -158,7 +150,6 @@ export interface QuestionChoiceAnswer {
 }
 
 export interface GetNextQuestionRequest {
-  securitySessionID: string;
   body: QuestionWithAnswer;
 }
 
@@ -194,6 +185,5 @@ export interface SaveCartV2Body {
 }
 
 export interface SaveCartV2Request {
-  securitySessionID: string;
   body: SaveCartV2Body;
 }
