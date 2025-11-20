@@ -22,7 +22,6 @@ export interface AuthRequest {
  */
 export interface AuthResponse {
   sessionID: string;
-  token: string;  // Authorization token from login API
   createTime: string;
   lastActivityTime: string;
   lastActivity: string;

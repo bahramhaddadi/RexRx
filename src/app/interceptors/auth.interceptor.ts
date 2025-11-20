@@ -12,10 +12,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                          req.url.includes('/Security/GetCaptcha');
 
   // If user is authenticated and it's not an auth endpoint, add Authorization header
-  if (session?.token && !isAuthEndpoint) {
+  if (session?.sessionID && !isAuthEndpoint) {
     const clonedRequest = req.clone({
       setHeaders: {
-        Authorization: session.token
+        Authorization: session.sessionID
       }
     });
     return next(clonedRequest);
