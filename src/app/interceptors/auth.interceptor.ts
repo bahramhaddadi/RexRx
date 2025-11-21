@@ -15,7 +15,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (session?.sessionID && !isAuthEndpoint) {
     const clonedRequest = req.clone({
       setHeaders: {
-        Authorization: session.sessionID
+        Authorization: `Bearer ${session.sessionID}`
       }
     });
     return next(clonedRequest);
