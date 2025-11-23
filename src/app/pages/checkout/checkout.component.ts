@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { QuestionnaireAnswer, SaveCartV2Body } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, SaveCartV2Body } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -41,6 +41,8 @@ export class CheckoutComponent implements OnInit {
   drugName: string = '';
   doseId?: number;
   questionnaireAnswers: QuestionnaireAnswer[] = [];
+  // Optional: if provided by previous step (drug-summary), use these directly
+  cartItems: CartItem[] = [];
 
   // Form fields
   isPatientSameAsUser: boolean = true;
@@ -78,6 +80,13 @@ export class CheckoutComponent implements OnInit {
     this.drugName = state?.['drugName'] || '';
     this.doseId = state?.['doseId'];
     this.questionnaireAnswers = state?.['questionnaireAnswers'] || [];
+    this.cartItems = state?.['cartItems'] || [];
+
+    // If cartItems are provided (from /drug-summary), prefer them.
+    // For backward-compatibility, set doseId from the first item if present.
+    if (this.cartItems && this.cartItems.length > 0) {
+      this.doseId = this.cartItems[0]?.itemDosageId ?? this.doseId;
+    }
 
     console.log('Checkout initialized with:', {
       drugName: this.drugName,
@@ -85,8 +94,10 @@ export class CheckoutComponent implements OnInit {
       answersCount: this.questionnaireAnswers.length
     });
 
-    // If no data available, show error
-    if (!this.doseId || this.questionnaireAnswers.length === 0) {
+    // If neither cartItems nor the legacy doseId+answers are provided, show error
+    const hasCartItems = this.cartItems && this.cartItems.length > 0;
+    const hasLegacy = !!this.doseId && this.questionnaireAnswers.length > 0;
+    if (!hasCartItems && !hasLegacy) {
       this.errorMessage = 'Missing required checkout data. Please complete the questionnaire first.';
     }
   }
@@ -127,13 +138,15 @@ export class CheckoutComponent implements OnInit {
       otherMedicalConditions: this.otherMedicalConditions,
       orderDate: this.formatDate(new Date()),
       promoCode: this.promoCode,
-      items: [
-        {
-          itemDosageId: this.doseId!,
-          quantity: 1,
-          questionnaireAnswers: this.questionnaireAnswers
-        }
-      ]
+      items: (this.cartItems && this.cartItems.length > 0)
+        ? this.cartItems
+        : [
+            {
+              itemDosageId: this.doseId!,
+              quantity: 1,
+              questionnaireAnswers: this.questionnaireAnswers
+            }
+          ]
     };
 
     console.log('Submitting cart data:', cartData);
@@ -165,15 +178,18 @@ export class CheckoutComponent implements OnInit {
    * Validates the form fields
    */
   validateForm(): boolean {
-    return !!(
+    const baseValid = !!(
       this.firstName &&
       this.lastName &&
       this.sex &&
       this.phone &&
       this.weight &&
-      this.birthDate &&
-      this.doseId
+      this.birthDate
     );
+
+    // Accept either cartItems provided, or legacy single doseId path
+    const hasItems = (this.cartItems && this.cartItems.length > 0) || !!this.doseId;
+    return baseValid && hasItems;
   }
 
   /**
