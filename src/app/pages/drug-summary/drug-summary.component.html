@@ -25,19 +25,42 @@
 
       <div class="related-list" *ngIf="!isLoading && !errorMessage">
         <p-card class="related-card" *ngFor="let r of relatedItems">
-          <div class="related-content">
-            <div class="title">{{ r?.title || r?.name || 'DRUG' }}</div>
-            <div class="image" aria-hidden="true"></div>
-            <div class="promo">Add now and get 10% discount</div>
-            <div class="prices">
-              <span class="old">$20</span>
-              <span class="new">$18</span>
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h4 class="drug-title">{{ r.title }}</h4>
+              <div class="badges">
+                <span class="status-badge related">Related Drug</span>
+                <span *ngIf="isSelected(r)" class="status-badge added">Added to Cart</span>
+                <span *ngIf="!r.isActive" class="status-badge inactive">Inactive</span>
+              </div>
             </div>
+          </ng-template>
+          <div class="drug-details">
+            <div class="detail-row">
+              <span class="label">Brand:</span>
+              <span class="value">{{ r.brandName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Category:</span>
+              <span class="value">{{ r.categoryName }}</span>
+            </div>
+            <div *ngIf="r.note" class="detail-row">
+              <span class="label">Note:</span>
+              <span class="value">{{ r.note }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Type:</span>
+              <span class="value">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+            </div>
+          </div>
+          <ng-template pTemplate="footer">
             <button pButton type="button"
                     (click)="toggleRelated(r)"
-                    [label]="selectedRelatedIds.has(r?.id ?? r?.Id ?? r?.itemDosageId) ? 'Remove' : 'Add to cart'"
+                    [label]="isSelected(r) ? 'Remove from Cart' : 'Add to Cart'"
+                    [class]="isSelected(r) ? 'p-button-danger' : 'p-button-success'"
+                    [icon]="isSelected(r) ? 'pi pi-times' : 'pi pi-plus'"
             ></button>
-          </div>
+          </ng-template>
         </p-card>
       </div>
     </div>

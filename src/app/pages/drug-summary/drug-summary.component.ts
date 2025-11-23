@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { CartItem, QuestionnaireAnswer } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, RelatedDrug } from '../../models/drug.model';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -23,12 +23,10 @@ export class DrugSummaryComponent implements OnInit {
 
   drugName: string = '';
   doseId?: number;
-  relatedItems: any[] = [];
+  relatedItems: RelatedDrug[] = [];
   isLoading = false;
   errorMessage = '';
-  // User can select any of the related items to add alongside
-  selectedRelatedIds = new Set<number>();
-  // Questionnaire answers passed from questions page (needed for main item)
+  selectedRelatedIds = new Set<string>();
   questionnaireAnswers: QuestionnaireAnswer[] = [];
 
   ngOnInit(): void {
@@ -66,21 +64,25 @@ export class DrugSummaryComponent implements OnInit {
     });
   }
 
-  toggleRelated(item: any): void {
-    const id = item?.id ?? item?.Id ?? item?.itemDosageId;
-    if (id == null) return;
-    if (this.selectedRelatedIds.has(id)) this.selectedRelatedIds.delete(id);
-    else this.selectedRelatedIds.add(id);
+  toggleRelated(item: RelatedDrug): void {
+    if (!item.id) return;
+    if (this.selectedRelatedIds.has(item.id)) {
+      this.selectedRelatedIds.delete(item.id);
+    } else {
+      this.selectedRelatedIds.add(item.id);
+    }
+  }
+
+  isSelected(item: RelatedDrug): boolean {
+    return this.selectedRelatedIds.has(item.id);
   }
 
   proceedToCheckout(): void {
     if (!this.doseId) {
-      // Fallback: go directly with no items (checkout will show error)
       this.router.navigate(['/checkout']);
       return;
     }
 
-    // Build cart items: main item + selected related items
     const items: CartItem[] = [];
     items.push({
       itemDosageId: this.doseId,
@@ -88,14 +90,16 @@ export class DrugSummaryComponent implements OnInit {
       questionnaireAnswers: this.questionnaireAnswers || []
     });
 
-    // Map related selection to cart items (no questionnaire answers for related)
-    Array.from(this.selectedRelatedIds).forEach(id => {
-      if (id !== this.doseId) {
-        items.push({
-          itemDosageId: id,
-          quantity: 1,
-          questionnaireAnswers: []
-        });
+    this.relatedItems.forEach(item => {
+      if (this.selectedRelatedIds.has(item.id)) {
+        const dosageId = parseInt(item.id, 10);
+        if (!isNaN(dosageId) && dosageId !== this.doseId) {
+          items.push({
+            itemDosageId: dosageId,
+            quantity: 1,
+            questionnaireAnswers: []
+          });
+        }
       }
     });
 

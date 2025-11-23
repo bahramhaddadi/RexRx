@@ -128,12 +128,12 @@ export class DrugService {
    * Fetches related items for upsell based on selected item dose
    * @param itemDoseId The selected ItemDoseID
    */
-  getRelatedItems(itemDoseId: number): Observable<ApiResponse<any[]>> {
+  getRelatedItems(itemDoseId: number): Observable<ApiResponse<RelatedDrug[]>> {
     const request: GetRelatedItemsRequest = {
       body: itemDoseId
     };
 
-    return this.apiService.post<ApiResponse<any[]>>(
+    return this.apiService.post<ApiResponse<RelatedDrug[]>>(
       '/Pharma/Drug/GetRelatedItems',
       request
     );
