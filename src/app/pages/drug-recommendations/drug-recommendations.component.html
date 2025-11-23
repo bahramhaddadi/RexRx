@@ -17,7 +17,11 @@
           <ng-template pTemplate="header">
             <div class="card-header">
               <h3 class="drug-title">{{ drug.title }}</h3>
-              <span *ngIf="!drug.isActive" class="status-badge inactive">Inactive</span>
+              <div class="badges">
+                <span class="status-badge related">Related Drug</span>
+                <span *ngIf="isSelected(drug)" class="status-badge added">Added to Order</span>
+                <span *ngIf="!drug.isActive" class="status-badge inactive">Inactive</span>
+              </div>
             </div>
           </ng-template>
           <div class="drug-details">
@@ -42,9 +46,10 @@
             <button
               pButton
               type="button"
-              label="Select Drug"
-              class="p-button-primary"
-              icon="pi pi-check"
+              [label]="isSelected(drug) ? 'Remove from Order' : 'Add to Order'"
+              [class]="isSelected(drug) ? 'p-button-danger' : 'p-button-success'"
+              [icon]="isSelected(drug) ? 'pi pi-times' : 'pi pi-plus'"
+              (click)="selectDrug(drug)"
             ></button>
           </ng-template>
         </p-card>

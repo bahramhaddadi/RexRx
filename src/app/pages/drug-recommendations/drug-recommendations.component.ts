@@ -34,6 +34,7 @@ export class DrugRecommendationsComponent implements OnInit {
 
   doseId?: number;
   recommendedDrugs: RelatedDrug[] = [];
+  selectedDrugs: RelatedDrug[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
   quantityOptions = [8, 12, 16].map(v => ({ label: `${v}`, value: v }));
@@ -87,13 +88,36 @@ export class DrugRecommendationsComponent implements OnInit {
   }
 
   /**
+   * Toggle drug selection
+   */
+  selectDrug(drug: RelatedDrug): void {
+    const index = this.selectedDrugs.findIndex(d => d.id === drug.id);
+
+    if (index > -1) {
+      // Remove if already selected
+      this.selectedDrugs.splice(index, 1);
+    } else {
+      // Add to selection
+      this.selectedDrugs.push({ ...drug, selected: true });
+    }
+  }
+
+  /**
+   * Check if drug is already selected
+   */
+  isSelected(drug: RelatedDrug): boolean {
+    return this.selectedDrugs.some(d => d.id === drug.id);
+  }
+
+  /**
    * Continue to checkout after placeholder flow
    */
   continueToCheckout(): void {
     this.router.navigate(['/checkout'], {
       state: {
         doseId: this.doseId,
-        quantity: this.selectedQuantity
+        quantity: this.selectedQuantity,
+        selectedDrugs: this.selectedDrugs
       }
     });
   }
