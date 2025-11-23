@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -120,6 +120,21 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<any>>(
       '/Pharma/Drug/GetRecommendedDrugsV2',
+      request
+    );
+  }
+
+  /**
+   * Fetches related items for upsell based on selected item dose
+   * @param itemDoseId The selected ItemDoseID
+   */
+  getRelatedItems(itemDoseId: number): Observable<ApiResponse<any[]>> {
+    const request: GetRelatedItemsRequest = {
+      body: itemDoseId
+    };
+
+    return this.apiService.post<ApiResponse<any[]>>(
+      '/Pharma/Drug/GetRelatedItems',
       request
     );
   }

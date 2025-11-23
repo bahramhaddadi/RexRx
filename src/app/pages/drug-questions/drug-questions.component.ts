@@ -229,8 +229,8 @@ export class DrugQuestionsComponent implements OnInit {
 
     // Check if current question is the LastQuestion type
     if (currentQ.questionTypeID === QuestionType.LastQuestion) {
-      // Navigate to checkout with all collected data
-      this.navigateToCheckout();
+      // Centralize completion flow to respect placeholder vs non-placeholder branching
+      this.handleQuestionsComplete();
       return;
     }
 
@@ -251,9 +251,9 @@ export class DrugQuestionsComponent implements OnInit {
           if (isValidQuestion) {
             // Check if this is the LastQuestion
             if (response.body.questionTypeID === QuestionType.LastQuestion) {
-              // LastQuestion received - navigate directly to checkout
-              console.log('LastQuestion received, navigating to checkout');
-              this.navigateToCheckout();
+              // LastQuestion received - centralize completion flow
+              console.log('LastQuestion received, handling completion flow');
+              this.handleQuestionsComplete();
             } else {
               // Load next question
               this.currentQuestion = {
@@ -370,8 +370,21 @@ export class DrugQuestionsComponent implements OnInit {
         }
       });
     } else {
-      // TODO: Handle non-placeholder flow (regular drug selection)
-      this.router.navigate(['/checkout']);
+      // Non-placeholder flow: show summary + related items page before checkout
+      if (this.doseId) {
+        this.router.navigate(['/drug-summary'], {
+          queryParams: {
+            doseId: this.doseId,
+            name: this.drugName
+          },
+          // Pass questionnaire answers via navigation state so /drug-summary can build cart items
+          state: {
+            questionnaireAnswers: this.questionnaireAnswers
+          }
+        });
+      } else {
+        this.router.navigate(['/checkout']);
+      }
     }
   }
 

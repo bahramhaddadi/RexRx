@@ -1,63 +1,33 @@
 <app-page-layout>
   <div class="recommendations-container">
-    <div class="header">
-      <button
-        pButton
-        type="button"
-        icon="pi pi-arrow-left"
-        class="p-button-text"
-        (click)="goBackHome()"
-        label="Back to Home"
-      ></button>
-      <h1>Recommended Drugs</h1>
-    </div>
-
-    <!-- Loading State -->
+    <!-- Loading -->
     <div *ngIf="isLoading" class="loading-container">
       <p-progressSpinner></p-progressSpinner>
-      <p>Loading recommended drugs...</p>
     </div>
 
-    <!-- Error State -->
-    <p-message
-      *ngIf="errorMessage && !isLoading"
-      severity="error"
-      [text]="errorMessage"
-    ></p-message>
+    <!-- Error -->
+    <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
 
-    <!-- Results State -->
-    <div *ngIf="!isLoading && !errorMessage && recommendedDrugs.length > 0" class="results-container">
-      <p class="results-info">
-        Based on your answers, we found {{ recommendedDrugs.length }} recommended drug(s) for you.
-      </p>
+    <!-- Content based on mock -->
+    <div *ngIf="!isLoading && !errorMessage" class="centered">
+      <h2 class="title">Recommended dose and brand</h2>
 
-      <!-- TODO: Replace with proper drug display once API response structure is known -->
-      <div class="drugs-list">
-        <p-card *ngFor="let drug of recommendedDrugs" class="drug-card">
-          <pre>{{ drug | json }}</pre>
-        </p-card>
+      <div class="product">
+        <div class="name">Drug name and branch</div>
+        <div class="dose">50mg</div>
+        <div class="image" aria-hidden="true"></div>
+        <div class="desc-title">Drug description</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
       </div>
-    </div>
 
-    <!-- No Results State -->
-    <div *ngIf="!isLoading && !errorMessage && recommendedDrugs.length === 0" class="no-results">
-      <p-card class="empty-card">
-        <div class="empty-state">
-          <i class="pi pi-info-circle empty-icon" aria-hidden="true"></i>
-          <h3 class="empty-title">No recommended drugs</h3>
-          <p class="empty-text">We couldn't find any recommendations based on your answers. You can go back and try different inputs or return to the home page.</p>
-          <div class="actions">
-            <button
-              pButton
-              type="button"
-              label="Back to Home"
-              class="p-button-primary"
-              (click)="goBackHome()"
-              aria-label="Back to Home"
-            ></button>
-          </div>
-        </div>
-      </p-card>
+      <div class="quantity">
+        <label for="qty">Quantity</label>
+        <p-dropdown id="qty" [options]="quantityOptions" [(ngModel)]="selectedQuantity" optionLabel="label"></p-dropdown>
+      </div>
+
+      <div class="actions">
+        <button pButton type="button" label="Continue" (click)="continueToCheckout()"></button>
+      </div>
     </div>
   </div>
 </app-page-layout>

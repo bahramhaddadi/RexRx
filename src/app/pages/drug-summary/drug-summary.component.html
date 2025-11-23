@@ -1,0 +1,50 @@
+<app-page-layout>
+  <div class="summary-container">
+    <div class="summary-header">
+      <h2>Product</h2>
+      <h2>Total</h2>
+    </div>
+
+    <!-- Selected Product Row -->
+    <div class="product-row">
+      <div class="product-info">
+        <div class="thumb" aria-hidden="true"></div>
+        <div class="details">
+          <div class="name">{{ drugName }} (Dose)</div>
+          <div class="desc">Number of pills</div>
+        </div>
+      </div>
+      <div class="price">$12</div>
+    </div>
+
+    <!-- Related products box -->
+    <div class="related-box">
+      <h3>Related products</h3>
+
+      <div *ngIf="isLoading" class="loading"><p-progressSpinner></p-progressSpinner></div>
+      <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
+
+      <div class="related-list" *ngIf="!isLoading && !errorMessage">
+        <p-card class="related-card" *ngFor="let r of relatedItems">
+          <div class="related-content">
+            <div class="title">{{ r?.title || r?.name || 'DRUG' }}</div>
+            <div class="image" aria-hidden="true"></div>
+            <div class="promo">Add now and get 10% discount</div>
+            <div class="prices">
+              <span class="old">$20</span>
+              <span class="new">$18</span>
+            </div>
+            <button pButton type="button"
+                    (click)="toggleRelated(r)"
+                    [label]="selectedRelatedIds.has(r?.id ?? r?.Id ?? r?.itemDosageId) ? 'Remove' : 'Add to cart'"
+            ></button>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button pButton type="button" class="p-button-rounded p-button-lg" (click)="proceedToCheckout()" label="Checkout"></button>
+    </div>
+  </div>
+</app-page-layout>

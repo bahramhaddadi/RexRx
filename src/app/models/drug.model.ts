@@ -128,6 +128,11 @@ export interface GetRecommendedDrugsRequest {
   body: number; // ItemDoseID
 }
 
+// Related items (upsell) request/response
+export interface GetRelatedItemsRequest {
+  body: number; // ItemDoseID
+}
+
 export interface GetFirstQuestionRequest {
   body: string; // ItemID (eid)
 }
