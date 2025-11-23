@@ -40,9 +40,14 @@
   }
 
   .drugs-list {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+    > * {
+      flex: 1 1 280px;
+      min-width: 280px;
+    }
 
     .drug-card {
       pre {
@@ -185,10 +190,15 @@
   }
 
   .drugs-list {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     margin-bottom: 2rem;
+
+    > * {
+      flex: 1 1 300px;
+      min-width: 300px;
+    }
   }
 
   .quantity {

@@ -5,19 +5,28 @@
 }
 
 .summary-header {
-  display: grid;
-  grid-template-columns: 1fr 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid var(--surface-border);
   padding-bottom: .75rem;
   margin-bottom: 1rem;
+
+  > :last-child {
+    flex: 0 0 120px;
+  }
 }
 
 .product-row {
-  display: grid;
-  grid-template-columns: 1fr 120px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid var(--surface-border);
+
+  > :last-child {
+    flex: 0 0 120px;
+  }
 }
 
 .product-info {
@@ -45,9 +54,14 @@
 }
 
 .related-list {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+  > * {
+    flex: 1 1 300px;
+    min-width: 300px;
+  }
 }
 
 .related-card {

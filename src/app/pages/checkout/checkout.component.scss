@@ -19,16 +19,18 @@
   }
 
   .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
 
     .form-field {
       display: flex;
       flex-direction: column;
+      flex: 1 1 calc(50% - 0.75rem);
+      min-width: 250px;
 
       &.full-width {
-        grid-column: 1 / -1;
+        flex: 1 1 100%;
       }
 
       label {
@@ -61,11 +63,11 @@
     padding: 1rem;
 
     .form-grid {
-      grid-template-columns: 1fr;
-
       .form-field {
+        flex: 1 1 100%;
+
         &.full-width {
-          grid-column: 1;
+          flex: 1 1 100%;
         }
       }
     }
