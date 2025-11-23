@@ -51,6 +51,74 @@
         word-wrap: break-word;
         font-size: 0.9rem;
       }
+
+      .card-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+
+        .drug-title {
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: var(--text-color);
+        }
+
+        .badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+
+        .status-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          &.related {
+            background-color: #e3f2fd;
+            color: #1976d2;
+          }
+
+          &.added {
+            background-color: #e8f5e9;
+            color: #388e3c;
+          }
+
+          &.inactive {
+            background-color: #ffebee;
+            color: #d32f2f;
+          }
+        }
+      }
+
+      .drug-details {
+        padding: 1rem;
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid var(--surface-border);
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .label {
+            font-weight: 600;
+            color: var(--text-color-secondary);
+          }
+
+          .value {
+            color: var(--text-color);
+          }
+        }
+      }
     }
   }
 }
@@ -100,6 +168,50 @@
 
   button {
     margin-top: 0.5rem;
+  }
+}
+
+.centered {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .title {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+  }
+
+  .drugs-list {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin-bottom: 2rem;
+  }
+
+  .quantity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 2rem 0;
+    max-width: 300px;
+
+    label {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+
+    button {
+      min-width: 200px;
+    }
   }
 }
 

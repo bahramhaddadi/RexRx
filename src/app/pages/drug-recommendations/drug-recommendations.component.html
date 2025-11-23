@@ -8,16 +8,51 @@
     <!-- Error -->
     <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
 
-    <!-- Content based on mock -->
+    <!-- Content based on API -->
     <div *ngIf="!isLoading && !errorMessage" class="centered">
       <h2 class="title">Recommended dose and brand</h2>
 
-      <div class="product">
-        <div class="name">Drug name and branch</div>
-        <div class="dose">50mg</div>
-        <div class="image" aria-hidden="true"></div>
-        <div class="desc-title">Drug description</div>
-        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit</div>
+      <div class="drugs-list">
+        <p-card *ngFor="let drug of recommendedDrugs" class="drug-card">
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h3 class="drug-title">{{ drug.title }}</h3>
+              <div class="badges">
+                <span class="status-badge related">Related Drug</span>
+                <span *ngIf="isSelected(drug)" class="status-badge added">Added to Order</span>
+                <span *ngIf="!drug.isActive" class="status-badge inactive">Inactive</span>
+              </div>
+            </div>
+          </ng-template>
+          <div class="drug-details">
+            <div class="detail-row">
+              <span class="label">Brand:</span>
+              <span class="value">{{ drug.brandName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Category:</span>
+              <span class="value">{{ drug.categoryName }}</span>
+            </div>
+            <div *ngIf="drug.note" class="detail-row">
+              <span class="label">Note:</span>
+              <span class="value">{{ drug.note }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Type:</span>
+              <span class="value">{{ drug.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+            </div>
+          </div>
+          <ng-template pTemplate="footer">
+            <button
+              pButton
+              type="button"
+              [label]="isSelected(drug) ? 'Remove from Order' : 'Add to Order'"
+              [class]="isSelected(drug) ? 'p-button-danger' : 'p-button-success'"
+              [icon]="isSelected(drug) ? 'pi pi-times' : 'pi pi-plus'"
+              (click)="selectDrug(drug)"
+            ></button>
+          </ng-template>
+        </p-card>
       </div>
 
       <div class="quantity">
