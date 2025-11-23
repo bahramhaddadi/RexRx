@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
+import { RelatedDrug } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -28,7 +29,7 @@ export class DrugRecommendationsComponent implements OnInit {
   private readonly router = inject(Router);
 
   doseId?: number;
-  recommendedDrugs: any[] = []; // TODO: Define proper type when API response structure is known
+  recommendedDrugs: RelatedDrug[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
 

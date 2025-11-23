@@ -124,6 +124,18 @@ export interface GetDrugsByCategoryRequest {
   searchCriteria: string;
 }
 
+export interface RelatedDrug {
+  selected: boolean;
+  id: string;
+  categoryId: number;
+  categoryName: string;
+  brandName: string;
+  title: string;
+  note: string;
+  isActive: boolean;
+  isGeneric: boolean;
+}
+
 export interface GetRecommendedDrugsRequest {
   body: number; // ItemDoseID
 }

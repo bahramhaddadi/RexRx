@@ -31,10 +31,41 @@
         Based on your answers, we found {{ recommendedDrugs.length }} recommended drug(s) for you.
       </p>
 
-      <!-- TODO: Replace with proper drug display once API response structure is known -->
       <div class="drugs-list">
         <p-card *ngFor="let drug of recommendedDrugs" class="drug-card">
-          <pre>{{ drug | json }}</pre>
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h3 class="drug-title">{{ drug.title }}</h3>
+              <span *ngIf="!drug.isActive" class="status-badge inactive">Inactive</span>
+            </div>
+          </ng-template>
+          <div class="drug-details">
+            <div class="detail-row">
+              <span class="label">Brand:</span>
+              <span class="value">{{ drug.brandName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Category:</span>
+              <span class="value">{{ drug.categoryName }}</span>
+            </div>
+            <div *ngIf="drug.note" class="detail-row">
+              <span class="label">Note:</span>
+              <span class="value">{{ drug.note }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Type:</span>
+              <span class="value">{{ drug.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+            </div>
+          </div>
+          <ng-template pTemplate="footer">
+            <button
+              pButton
+              type="button"
+              label="Select Drug"
+              class="p-button-primary"
+              icon="pi pi-check"
+            ></button>
+          </ng-template>
         </p-card>
       </div>
     </div>
