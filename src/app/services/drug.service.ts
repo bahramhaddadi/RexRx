@@ -174,14 +174,14 @@ export class DrugService {
   /**
    * Saves the shopping cart with patient information and questionnaire answers
    * @param cartData The cart data with patient info and questionnaire answers
-   * @returns Observable of API response
+   * @returns Observable of API response containing Stripe checkout URL
    */
-  SaveCartV2(cartData: SaveCartV2Body): Observable<ApiResponse<any>> {
+  SaveCartV2(cartData: SaveCartV2Body): Observable<ApiResponse<string>> {
     const request: SaveCartV2Request = {
       body: cartData
     };
 
-    return this.apiService.post<ApiResponse<any>>(
+    return this.apiService.post<ApiResponse<string>>(
       '/Pharma/Shopping/SaveCartV2',
       request
     );

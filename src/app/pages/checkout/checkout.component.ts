@@ -155,12 +155,14 @@ export class CheckoutComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         if (response.errorCode === 0) {
-          this.successMessage = 'Order submitted successfully!';
-          console.log('Order response:', response);
-          // Optionally navigate to success page or home after a delay
-          setTimeout(() => {
-            this.router.navigate(['/home']);
-          }, 2000);
+          console.log('Order submitted successfully, redirecting to Stripe checkout:', response.body);
+          // Redirect to Stripe checkout URL
+          if (response.body) {
+            window.location.href = response.body;
+          } else {
+            this.errorMessage = 'Checkout URL not provided';
+            console.error('Missing checkout URL in response');
+          }
         } else {
           this.errorMessage = response.errorMessage || 'Failed to submit order';
           console.error('API Error:', response.errorMessage);
