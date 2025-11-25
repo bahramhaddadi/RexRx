@@ -1,0 +1,372 @@
+<app-page-layout [showHeader]="true" [showBackButton]="false">
+  <div class="settings-container">
+    <!-- Page Title -->
+    <div class="settings-header">
+      <h1>Settings</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="settings-content">
+      <!-- Left Sidebar Navigation -->
+      <aside class="settings-sidebar">
+        <nav class="settings-menu">
+          <button
+            *ngFor="let item of menuItems"
+            class="menu-item"
+            [class.active]="selectedSection === item.value"
+            [class.disabled]="item.disabled"
+            (click)="navigateToSection(item.value)"
+            [disabled]="item.disabled"
+          >
+            <i [class]="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="settings-main">
+        <!-- Error/Success Messages -->
+        <div *ngIf="errorMessage" class="message message-error">
+          <i class="pi pi-exclamation-circle"></i>
+          {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="message message-success">
+          <i class="pi pi-check-circle"></i>
+          {{ successMessage }}
+        </div>
+
+        <!-- Personal Info Section -->
+        <section *ngIf="selectedSection === 'personal-info'" class="settings-section">
+          <h2>Personal Info</h2>
+
+          <div *ngIf="isLoadingProfile" class="loading-container">
+            <p-progressSpinner />
+          </div>
+
+          <form *ngIf="!isLoadingProfile" class="personal-info-form">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="firstName">First name</label>
+                <input
+                  pInputText
+                  id="firstName"
+                  [(ngModel)]="personalInfoForm.firstName"
+                  name="firstName"
+                  placeholder="First name"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="gender">Gender</label>
+                <p-dropdown
+                  id="gender"
+                  [(ngModel)]="personalInfoForm.gender"
+                  [options]="genderOptions"
+                  name="gender"
+                  placeholder="Select gender"
+                  optionLabel="label"
+                  optionValue="value"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="lastName">Last name</label>
+                <input
+                  pInputText
+                  id="lastName"
+                  [(ngModel)]="personalInfoForm.lastName"
+                  name="lastName"
+                  placeholder="Last name"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="phone">Phone number</label>
+                <input
+                  pInputText
+                  id="phone"
+                  [(ngModel)]="personalInfoForm.phone"
+                  name="phone"
+                  placeholder="Phone number"
+                  type="tel"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="dob">DOB</label>
+                <input
+                  pInputText
+                  id="dob"
+                  [(ngModel)]="personalInfoForm.dateOfBirth"
+                  name="dateOfBirth"
+                  placeholder="YYYY-MM-DD"
+                  type="date"
+                />
+              </div>
+
+              <div class="form-field">
+                <!-- Empty field for alignment -->
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelPersonalInfo()"
+                [disabled]="isSavingProfile"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Save"
+                (click)="savePersonalInfo()"
+                [loading]="isSavingProfile"
+              ></button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Shipping Address Section -->
+        <section *ngIf="selectedSection === 'shipping-address'" class="settings-section">
+          <div class="section-header">
+            <h2>Shipping addresses</h2>
+            <button
+              pButton
+              type="button"
+              label="Add New"
+              icon="pi pi-plus"
+              (click)="addNewAddress()"
+            ></button>
+          </div>
+
+          <div *ngIf="isLoadingAddresses" class="loading-container">
+            <p-progressSpinner />
+          </div>
+
+          <div *ngIf="!isLoadingAddresses && addresses.length === 0" class="empty-state">
+            <i class="pi pi-map-marker"></i>
+            <p>No addresses added yet</p>
+            <button
+              pButton
+              type="button"
+              label="Add your first address"
+              icon="pi pi-plus"
+              (click)="addNewAddress()"
+            ></button>
+          </div>
+
+          <p-table
+            *ngIf="!isLoadingAddresses && addresses.length > 0"
+            [value]="addresses"
+            [tableStyle]="{ 'min-width': '50rem' }"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <i class="pi pi-check"></i>
+                </th>
+                <th>Nickname</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Province</th>
+                <th>Postal code</th>
+                <th style="width: 8rem">Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-address>
+              <tr>
+                <td>
+                  <i *ngIf="address.isDefault" class="pi pi-check" style="color: var(--primary-color)"></i>
+                </td>
+                <td>{{ address.nickName }}</td>
+                <td>
+                  {{ address.streetAddress1 }}
+                  <span *ngIf="address.streetAddress2">, {{ address.streetAddress2 }}</span>
+                  <span *ngIf="address.apartmentNumber"> #{{ address.apartmentNumber }}</span>
+                </td>
+                <td>{{ address.city }}</td>
+                <td>{{ address.province }}</td>
+                <td>{{ address.postalCode }}</td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text"
+                    (click)="editAddress(address)"
+                    pTooltip="Edit"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </section>
+
+        <!-- Placeholder sections for other menu items -->
+        <section *ngIf="selectedSection === 'government-id'" class="settings-section">
+          <h2>Government issued ID</h2>
+          <p class="placeholder-text">This section is coming soon.</p>
+        </section>
+
+        <section *ngIf="selectedSection === 'family-doctor'" class="settings-section">
+          <h2>Family doctor</h2>
+          <p class="placeholder-text">This section is coming soon.</p>
+        </section>
+
+        <section *ngIf="selectedSection === 'medical-history'" class="settings-section">
+          <h2>Medical history</h2>
+          <p class="placeholder-text">This section is coming soon.</p>
+        </section>
+
+        <section *ngIf="selectedSection === 'orders'" class="settings-section">
+          <h2>Orders</h2>
+          <p class="placeholder-text">This section is coming soon.</p>
+        </section>
+
+        <section *ngIf="selectedSection === 'prescriptions'" class="settings-section">
+          <h2>Prescriptions</h2>
+          <p class="placeholder-text">This section is coming soon.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Address Dialog -->
+  <p-dialog
+    [(visible)]="showAddressDialog"
+    [header]="isEditMode ? 'Edit Address' : 'Add New Address'"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true"
+    [draggable]="false"
+  >
+    <form class="address-form">
+      <div class="form-field">
+        <label for="nickname">Nickname</label>
+        <input
+          pInputText
+          id="nickname"
+          [(ngModel)]="addressForm.nickName"
+          name="nickname"
+          placeholder="e.g., Home, Office"
+          required
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="streetAddress1">Street address 1</label>
+          <input
+            pInputText
+            id="streetAddress1"
+            [(ngModel)]="addressForm.streetAddress1"
+            name="streetAddress1"
+            placeholder="Street address"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="streetAddress2">Street address 2</label>
+          <input
+            pInputText
+            id="streetAddress2"
+            [(ngModel)]="addressForm.streetAddress2"
+            name="streetAddress2"
+            placeholder="Apartment, suite, etc."
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="city">City</label>
+          <input
+            pInputText
+            id="city"
+            [(ngModel)]="addressForm.city"
+            name="city"
+            placeholder="City"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="province">Province</label>
+          <input
+            pInputText
+            id="province"
+            [(ngModel)]="addressForm.province"
+            name="province"
+            placeholder="Province"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="postalCode">Postal code</label>
+          <input
+            pInputText
+            id="postalCode"
+            [(ngModel)]="addressForm.postalCode"
+            name="postalCode"
+            placeholder="Postal code"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="apartmentNumber">Apartment number</label>
+          <input
+            pInputText
+            id="apartmentNumber"
+            [(ngModel)]="addressForm.apartmentNumber"
+            name="apartmentNumber"
+            placeholder="Apt #"
+          />
+        </div>
+      </div>
+
+      <div class="form-field checkbox-field">
+        <p-checkbox
+          [(ngModel)]="addressForm.isDefault"
+          [binary]="true"
+          inputId="isDefault"
+          name="isDefault"
+        />
+        <label for="isDefault">Set as default address</label>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="cancelAddress()"
+        [disabled]="isSavingAddress"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Save"
+        (click)="saveAddress()"
+        [loading]="isSavingAddress"
+      ></button>
+    </ng-template>
+  </p-dialog>
+</app-page-layout>
