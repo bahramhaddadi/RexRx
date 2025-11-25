@@ -53,6 +53,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'payment',
+    loadComponent: () => import('./pages/payment-callback/payment-callback.component').then(mod => mod.PaymentCallbackComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.component').then(mod => mod.SettingsComponent),
     canActivate: [authGuard]
