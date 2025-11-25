@@ -122,17 +122,22 @@
 }
 
 .drug-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   padding: 1.5rem 0;
+
+  > * {
+    flex: 1 1 calc(33.333% - 1.333rem);
+    min-width: 280px;
+  }
 
   .drug-item {
     min-height: 150px;
   }
 
   .empty-state {
-    grid-column: 1 / -1;
+    flex: 1 1 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -155,7 +160,10 @@
 // Responsive design
 @media (max-width: 1024px) {
   .drug-grid {
-    grid-template-columns: repeat(2, 1fr);
+    > * {
+      flex: 1 1 calc(50% - 1rem);
+      min-width: 280px;
+    }
   }
 }
 
@@ -177,8 +185,11 @@
   }
 
   .drug-grid {
-    grid-template-columns: 1fr;
     gap: 1.5rem;
+
+    > * {
+      flex: 1 1 100%;
+    }
   }
 }
 

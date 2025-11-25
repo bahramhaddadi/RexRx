@@ -55,10 +55,15 @@
 }
 
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: $spacing-lg;
   margin-bottom: $spacing-lg;
+
+  > * {
+    flex: 1 1 calc(50% - ($spacing-lg / 2));
+    min-width: 200px;
+  }
 }
 
 .source-row {
@@ -284,13 +289,18 @@
   }
 
   .form-row {
-    grid-template-columns: 1fr;
     gap: $spacing-md;
     margin-bottom: $spacing-md;
+
+    > * {
+      flex: 1 1 100%;
+    }
   }
 
   .source-row {
-    grid-template-columns: 1fr;
+    > * {
+      flex: 1 1 100%;
+    }
   }
 
   .source-label label {
