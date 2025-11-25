@@ -52,6 +52,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/checkout/checkout.component').then(mod => mod.CheckoutComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'settings',
+    loadComponent: () => import('./pages/settings/settings.component').then(mod => mod.SettingsComponent),
+    canActivate: [authGuard]
+  },
 
   // Default redirect
   {
