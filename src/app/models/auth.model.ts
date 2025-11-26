@@ -50,7 +50,7 @@ export interface SignUpRequest {
  * Sign-up response model
  */
 export interface SignUpResponse {
-  exceptionCode: number;
-  exceptionMessage: string | null;
+  errorCode: number;
+  errorMessage: string | null;
   success?: boolean;
 }
