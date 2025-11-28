@@ -14,12 +14,23 @@
           <p class="session-info" *ngIf="sessionId">
             Order Reference: <span class="session-id">{{ sessionId }}</span>
           </p>
-          <p-button
-            label="Go to Home"
-            icon="pi pi-home"
-            (onClick)="goToHome()"
-            styleClass="home-button">
-          </p-button>
+          <p class="redirect-message">
+            Redirecting to shipping address in {{ countdown }} seconds...
+          </p>
+          <div class="button-group">
+            <p-button
+              label="Continue to Shipping"
+              icon="pi pi-arrow-right"
+              (onClick)="goToShippingAddress()"
+              styleClass="shipping-button">
+            </p-button>
+            <p-button
+              label="Go to Home"
+              icon="pi pi-home"
+              (onClick)="goToHome()"
+              styleClass="p-button-secondary home-button">
+            </p-button>
+          </div>
         </div>
       </p-card>
 

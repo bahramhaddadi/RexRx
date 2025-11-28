@@ -58,6 +58,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'shipping-address',
+    loadComponent: () => import('./pages/shipping-address/shipping-address.component').then(mod => mod.ShippingAddressComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.component').then(mod => mod.SettingsComponent),
     canActivate: [authGuard]

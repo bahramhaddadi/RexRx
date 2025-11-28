@@ -1,0 +1,155 @@
+<app-page-layout [showHeader]="true" [showBackButton]="false">
+  <div class="shipping-address-container">
+    <div class="form-wrapper">
+      <p-card class="shipping-card">
+        <div class="shipping-content">
+          <h1 class="page-title">Shipping Address</h1>
+
+          <!-- Saved Addresses Dropdown -->
+          <div class="saved-addresses-section" *ngIf="savedAddresses.length > 0">
+            <label for="savedAddress">Use my profile</label>
+            <p-dropdown
+              id="savedAddress"
+              [(ngModel)]="selectedSavedAddress"
+              [options]="savedAddresses"
+              (onChange)="onSavedAddressSelect()"
+              placeholder="Home / Work / User / GetShippingAddresses"
+              optionLabel="nickName"
+              [style]="{ width: '100%' }"
+              [showClear]="true"
+            />
+          </div>
+
+          <!-- Shipping Info Section -->
+          <div class="shipping-info-section">
+            <h2 class="section-title">Shipping Info</h2>
+
+            <form class="shipping-form">
+              <!-- Street Address 1 with Autocomplete -->
+              <div class="form-field autocomplete-field">
+                <input
+                  pInputText
+                  id="streetAddress1"
+                  [(ngModel)]="addressForm.streetAddress1"
+                  name="streetAddress1"
+                  placeholder="232 Len"
+                  (input)="onStreetAddressInput($event)"
+                  autocomplete="off"
+                  required
+                />
+
+                <!-- Autocomplete Suggestions Dropdown -->
+                <div class="autocomplete-suggestions" *ngIf="showAutocompleteSuggestions">
+                  <div
+                    class="suggestion-item"
+                    *ngFor="let suggestion of autocompleteSuggestions"
+                    (click)="selectSuggestion(suggestion)"
+                  >
+                    {{ suggestion.fullAddress }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Two Column Layout -->
+              <div class="form-row">
+                <!-- Apartment Number -->
+                <div class="form-field">
+                  <input
+                    pInputText
+                    id="apartmentNumber"
+                    [(ngModel)]="addressForm.apartmentNumber"
+                    name="apartmentNumber"
+                    placeholder="Apartment number"
+                  />
+                </div>
+
+                <!-- Street Address 2 -->
+                <div class="form-field">
+                  <input
+                    pInputText
+                    id="streetAddress2"
+                    [(ngModel)]="addressForm.streetAddress2"
+                    name="streetAddress2"
+                    placeholder="Street address 2"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <!-- Province -->
+                <div class="form-field">
+                  <input
+                    pInputText
+                    id="province"
+                    [(ngModel)]="addressForm.province"
+                    name="province"
+                    placeholder="Province"
+                    required
+                  />
+                </div>
+
+                <!-- City -->
+                <div class="form-field">
+                  <input
+                    pInputText
+                    id="city"
+                    [(ngModel)]="addressForm.city"
+                    name="city"
+                    placeholder="City"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Postal Code (Full Width) -->
+              <div class="form-field">
+                <input
+                  pInputText
+                  id="postalCode"
+                  [(ngModel)]="addressForm.postalCode"
+                  name="postalCode"
+                  placeholder="Postal code"
+                  required
+                />
+              </div>
+
+              <!-- Special Delivery Note -->
+              <div class="form-field">
+                <textarea
+                  pInputText
+                  id="specialDeliveryNote"
+                  [(ngModel)]="addressForm.specialDeliveryNote"
+                  name="specialDeliveryNote"
+                  placeholder="Special delivery note"
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <!-- Deliver to Mailbox Checkbox -->
+              <div class="form-field checkbox-field">
+                <p-checkbox
+                  [(ngModel)]="deliverToMailbox"
+                  [binary]="true"
+                  inputId="deliverToMailbox"
+                  name="deliverToMailbox"
+                />
+                <label for="deliverToMailbox">Deliver to Mailbox</label>
+              </div>
+
+              <!-- Finish Button -->
+              <div class="form-actions">
+                <button
+                  pButton
+                  type="button"
+                  label="Finish"
+                  (click)="finish()"
+                  class="finish-button"
+                ></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</app-page-layout>

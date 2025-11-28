@@ -103,3 +103,38 @@ export interface ApiResponse {
   exceptionMessage: string | null;
   success?: boolean;
 }
+
+/**
+ * Autocomplete address request model
+ */
+export interface AutocompleteAddressRequest {
+  body: string;
+}
+
+/**
+ * Autocomplete address item
+ */
+export interface AutocompleteAddressItem {
+  fullAddress: string;
+  streetAddress1?: string;
+  streetAddress2?: string;
+  city?: string;
+  province?: string;
+  postalCode?: string;
+}
+
+/**
+ * Autocomplete address response
+ */
+export interface AutocompleteAddressResponse {
+  body: AutocompleteAddressItem[];
+  errorCode: number;
+  errorMessage: string | null;
+}
+
+/**
+ * Shipping address item (extended from UserAddress)
+ */
+export interface ShippingAddress extends UserAddress {
+  id: number;
+}
