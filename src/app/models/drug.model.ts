@@ -165,7 +165,7 @@ export interface RelatedDrug {
 }
 
 export interface GetRecommendedDrugsRequest {
-  body: number; // ItemDoseID
+  body: QuestionnaireAnswer[]; // Array of questionnaire answers
 }
 
 // Related items (upsell) request/response

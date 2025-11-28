@@ -356,6 +356,9 @@ export class DrugQuestionsComponent implements OnInit {
       this.router.navigate(['/drug-recommendations'], {
         queryParams: {
           doseId: this.doseId
+        },
+        state: {
+          questionnaireAnswers: this.questionnaireAnswers
         }
       });
     } else {
