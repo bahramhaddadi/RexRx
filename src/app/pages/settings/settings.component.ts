@@ -106,16 +106,21 @@ export class SettingsComponent implements OnInit {
     this.errorMessage = '';
 
     this.userService.getUserProfile().subscribe({
-      next: (profile) => {
-        this.userProfile = profile;
-        this.personalInfoForm = {
-          firstName: profile.firstName || '',
-          middleName: profile.middleName || '',
-          lastName: profile.lastName || '',
-          dateOfBirth: profile.dateOfBirth || '',
-          gender: profile.gender || '',
-          phone: profile.phone || ''
-        };
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.userProfile = response.body;
+          this.personalInfoForm = {
+            firstName: response.body.firstName || '',
+            middleName: response.body.middleName || '',
+            lastName: response.body.lastName || '',
+            dateOfBirth: response.body.dateOfBirth || '',
+            gender: response.body.gender || '',
+            phone: response.body.phone || ''
+          };
+        } else {
+          console.error('API Error:', response.errorMessage);
+          this.errorMessage = response.errorMessage || 'Failed to load user profile.';
+        }
         this.isLoadingProfile = false;
       },
       error: (error) => {

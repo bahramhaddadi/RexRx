@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { RelatedDrug } from '../../models/drug.model';
+import { RelatedDrug, QuestionnaireAnswer } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -35,12 +35,19 @@ export class DrugRecommendationsComponent implements OnInit {
   doseId?: number;
   recommendedDrugs: RelatedDrug[] = [];
   selectedDrugs: RelatedDrug[] = [];
+  questionnaireAnswers: QuestionnaireAnswer[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
   quantityOptions = [8, 12, 16].map(v => ({ label: `${v}`, value: v }));
   selectedQuantity = this.quantityOptions[0]?.value ?? 8;
 
   ngOnInit() {
+    // Extract questionnaire answers from navigation state
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state) {
+      this.questionnaireAnswers = navigation.extras.state['questionnaireAnswers'] || [];
+    }
+
     this.route.queryParams.subscribe(params => {
       this.doseId = params['doseId'] ? +params['doseId'] : undefined;
 
@@ -56,12 +63,15 @@ export class DrugRecommendationsComponent implements OnInit {
    * Loads recommended drugs from the API
    */
   loadRecommendedDrugs(): void {
-    if (!this.doseId) return;
+    if (!this.questionnaireAnswers || this.questionnaireAnswers.length === 0) {
+      this.errorMessage = 'No questionnaire answers available';
+      return;
+    }
 
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.drugService.getRecommendedDrugs(this.doseId).subscribe({
+    this.drugService.getRecommendedDrugs(this.questionnaireAnswers).subscribe({
       next: (response) => {
         if (response.errorCode === 0) {
           this.recommendedDrugs = response.body;

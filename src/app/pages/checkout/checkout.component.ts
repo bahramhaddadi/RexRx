@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
+import { UserService } from '../../services/user.service';
 import { CartItem, QuestionnaireAnswer, SaveCartV2Body } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -36,6 +37,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 export class CheckoutComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly drugService = inject(DrugService);
+  private readonly userService = inject(UserService);
 
   // Data received from drug-questions page
   drugName: string = '';
@@ -100,6 +102,46 @@ export class CheckoutComponent implements OnInit {
     if (!hasCartItems && !hasLegacy) {
       this.errorMessage = 'Missing required checkout data. Please complete the questionnaire first.';
     }
+
+    // Fetch user profile and pre-fill form fields
+    this.loadUserProfile();
+  }
+
+  /**
+   * Loads user profile and pre-fills form fields
+   */
+  loadUserProfile(): void {
+    this.userService.getUserProfile().subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          const profile = response.body;
+
+          // Pre-fill form fields from user profile
+          this.firstName = profile.firstName || '';
+          this.middleName = profile.middleName || '';
+          this.lastName = profile.lastName || '';
+          this.sex = profile.gender || '';
+          this.phone = profile.phone || '';
+          this.allergies = profile.allergies || '';
+          this.medications = profile.medications || '';
+          this.surgeries = profile.surgeries || '';
+          this.otherMedicalConditions = profile.otherConditions || '';
+
+          // Parse and set birth date
+          if (profile.dateOfBirth) {
+            this.birthDate = new Date(profile.dateOfBirth);
+          }
+
+          console.log('User profile loaded and form pre-filled');
+        } else {
+          console.warn('Failed to load user profile:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading user profile:', error);
+        // Don't show error to user, just log it - form can still be filled manually
+      }
+    });
   }
 
   /**

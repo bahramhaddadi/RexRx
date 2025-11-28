@@ -18,6 +18,7 @@ interface ExtendedQuestion extends UserQuestion {
   selectedChoiceId?: number;
   selectedChoiceIds?: number[];
   textAnswers?: { [key: number]: string }; // For FormFill - choice id to answer mapping
+  extraTextAnswers?: { [key: number]: string }; // For choices with hasExtraInfo - choice id to extra text mapping
   noneSelected?: boolean; // For MultipleChoiceWithNone
 }
 
@@ -92,6 +93,7 @@ export class DrugQuestionsComponent implements OnInit {
               ...response.body,
               selectedChoiceIds: [],
               textAnswers: {},
+              extraTextAnswers: {},
               noneSelected: false
             };
           } else {
@@ -172,7 +174,7 @@ export class DrugQuestionsComponent implements OnInit {
       if (choice) {
         selectedChoices = [{
           id: choice.id,
-          extraInfo: "" //get it from text box on screen
+          extraInfo: question.extraTextAnswers?.[choice.id] || ""
         }];
       }
     } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
@@ -183,7 +185,7 @@ export class DrugQuestionsComponent implements OnInit {
         .filter(c => question.selectedChoiceIds!.includes(c.id))
         .map(c => ({
           id: c.id,
-          extraInfo: "" //from UI inut
+          extraInfo: question.extraTextAnswers?.[c.id] || ""
         }));
     } else if (question.questionTypeID === QuestionType.FormFill) {
       // Form fill - include all choices (text answers will be in ExtraInfoTitle)
@@ -249,6 +251,7 @@ export class DrugQuestionsComponent implements OnInit {
                 ...response.body,
                 selectedChoiceIds: [],
                 textAnswers: {},
+                extraTextAnswers: {},
                 noneSelected: false
               };
             }
@@ -284,7 +287,7 @@ export class DrugQuestionsComponent implements OnInit {
       this.questionnaireAnswers.push({
         questionId: question.id,
         choiceId: question.selectedChoiceId,
-        extraText: ''
+        extraText: question.extraTextAnswers?.[question.selectedChoiceId] || ''
       });
     } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
                 question.questionTypeID === QuestionType.MultipleChoiceWithNone) &&
@@ -294,7 +297,7 @@ export class DrugQuestionsComponent implements OnInit {
         this.questionnaireAnswers.push({
           questionId: question.id,
           choiceId: choiceId,
-          extraText: ''
+          extraText: question.extraTextAnswers?.[choiceId] || ''
         });
       });
     } else if (question.questionTypeID === QuestionType.MultipleChoiceWithNone && question.noneSelected) {
@@ -356,6 +359,9 @@ export class DrugQuestionsComponent implements OnInit {
       this.router.navigate(['/drug-recommendations'], {
         queryParams: {
           doseId: this.doseId
+        },
+        state: {
+          questionnaireAnswers: this.questionnaireAnswers
         }
       });
     } else {

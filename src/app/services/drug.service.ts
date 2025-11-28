@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -110,12 +110,12 @@ export class DrugService {
 
   /**
    * Fetches recommended drugs based on answered questions
-   * @param itemDoseId The item dose ID (from placeholder API)
+   * @param questionnaireAnswers Array of questionnaire answers from the user
    * @returns Observable of API response containing recommended drugs
    */
-  getRecommendedDrugs(itemDoseId: number): Observable<ApiResponse<RelatedDrug[]>> {
+  getRecommendedDrugs(questionnaireAnswers: QuestionnaireAnswer[]): Observable<ApiResponse<RelatedDrug[]>> {
     const request: GetRecommendedDrugsRequest = {
-      body: itemDoseId
+      body: questionnaireAnswers
     };
 
     return this.apiService.post<ApiResponse<RelatedDrug[]>>(
