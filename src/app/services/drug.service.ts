@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -144,13 +144,13 @@ export class DrugService {
    * @param itemEid The drug's eid (unique identifier)
    * @returns Observable of API response containing the first question
    */
-  getFirstQuestion(itemEid: string): Observable<ApiResponse<Question>> {
+  getFirstQuestion(itemEid: string): Observable<ApiResponse<UserQuestion>> {
     const request: GetFirstQuestionRequest = {
       body: itemEid
     };
 
-    return this.apiService.post<ApiResponse<Question>>(
-      '/Pharma/Drug/GetFirstQuestion',
+    return this.apiService.post<ApiResponse<UserQuestion>>(
+      '/Pharma/Drug/GetFirstQuestionV2',
       request
     );
   }

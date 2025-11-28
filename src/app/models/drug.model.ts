@@ -85,6 +85,23 @@ export interface QuestionChoice {
   pageCount: number;
 }
 
+export interface UserQuestion {
+  id: number;
+  questionTypeID: number;  
+  title: string;
+  note: string;
+  imageURL: string | null;
+  questionChoices: UserQuestionChoice[];
+}
+
+export interface UserQuestionChoice {
+  id: number;
+  title: string;
+  hasExtraInfo: boolean;
+  extraInfoTitle: string | null;
+  imageURL: string | null;
+}
+
 export interface GetQuestionsRequest {
   body: string; // Drug eid
 }

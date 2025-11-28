@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
 
-interface ExtendedQuestion extends Question {
+interface ExtendedQuestion extends UserQuestion {
   selectedChoiceId?: number;
   selectedChoiceIds?: number[];
   textAnswers?: { [key: number]: string }; // For FormFill - choice id to answer mapping
@@ -174,7 +174,7 @@ export class DrugQuestionsComponent implements OnInit {
           Id: choice.id,
           HasExtraInfo: choice.hasExtraInfo,
           ExtraInfoTitle: choice.extraInfoTitle,
-          NextQuestionID: choice.nextQuestionID
+          NextQuestionID: 0 //choice.nextQuestionID
         }];
       }
     } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
@@ -187,7 +187,7 @@ export class DrugQuestionsComponent implements OnInit {
           Id: c.id,
           HasExtraInfo: c.hasExtraInfo,
           ExtraInfoTitle: c.extraInfoTitle,
-          NextQuestionID: c.nextQuestionID
+          NextQuestionID: 0 //c.nextQuestionID
         }));
     } else if (question.questionTypeID === QuestionType.FormFill) {
       // Form fill - include all choices (text answers will be in ExtraInfoTitle)
@@ -195,14 +195,14 @@ export class DrugQuestionsComponent implements OnInit {
         Id: c.id,
         HasExtraInfo: c.hasExtraInfo,
         ExtraInfoTitle: question.textAnswers?.[c.id] || c.extraInfoTitle,
-        NextQuestionID: c.nextQuestionID
+        NextQuestionID: 0 //c.nextQuestionID
       }));
     }
 
     return {
       Id: question.id,
-      QuestionnairID: question.questionnairID,
-      NextQuestionID: question.nextQuestionID,
+      QuestionnairID: 0, //question.questionnairID,
+      NextQuestionID: 0, //question.nextQuestionID,
       QuestionTypeID: question.questionTypeID,
       Title: question.title,
       Note: question.note,
