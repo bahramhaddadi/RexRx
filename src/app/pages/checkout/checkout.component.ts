@@ -124,7 +124,7 @@ export class CheckoutComponent implements OnInit {
       sex: '',
       phone: '',
       weight: '',
-      birthDate: '',
+      birthDate: '1900-01-01',
       healthCardNumber: '',
       allergies: '',
       medications: '',
