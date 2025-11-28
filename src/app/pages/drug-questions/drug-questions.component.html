@@ -74,6 +74,17 @@
                 {{ choice.title }}
               </label>
             </div>
+            @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
+              <div class="extra-text-field">
+                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                  class="form-input">
+              </div>
+            }
           }
         </div>
       }
@@ -96,6 +107,17 @@
                 {{ choice.title }}
               </label>
             </div>
+            @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
+              <div class="extra-text-field">
+                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                  class="form-input">
+              </div>
+            }
           }
         </div>
       }
@@ -119,6 +141,17 @@
                 {{ choice.title }}
               </label>
             </div>
+            @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
+              <div class="extra-text-field">
+                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                  class="form-input">
+              </div>
+            }
           }
 
           <!-- None of These Apply Button -->
@@ -173,6 +206,17 @@
                   {{ choice.title }}
                 </label>
               </div>
+              @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
+                <div class="extra-text-field">
+                  <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                  <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                    [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                    class="form-input">
+                </div>
+              }
             }
           </div>
         </div>

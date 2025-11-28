@@ -271,6 +271,40 @@
     }
   }
 
+  // Extra Text Field Styles (for hasExtraInfo choices)
+  .extra-text-field {
+    margin-top: $spacing-md;
+    margin-bottom: $spacing-md;
+    padding: $spacing-md;
+    background: $gray-50;
+    border-radius: $border-radius-md;
+    border-left: 3px solid $accent-color;
+
+    label {
+      display: block;
+      margin-bottom: $spacing-sm;
+      color: $gray-700;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: $input-padding-y $input-padding-x;
+      border: 1px solid $input-border;
+      border-radius: $input-border-radius;
+      font-size: $font-size-base;
+      font-family: $font-family-base;
+      background: $white;
+
+      &:focus {
+        outline: 0;
+        border-color: $input-focus-border;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+    }
+  }
+
   // Instruction Text
   .instruction-text {
     color: $gray-600;
