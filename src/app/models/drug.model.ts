@@ -102,6 +102,17 @@ export interface UserQuestionChoice {
   imageURL: string | null;
 }
 
+export interface UserQuestionsToGetNextQuestion {
+  questionId: number;
+  answers: UserAnswerToGetNextQuestion[];
+}
+
+export interface UserAnswerToGetNextQuestion {
+  id: number;
+  extraInfo: string | null;
+}
+
+
 export interface GetQuestionsRequest {
   body: string; // Drug eid
 }
@@ -184,7 +195,7 @@ export interface QuestionChoiceAnswer {
 }
 
 export interface GetNextQuestionRequest {
-  body: QuestionWithAnswer;
+  body: UserQuestionsToGetNextQuestion
 }
 
 export interface QuestionnaireAnswer {

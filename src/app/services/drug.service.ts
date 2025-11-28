@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -160,13 +160,13 @@ export class DrugService {
    * @param questionWithAnswers The current question with selected answers
    * @returns Observable of API response containing the next question
    */
-  getNextQuestion(questionWithAnswers: QuestionWithAnswer): Observable<ApiResponse<Question>> {
+  getNextQuestion(questionWithAnswers: UserQuestionsToGetNextQuestion): Observable<ApiResponse<UserQuestion>> {
     const request: GetNextQuestionRequest = {
       body: questionWithAnswers
     };
 
-    return this.apiService.post<ApiResponse<Question>>(
-      '/Pharma/Drug/GetNextQuestion',
+    return this.apiService.post<ApiResponse<UserQuestion>>(
+      '/Pharma/Drug/GetNextQuestionV2',
       request
     );
   }
