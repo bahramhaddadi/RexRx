@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -183,6 +183,38 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<string>>(
       '/Pharma/Shopping/SaveCartV2',
+      request
+    );
+  }
+
+  /**
+   * Saves the shopping cart and returns a cartId
+   * @param cartData The cart data with items and questionnaire answers
+   * @returns Observable of API response containing cartId
+   */
+  SaveCart(cartData: SaveCartBody): Observable<ApiResponse<string>> {
+    const request: SaveCartRequest = {
+      body: cartData
+    };
+
+    return this.apiService.post<ApiResponse<string>>(
+      '/Pharma/Shopping/SaveCart',
+      request
+    );
+  }
+
+  /**
+   * Submits the cart as an order and initiates payment
+   * @param orderData The order data including cartId and patient information
+   * @returns Observable of API response containing Stripe checkout URL
+   */
+  PayAndSaveCartAsOrder(orderData: PayAndSaveCartAsOrderBody): Observable<ApiResponse<string>> {
+    const request: PayAndSaveCartAsOrderRequest = {
+      body: orderData
+    };
+
+    return this.apiService.post<ApiResponse<string>>(
+      '/Pharma/Shopping/PayAndSaveCartAsOrder',
       request
     );
   }
