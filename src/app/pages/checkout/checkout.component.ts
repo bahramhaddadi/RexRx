@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { UserService } from '../../services/user.service';
-import { CartItem, QuestionnaireAnswer, SaveCartV2Body } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -66,6 +66,7 @@ export class CheckoutComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
+  cartId: string = ''; // Stores the cart ID from SaveCart API
 
   // Dropdown options
   sexOptions = [
@@ -105,6 +106,60 @@ export class CheckoutComponent implements OnInit {
 
     // Fetch user profile and pre-fill form fields
     this.loadUserProfile();
+
+    // Save cart on page load to get cartId
+    this.saveCartOnLoad();
+  }
+
+  /**
+   * Saves cart on page load to get cartId
+   */
+  saveCartOnLoad(): void {
+    // Build cart data with empty patient info
+    const cartData: SaveCartBody = {
+      isPatientSameAsUser: true,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      sex: '',
+      phone: '',
+      weight: '',
+      birthDate: '',
+      healthCardNumber: '',
+      allergies: '',
+      medications: '',
+      surgeries: '',
+      otherMedicalConditions: '',
+      orderDate: this.formatDate(new Date()),
+      promoCode: '',
+      items: (this.cartItems && this.cartItems.length > 0)
+        ? this.cartItems
+        : [
+            {
+              itemDosageId: this.doseId!,
+              quantity: 1,
+              questionnaireAnswers: this.questionnaireAnswers
+            }
+          ]
+    };
+
+    console.log('Saving cart on page load:', cartData);
+
+    this.drugService.SaveCart(cartData).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.cartId = response.body;
+          console.log('Cart saved successfully, cartId:', this.cartId);
+        } else {
+          console.error('Failed to save cart:', response.errorMessage);
+          this.errorMessage = 'Failed to initialize checkout. Please try again.';
+        }
+      },
+      error: (error) => {
+        console.error('Error saving cart:', error);
+        this.errorMessage = 'Failed to initialize checkout. Please try again.';
+      }
+    });
   }
 
   /**
@@ -154,6 +209,12 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
+    // Validate cartId exists
+    if (!this.cartId) {
+      this.errorMessage = 'Cart not initialized. Please refresh the page and try again.';
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
@@ -163,8 +224,9 @@ export class CheckoutComponent implements OnInit {
       ? this.formatDateOnly(this.birthDate)
       : '';
 
-    // Build cart data
-    const cartData: SaveCartV2Body = {
+    // Build order data with cartId
+    const orderData: PayAndSaveCartAsOrderBody = {
+      id: this.cartId, // Use the cartId from SaveCart
       isPatientSameAsUser: this.isPatientSameAsUser,
       firstName: this.firstName,
       middleName: this.middleName,
@@ -191,9 +253,9 @@ export class CheckoutComponent implements OnInit {
           ]
     };
 
-    console.log('Submitting cart data:', cartData);
+    console.log('Submitting order data:', orderData);
 
-    this.drugService.SaveCartV2(cartData).subscribe({
+    this.drugService.PayAndSaveCartAsOrder(orderData).subscribe({
       next: (response) => {
         this.isLoading = false;
         if (response.errorCode === 0) {

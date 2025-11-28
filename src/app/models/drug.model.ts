@@ -232,3 +232,50 @@ export interface SaveCartV2Body {
 export interface SaveCartV2Request {
   body: SaveCartV2Body;
 }
+
+export interface SaveCartBody {
+  isPatientSameAsUser: boolean;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  sex: string;
+  phone: string;
+  weight: string;
+  birthDate: string;
+  healthCardNumber: string;
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherMedicalConditions: string;
+  orderDate: string;
+  promoCode: string;
+  items: CartItem[];
+}
+
+export interface SaveCartRequest {
+  body: SaveCartBody;
+}
+
+export interface PayAndSaveCartAsOrderBody {
+  id: string; // cartId from SaveCart response
+  isPatientSameAsUser: boolean;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  sex: string;
+  phone: string;
+  weight: string;
+  birthDate: string;
+  healthCardNumber: string;
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherMedicalConditions: string;
+  orderDate: string;
+  promoCode: string;
+  items: CartItem[];
+}
+
+export interface PayAndSaveCartAsOrderRequest {
+  body: PayAndSaveCartAsOrderBody;
+}
