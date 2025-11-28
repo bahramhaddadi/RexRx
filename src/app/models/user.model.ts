@@ -1,16 +1,42 @@
 /**
- * User profile response model
+ * User profile response model (from GetUserProfileV2)
  */
 export interface UserProfile {
-  userID: number;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
+  eid: string;
   email: string;
-  phone: string;
-  dateOfBirth: string;
+  password: string | null;
+  salt: string | null;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  phone: string | null;
+  dateOfBirth: string; // ISO format: "1999-03-23T00:00:00"
   gender: string;
-  // Add other fields as returned by the API
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherConditions: string;
+  hasVerified: boolean;
+  isActive: boolean;
+  creationDate: string;
+  resetPasswordUUID: string;
+  resetPasswordDate: string | null;
+  relatedCategory: any | null;
+  relatedShoppingCart: any | null;
+  state: number;
+  id: number;
+  isSerializing: number;
+  rowCount: number;
+  pageCount: number;
+}
+
+/**
+ * Get user profile request/response wrapper
+ */
+export interface GetUserProfileV2Response {
+  body: UserProfile;
+  errorCode: number;
+  errorMessage: string | null;
 }
 
 /**

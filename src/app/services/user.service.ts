@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import {
   UserProfile,
+  GetUserProfileV2Response,
   UpdatePersonalInfoRequest,
   UserAddress,
   CreateUserAddressRequest,
@@ -18,12 +19,12 @@ export class UserService {
 
   /**
    * Fetches the user profile information
-   * @returns Observable of user profile data
+   * @returns Observable of user profile response with error handling
    */
-  getUserProfile(): Observable<UserProfile> {
-    return this.apiService.post<UserProfile>(
+  getUserProfile(): Observable<GetUserProfileV2Response> {
+    return this.apiService.post<GetUserProfileV2Response>(
       '/Pharma/User/GetUserProfileV2',
-      {}
+      { body: null }
     );
   }
 
