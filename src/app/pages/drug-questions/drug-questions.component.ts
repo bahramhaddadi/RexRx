@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion, UserQuestionsToGetNextQuestion, UserAnswerToGetNextQuestion } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
 
-interface ExtendedQuestion extends Question {
+interface ExtendedQuestion extends UserQuestion {
   selectedChoiceId?: number;
   selectedChoiceIds?: number[];
   textAnswers?: { [key: number]: string }; // For FormFill - choice id to answer mapping
@@ -160,21 +160,19 @@ export class DrugQuestionsComponent implements OnInit {
   /**
    * Builds the question with answers object for API submission
    */
-  buildQuestionWithAnswers(): QuestionWithAnswer {
+  buildQuestionWithAnswers(): UserQuestionsToGetNextQuestion {
     const question = this.currentQuestion!;
 
     // Build selected choices array
-    let selectedChoices: QuestionChoiceAnswer[] = [];
+    let selectedChoices: UserAnswerToGetNextQuestion[] = [];
 
     if (question.questionTypeID === QuestionType.SingleChoice && question.selectedChoiceId) {
       // Single choice - find the selected choice
       const choice = question.questionChoices.find(c => c.id === question.selectedChoiceId);
       if (choice) {
         selectedChoices = [{
-          Id: choice.id,
-          HasExtraInfo: choice.hasExtraInfo,
-          ExtraInfoTitle: choice.extraInfoTitle,
-          NextQuestionID: choice.nextQuestionID
+          id: choice.id,
+          extraInfo: "" //get it from text box on screen
         }];
       }
     } else if ((question.questionTypeID === QuestionType.MultipleChoice ||
@@ -184,29 +182,20 @@ export class DrugQuestionsComponent implements OnInit {
       selectedChoices = question.questionChoices
         .filter(c => question.selectedChoiceIds!.includes(c.id))
         .map(c => ({
-          Id: c.id,
-          HasExtraInfo: c.hasExtraInfo,
-          ExtraInfoTitle: c.extraInfoTitle,
-          NextQuestionID: c.nextQuestionID
+          id: c.id,
+          extraInfo: "" //from UI inut
         }));
     } else if (question.questionTypeID === QuestionType.FormFill) {
       // Form fill - include all choices (text answers will be in ExtraInfoTitle)
       selectedChoices = question.questionChoices.map(c => ({
-        Id: c.id,
-        HasExtraInfo: c.hasExtraInfo,
-        ExtraInfoTitle: question.textAnswers?.[c.id] || c.extraInfoTitle,
-        NextQuestionID: c.nextQuestionID
+        id: c.id,
+        extraInfo: question.textAnswers?.[c.id] || c.extraInfoTitle
       }));
     }
 
     return {
-      Id: question.id,
-      QuestionnairID: question.questionnairID,
-      NextQuestionID: question.nextQuestionID,
-      QuestionTypeID: question.questionTypeID,
-      Title: question.title,
-      Note: question.note,
-      QuestionChoices: selectedChoices
+      questionId: question.id,
+      answers: selectedChoices
     };
   }
 
