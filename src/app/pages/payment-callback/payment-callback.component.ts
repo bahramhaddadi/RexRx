@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
@@ -17,12 +17,14 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './payment-callback.component.html',
   styleUrls: ['./payment-callback.component.scss']
 })
-export class PaymentCallbackComponent implements OnInit {
+export class PaymentCallbackComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
   paymentStatus: 'success' | 'failed' | 'pending' = 'pending';
   sessionId: string = '';
+  countdown: number = 5;
+  private countdownInterval?: any;
 
   ngOnInit() {
     // Get payment status from query parameters
@@ -33,18 +35,46 @@ export class PaymentCallbackComponent implements OnInit {
       // and may include 'canceled' for failed payments
       if (params['success'] === 'true' || params['payment_status'] === 'success') {
         this.paymentStatus = 'success';
+        this.startRedirectCountdown();
       } else if (params['canceled'] === 'true' || params['payment_status'] === 'failed') {
         this.paymentStatus = 'failed';
       } else if (this.sessionId) {
         // If we have a session_id, assume success
         this.paymentStatus = 'success';
+        this.startRedirectCountdown();
       } else {
         this.paymentStatus = 'failed';
       }
     });
   }
 
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
+
+  /**
+   * Starts a 5-second countdown and redirects to shipping address page
+   */
+  startRedirectCountdown() {
+    this.countdownInterval = setInterval(() => {
+      this.countdown--;
+      if (this.countdown <= 0) {
+        clearInterval(this.countdownInterval);
+        this.router.navigate(['/shipping-address']);
+      }
+    }, 1000);
+  }
+
   goToHome() {
     this.router.navigate(['/home']);
+  }
+
+  goToShippingAddress() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+    this.router.navigate(['/shipping-address']);
   }
 }

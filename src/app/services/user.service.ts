@@ -8,7 +8,10 @@ import {
   UserAddress,
   CreateUserAddressRequest,
   UpdateUserAddressRequest,
-  ApiResponse
+  ApiResponse,
+  AutocompleteAddressRequest,
+  AutocompleteAddressResponse,
+  ShippingAddress
 } from '../models/user.model';
 
 @Injectable({
@@ -72,6 +75,33 @@ export class UserService {
     return this.apiService.post<ApiResponse>(
       '/Pharma/User/UpdateUserAddress',
       address
+    );
+  }
+
+  /**
+   * Fetches shipping addresses for the user
+   * @returns Observable of shipping addresses array
+   */
+  getShippingAddresses(): Observable<ShippingAddress[]> {
+    return this.apiService.post<ShippingAddress[]>(
+      '/Pharma/User/GetShippingAddresses',
+      {}
+    );
+  }
+
+  /**
+   * Autocompletes address based on search text
+   * @param searchText The text to search for (street address)
+   * @returns Observable of autocomplete address response
+   */
+  autocompleteAddress(searchText: string): Observable<AutocompleteAddressResponse> {
+    const request: AutocompleteAddressRequest = {
+      body: searchText
+    };
+
+    return this.apiService.post<AutocompleteAddressResponse>(
+      '/Pharma/Shopping/AutocompleteAddress',
+      request
     );
   }
 }
