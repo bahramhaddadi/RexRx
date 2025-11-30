@@ -62,7 +62,9 @@ export class PaymentCallbackComponent implements OnInit, OnDestroy {
       this.countdown--;
       if (this.countdown <= 0) {
         clearInterval(this.countdownInterval);
-        this.router.navigate(['/shipping-address']);
+        this.router.navigate(['/shipping-address'], {
+          state: { orderID: this.sessionId }
+        });
       }
     }, 1000);
   }
@@ -75,6 +77,8 @@ export class PaymentCallbackComponent implements OnInit, OnDestroy {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
-    this.router.navigate(['/shipping-address']);
+    this.router.navigate(['/shipping-address'], {
+      state: { orderID: this.sessionId }
+    });
   }
 }

@@ -279,3 +279,17 @@ export interface PayAndSaveCartAsOrderBody {
 export interface PayAndSaveCartAsOrderRequest {
   body: PayAndSaveCartAsOrderBody;
 }
+
+export interface SetOrderShippingAddressBody {
+  orderID: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  specialInstructions: string;
+}
+
+export interface SetOrderShippingAddressRequest {
+  body: SetOrderShippingAddressBody;
+}

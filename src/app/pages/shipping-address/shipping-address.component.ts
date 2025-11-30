@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { UserService } from '../../services/user.service';
+import { DrugService } from '../../services/drug.service';
 import { ShippingAddress, AutocompleteAddressItem } from '../../models/user.model';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -32,13 +33,22 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 export class ShippingAddressComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
+  private readonly drugService = inject(DrugService);
   private readonly destroy$ = new Subject<void>();
   private readonly streetAddressInput$ = new Subject<string>();
+
+  // Order ID from payment callback
+  orderID: string = '';
 
   // Saved addresses
   savedAddresses: ShippingAddress[] = [];
   selectedSavedAddress: ShippingAddress | null = null;
   isLoadingAddresses = false;
+
+  // UI state
+  isSubmitting = false;
+  successMessage = '';
+  errorMessage = '';
 
   // Address form
   addressForm = {
@@ -60,6 +70,15 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   deliverToMailbox = false;
 
   ngOnInit() {
+    // Get orderID from navigation state
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras?.state || history.state;
+    this.orderID = state?.['orderID'] || '';
+
+    if (!this.orderID) {
+      console.warn('No orderID provided in navigation state');
+    }
+
     this.loadSavedAddresses();
     this.setupAutocomplete();
   }
@@ -175,8 +194,56 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
    * Handles form submission
    */
   finish() {
-    // TODO: Save the shipping address or proceed to next step
-    // For now, navigate to home
-    this.router.navigate(['/home']);
+    // Validate required fields
+    if (!this.addressForm.streetAddress1 || !this.addressForm.city ||
+        !this.addressForm.province || !this.addressForm.postalCode) {
+      this.errorMessage = 'Please fill in all required fields (Street Address, City, Province, and Postal Code)';
+      return;
+    }
+
+    // Validate orderID
+    if (!this.orderID) {
+      this.errorMessage = 'Order ID is missing. Please try again from the payment page.';
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    // Prepare shipping address data
+    const shippingData = {
+      orderID: this.orderID,
+      addressLine1: this.addressForm.streetAddress1,
+      addressLine2: this.addressForm.streetAddress2 || '',
+      city: this.addressForm.city,
+      province: this.addressForm.province,
+      postalCode: this.addressForm.postalCode,
+      specialInstructions: this.addressForm.specialDeliveryNote || ''
+    };
+
+    this.drugService.SetOrderShippingAddress(shippingData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          if (response.errorCode === 0) {
+            this.successMessage = 'Shipping address saved successfully!';
+
+            // Navigate to home after 1.5 seconds
+            setTimeout(() => {
+              this.router.navigate(['/home']);
+            }, 1500);
+          } else {
+            this.errorMessage = response.errorMessage || 'Failed to save shipping address';
+            console.error('API Error:', response.errorMessage);
+          }
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          this.errorMessage = 'Failed to save shipping address. Please try again.';
+          console.error('Error saving shipping address:', error);
+        }
+      });
   }
 }
