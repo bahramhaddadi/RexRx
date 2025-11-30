@@ -24,6 +24,16 @@
           <div class="shipping-info-section">
             <h2 class="section-title">Shipping Info</h2>
 
+            <!-- Error/Success Messages -->
+            <div *ngIf="errorMessage" class="message message-error">
+              <i class="pi pi-exclamation-circle"></i>
+              {{ errorMessage }}
+            </div>
+            <div *ngIf="successMessage" class="message message-success">
+              <i class="pi pi-check-circle"></i>
+              {{ successMessage }}
+            </div>
+
             <form class="shipping-form">
               <!-- Street Address 1 with Autocomplete -->
               <div class="form-field autocomplete-field">
@@ -141,8 +151,9 @@
                 <button
                   pButton
                   type="button"
-                  label="Finish"
+                  [label]="isSubmitting ? 'Saving...' : 'Finish'"
                   (click)="finish()"
+                  [disabled]="isSubmitting"
                   class="finish-button"
                 ></button>
               </div>

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -215,6 +215,22 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<string>>(
       '/Pharma/Shopping/PayAndSaveCartAsOrder',
+      request
+    );
+  }
+
+  /**
+   * Sets the shipping address for an order
+   * @param shippingData The shipping address data including orderID and address details
+   * @returns Observable of API response
+   */
+  SetOrderShippingAddress(shippingData: SetOrderShippingAddressBody): Observable<ApiResponse<any>> {
+    const request: SetOrderShippingAddressRequest = {
+      body: shippingData
+    };
+
+    return this.apiService.post<ApiResponse<any>>(
+      '/Pharma/Shopping/SetOrderShippingAddress',
       request
     );
   }
