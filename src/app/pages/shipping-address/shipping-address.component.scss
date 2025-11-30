@@ -17,10 +17,6 @@
       border-radius: $border-radius-sm;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-      ::ng-deep .p-card-body {
-        padding: $spacing-xl;
-      }
-
       ::ng-deep .p-card-content {
         padding: 0;
       }
@@ -197,14 +193,6 @@
 @media (max-width: 768px) {
   .shipping-address-container {
     padding: $spacing-md;
-
-    .form-wrapper {
-      .shipping-card {
-        ::ng-deep .p-card-body {
-          padding: $spacing-lg;
-        }
-      }
-    }
 
     .shipping-content {
       .page-title {
