@@ -5,15 +5,29 @@
         <div class="shipping-content">
           <h1 class="page-title">Shipping Address</h1>
 
+          <!-- Use My Profile Checkbox -->
+          <div class="use-profile-section">
+            <div class="form-field checkbox-field">
+              <p-checkbox
+                [(ngModel)]="useMyProfile"
+                [binary]="true"
+                inputId="useMyProfile"
+                name="useMyProfile"
+                [disabled]="savedAddresses.length === 0"
+                (onChange)="onUseMyProfileChange()"
+              />
+              <label for="useMyProfile">Use my profile</label>
+            </div>
+          </div>
+
           <!-- Saved Addresses Dropdown -->
-          <div class="saved-addresses-section" *ngIf="savedAddresses.length > 0">
-            <label for="savedAddress">Use my profile</label>
+          <div class="saved-addresses-section" *ngIf="useMyProfile && savedAddresses.length > 0">
             <p-dropdown
               id="savedAddress"
               [(ngModel)]="selectedSavedAddress"
               [options]="savedAddresses"
               (onChange)="onSavedAddressSelect()"
-              placeholder="Home / Work"
+              placeholder="Select address"
               optionLabel="nickName"
               [style]="{ width: '100%' }"
               [showClear]="true"

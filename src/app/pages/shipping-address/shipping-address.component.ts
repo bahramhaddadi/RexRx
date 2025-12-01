@@ -44,6 +44,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   savedAddresses: ShippingAddress[] = [];
   selectedSavedAddress: ShippingAddress | null = null;
   isLoadingAddresses = false;
+  useMyProfile = false;
 
   // UI state
   isSubmitting = false;
@@ -188,6 +189,16 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
 
     this.showAutocompleteSuggestions = false;
     this.autocompleteSuggestions = [];
+  }
+
+  /**
+   * Handles changes to the "Use my profile" checkbox
+   */
+  onUseMyProfileChange() {
+    if (!this.useMyProfile) {
+      // Clear selected address when checkbox is unchecked
+      this.selectedSavedAddress = null;
+    }
   }
 
   /**
