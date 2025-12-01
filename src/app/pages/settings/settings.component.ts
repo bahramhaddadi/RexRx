@@ -83,6 +83,20 @@ export class SettingsComponent implements OnInit {
     { label: 'Prefer not to say', value: 'Prefer not to say' }
   ];
 
+  // Province options for Canadian provinces
+  provinceOptions = [
+    { label: 'Alberta', value: 'Alberta' },
+    { label: 'British Columbia', value: 'British Columbia' },
+    { label: 'Manitoba', value: 'Manitoba' },
+    { label: 'New Brunswick', value: 'New Brunswick' },
+    { label: 'Newfoundland and Labrador', value: 'Newfoundland and Labrador' },
+    { label: 'Nova Scotia', value: 'Nova Scotia' },
+    { label: 'Ontario', value: 'Ontario' },
+    { label: 'Prince Edward Island', value: 'Prince Edward Island' },
+    { label: 'Quebec', value: 'Quebec' },
+    { label: 'Saskatchewan', value: 'Saskatchewan' }
+  ];
+
   // Shipping Addresses
   addresses: UserAddress[] = [];
   showAddressDialog = false;

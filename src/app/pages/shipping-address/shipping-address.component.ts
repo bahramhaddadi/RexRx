@@ -69,6 +69,20 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   // Deliver to mailbox option
   deliverToMailbox = false;
 
+  // Province options for Canadian provinces
+  provinceOptions = [
+    { label: 'Alberta', value: 'Alberta' },
+    { label: 'British Columbia', value: 'British Columbia' },
+    { label: 'Manitoba', value: 'Manitoba' },
+    { label: 'New Brunswick', value: 'New Brunswick' },
+    { label: 'Newfoundland and Labrador', value: 'Newfoundland and Labrador' },
+    { label: 'Nova Scotia', value: 'Nova Scotia' },
+    { label: 'Ontario', value: 'Ontario' },
+    { label: 'Prince Edward Island', value: 'Prince Edward Island' },
+    { label: 'Quebec', value: 'Quebec' },
+    { label: 'Saskatchewan', value: 'Saskatchewan' }
+  ];
+
   ngOnInit() {
     // Get orderID from navigation state
     const navigation = this.router.getCurrentNavigation();

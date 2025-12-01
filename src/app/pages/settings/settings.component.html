@@ -304,12 +304,15 @@
 
         <div class="form-field">
           <label for="province">Province</label>
-          <input
-            pInputText
+          <p-dropdown
             id="province"
             [(ngModel)]="addressForm.province"
+            [options]="provinceOptions"
             name="province"
             placeholder="Province"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{ width: '100%' }"
             required
           />
         </div>

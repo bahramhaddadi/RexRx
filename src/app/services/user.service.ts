@@ -84,7 +84,7 @@ export class UserService {
    */
   getShippingAddresses(): Observable<ShippingAddress[]> {
     return this.apiService.post<ShippingAddress[]>(
-      '/Pharma/User/GetShippingAddresses',
+      '/Pharma/User/GetUserAddresses',
       {}
     );
   }
