@@ -167,7 +167,6 @@
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: $spacing-lg;
-          margin-bottom: $spacing-lg;
 
           @media (max-width: 768px) {
             grid-template-columns: 1fr;
