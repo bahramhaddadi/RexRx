@@ -10,7 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { UserService } from '../../services/user.service';
 import { DrugService } from '../../services/drug.service';
-import { ShippingAddress, AutocompleteAddressItem } from '../../models/user.model';
+import { UserAddress, AutocompleteAddressItem } from '../../models/user.model';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
@@ -41,8 +41,8 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   orderID: string = '';
 
   // Saved addresses
-  savedAddresses: ShippingAddress[] = [];
-  selectedSavedAddress: ShippingAddress | null = null;
+  savedAddresses: UserAddress[] = [];
+  selectedSavedAddress: UserAddress | null = null;
   isLoadingAddresses = false;
   useMyProfile = false;
 
@@ -125,7 +125,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
    */
   loadSavedAddresses() {
     this.isLoadingAddresses = true;
-    this.userService.getShippingAddresses()
+    this.userService.getUserAddresses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (addresses) => {
