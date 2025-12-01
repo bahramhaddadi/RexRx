@@ -5,19 +5,36 @@
         <div class="shipping-content">
           <h1 class="page-title">Shipping Address</h1>
 
+          <!-- Use My Profile Checkbox -->
+          <div class="use-profile-section mb-3">
+            <div class="form-field checkbox-field">
+              <p-checkbox
+                [(ngModel)]="useMyProfile"
+                [binary]="true"
+                inputId="useMyProfile"
+                name="useMyProfile"
+                [disabled]="savedAddresses.length === 0"
+                (onChange)="onUseMyProfileChange()"
+              />
+              <label for="useMyProfile">Use my profile</label>
+            </div>
+          </div>
+
           <!-- Saved Addresses Dropdown -->
-          <div class="saved-addresses-section" *ngIf="savedAddresses.length > 0">
-            <label for="savedAddress">Use my profile</label>
-            <p-dropdown
-              id="savedAddress"
-              [(ngModel)]="selectedSavedAddress"
-              [options]="savedAddresses"
-              (onChange)="onSavedAddressSelect()"
-              placeholder="Home / Work / User / GetShippingAddresses"
-              optionLabel="nickName"
-              [style]="{ width: '100%' }"
-              [showClear]="true"
-            />
+          <div class="saved-addresses-section">
+            <div class="form-field">
+              <p-dropdown
+                id="savedAddress"
+                [(ngModel)]="selectedSavedAddress"
+                [options]="savedAddresses"
+                (onChange)="onSavedAddressSelect()"
+                placeholder="Select address"
+                optionLabel="nickName"
+                [style]="{ width: '100%' }"
+                [showClear]="true"
+                [disabled]="!useMyProfile || savedAddresses.length === 0"
+              />
+            </div>
           </div>
 
           <!-- Shipping Info Section -->
@@ -88,24 +105,32 @@
               <div class="form-row">
                 <!-- Province -->
                 <div class="form-field">
-                  <input
-                    pInputText
+                  <p-dropdown
                     id="province"
                     [(ngModel)]="addressForm.province"
+                    [options]="provinceOptions"
                     name="province"
                     placeholder="Province"
+                    optionLabel="label"
+                    optionValue="value"
+                    [style]="{ width: '100%' }"
+                    (onChange)="onProvinceChange()"
                     required
                   />
                 </div>
 
                 <!-- City -->
                 <div class="form-field">
-                  <input
-                    pInputText
+                  <p-dropdown
                     id="city"
                     [(ngModel)]="addressForm.city"
+                    [options]="cityOptions"
                     name="city"
                     placeholder="City"
+                    optionLabel="label"
+                    optionValue="value"
+                    [style]="{ width: '100%' }"
+                    [disabled]="!addressForm.province"
                     required
                   />
                 </div>

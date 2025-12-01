@@ -105,6 +105,15 @@ export interface ApiResponse {
 }
 
 /**
+ * Get user addresses response
+ */
+export interface GetUserAddressesResponse {
+  body: UserAddress[];
+  errorCode: number;
+  errorMessage: string | null;
+}
+
+/**
  * Autocomplete address request model
  */
 export interface AutocompleteAddressRequest {

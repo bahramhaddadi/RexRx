@@ -83,6 +83,37 @@ export class SettingsComponent implements OnInit {
     { label: 'Prefer not to say', value: 'Prefer not to say' }
   ];
 
+  // Province options for Canadian provinces
+  provinceOptions = [
+    { label: 'Alberta', value: 'Alberta' },
+    { label: 'British Columbia', value: 'British Columbia' },
+    { label: 'Manitoba', value: 'Manitoba' },
+    { label: 'New Brunswick', value: 'New Brunswick' },
+    { label: 'Newfoundland and Labrador', value: 'Newfoundland and Labrador' },
+    { label: 'Nova Scotia', value: 'Nova Scotia' },
+    { label: 'Ontario', value: 'Ontario' },
+    { label: 'Prince Edward Island', value: 'Prince Edward Island' },
+    { label: 'Quebec', value: 'Quebec' },
+    { label: 'Saskatchewan', value: 'Saskatchewan' }
+  ];
+
+  // Cities mapped by province
+  citiesByProvince: { [key: string]: string[] } = {
+    'Alberta': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert', 'Medicine Hat', 'Grande Prairie', 'Airdrie', 'Spruce Grove', 'Okotoks'],
+    'British Columbia': ['Vancouver', 'Victoria', 'Kelowna', 'Abbotsford', 'Surrey', 'Burnaby', 'Richmond', 'Coquitlam', 'Saanich', 'Delta'],
+    'Manitoba': ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie', 'Winkler', 'Selkirk', 'Morden', 'Dauphin', 'The Pas'],
+    'New Brunswick': ['Moncton', 'Saint John', 'Fredericton', 'Dieppe', 'Miramichi', 'Bathurst', 'Edmundston', 'Riverview', 'Campbellton', 'Quispamsis'],
+    'Newfoundland and Labrador': ['St. John\'s', 'Mount Pearl', 'Corner Brook', 'Conception Bay South', 'Paradise', 'Grand Falls-Windsor', 'Gander', 'Portugal Cove-St. Philip\'s', 'Torbay', 'Happy Valley-Goose Bay'],
+    'Nova Scotia': ['Halifax', 'Dartmouth', 'Sydney', 'Truro', 'New Glasgow', 'Glace Bay', 'Kentville', 'Amherst', 'Bridgewater', 'Yarmouth'],
+    'Ontario': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton', 'London', 'Markham', 'Vaughan', 'Kitchener', 'Windsor', 'Richmond Hill', 'Burlington', 'Oshawa', 'Barrie', 'St. Catharines', 'Cambridge', 'Kingston', 'Guelph', 'Whitby', 'Ajax'],
+    'Prince Edward Island': ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall', 'Montague', 'Kensington', 'Souris', 'Alberton', 'O\'Leary', 'Georgetown'],
+    'Quebec': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke', 'Saguenay', 'Trois-Rivières', 'Terrebonne', 'Saint-Jean-sur-Richelieu', 'Repentigny', 'Brossard', 'Drummondville', 'Saint-Jérôme', 'Granby'],
+    'Saskatchewan': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current', 'Yorkton', 'North Battleford', 'Estevan', 'Weyburn', 'Warman']
+  };
+
+  // Filtered cities based on selected province
+  cityOptions: { label: string; value: string }[] = [];
+
   // Shipping Addresses
   addresses: UserAddress[] = [];
   showAddressDialog = false;
@@ -139,13 +170,14 @@ export class SettingsComponent implements OnInit {
     this.errorMessage = '';
 
     this.userService.getUserAddresses().subscribe({
-      next: (addresses) => {
-        this.addresses = addresses || [];
+      next: (response) => {
+        this.addresses = response.body || [];
         this.isLoadingAddresses = false;
       },
       error: (error) => {
         console.error('Error loading user addresses:', error);
         this.errorMessage = 'Failed to load addresses. Please try again.';
+        this.addresses = [];
         this.isLoadingAddresses = false;
       }
     });
@@ -212,6 +244,33 @@ export class SettingsComponent implements OnInit {
     this.isEditMode = true;
     this.addressForm = { ...address };
     this.showAddressDialog = true;
+
+    // Update city options when editing an address with a province
+    if (this.addressForm.province) {
+      this.updateCityOptions(this.addressForm.province);
+    }
+  }
+
+  /**
+   * Updates city options based on selected province
+   */
+  updateCityOptions(province: string): void {
+    const cities = this.citiesByProvince[province] || [];
+    this.cityOptions = cities.map(city => ({ label: city, value: city }));
+  }
+
+  /**
+   * Handles province selection change
+   */
+  onProvinceChange(): void {
+    // Clear city when province changes
+    this.addressForm.city = '';
+    // Update available cities
+    if (this.addressForm.province) {
+      this.updateCityOptions(this.addressForm.province);
+    } else {
+      this.cityOptions = [];
+    }
   }
 
   /**

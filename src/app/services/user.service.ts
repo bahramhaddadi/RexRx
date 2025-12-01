@@ -11,7 +11,7 @@ import {
   ApiResponse,
   AutocompleteAddressRequest,
   AutocompleteAddressResponse,
-  ShippingAddress
+  GetUserAddressesResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -45,10 +45,10 @@ export class UserService {
 
   /**
    * Fetches the user's shipping addresses
-   * @returns Observable of user addresses array
+   * @returns Observable of user addresses response
    */
-  getUserAddresses(): Observable<UserAddress[]> {
-    return this.apiService.post<UserAddress[]>(
+  getUserAddresses(): Observable<GetUserAddressesResponse> {
+    return this.apiService.post<GetUserAddressesResponse>(
       '/Pharma/User/GetUserAddresses',
       {}
     );
@@ -75,17 +75,6 @@ export class UserService {
     return this.apiService.post<ApiResponse>(
       '/Pharma/User/UpdateUserAddress',
       address
-    );
-  }
-
-  /**
-   * Fetches shipping addresses for the user
-   * @returns Observable of shipping addresses array
-   */
-  getShippingAddresses(): Observable<ShippingAddress[]> {
-    return this.apiService.post<ShippingAddress[]>(
-      '/Pharma/User/GetShippingAddresses',
-      {}
     );
   }
 

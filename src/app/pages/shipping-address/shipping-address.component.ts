@@ -10,7 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { UserService } from '../../services/user.service';
 import { DrugService } from '../../services/drug.service';
-import { ShippingAddress, AutocompleteAddressItem } from '../../models/user.model';
+import { UserAddress, AutocompleteAddressItem } from '../../models/user.model';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
@@ -41,9 +41,10 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   orderID: string = '';
 
   // Saved addresses
-  savedAddresses: ShippingAddress[] = [];
-  selectedSavedAddress: ShippingAddress | null = null;
+  savedAddresses: UserAddress[] = [];
+  selectedSavedAddress: UserAddress | null = null;
   isLoadingAddresses = false;
+  useMyProfile = false;
 
   // UI state
   isSubmitting = false;
@@ -69,6 +70,37 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
   // Deliver to mailbox option
   deliverToMailbox = false;
 
+  // Province options for Canadian provinces
+  provinceOptions = [
+    { label: 'Alberta', value: 'Alberta' },
+    { label: 'British Columbia', value: 'British Columbia' },
+    { label: 'Manitoba', value: 'Manitoba' },
+    { label: 'New Brunswick', value: 'New Brunswick' },
+    { label: 'Newfoundland and Labrador', value: 'Newfoundland and Labrador' },
+    { label: 'Nova Scotia', value: 'Nova Scotia' },
+    { label: 'Ontario', value: 'Ontario' },
+    { label: 'Prince Edward Island', value: 'Prince Edward Island' },
+    { label: 'Quebec', value: 'Quebec' },
+    { label: 'Saskatchewan', value: 'Saskatchewan' }
+  ];
+
+  // Cities mapped by province
+  citiesByProvince: { [key: string]: string[] } = {
+    'Alberta': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert', 'Medicine Hat', 'Grande Prairie', 'Airdrie', 'Spruce Grove', 'Okotoks'],
+    'British Columbia': ['Vancouver', 'Victoria', 'Kelowna', 'Abbotsford', 'Surrey', 'Burnaby', 'Richmond', 'Coquitlam', 'Saanich', 'Delta'],
+    'Manitoba': ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie', 'Winkler', 'Selkirk', 'Morden', 'Dauphin', 'The Pas'],
+    'New Brunswick': ['Moncton', 'Saint John', 'Fredericton', 'Dieppe', 'Miramichi', 'Bathurst', 'Edmundston', 'Riverview', 'Campbellton', 'Quispamsis'],
+    'Newfoundland and Labrador': ['St. John\'s', 'Mount Pearl', 'Corner Brook', 'Conception Bay South', 'Paradise', 'Grand Falls-Windsor', 'Gander', 'Portugal Cove-St. Philip\'s', 'Torbay', 'Happy Valley-Goose Bay'],
+    'Nova Scotia': ['Halifax', 'Dartmouth', 'Sydney', 'Truro', 'New Glasgow', 'Glace Bay', 'Kentville', 'Amherst', 'Bridgewater', 'Yarmouth'],
+    'Ontario': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton', 'London', 'Markham', 'Vaughan', 'Kitchener', 'Windsor', 'Richmond Hill', 'Burlington', 'Oshawa', 'Barrie', 'St. Catharines', 'Cambridge', 'Kingston', 'Guelph', 'Whitby', 'Ajax'],
+    'Prince Edward Island': ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall', 'Montague', 'Kensington', 'Souris', 'Alberton', 'O\'Leary', 'Georgetown'],
+    'Quebec': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke', 'Saguenay', 'Trois-Rivières', 'Terrebonne', 'Saint-Jean-sur-Richelieu', 'Repentigny', 'Brossard', 'Drummondville', 'Saint-Jérôme', 'Granby'],
+    'Saskatchewan': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current', 'Yorkton', 'North Battleford', 'Estevan', 'Weyburn', 'Warman']
+  };
+
+  // Filtered cities based on selected province
+  cityOptions: { label: string; value: string }[] = [];
+
   ngOnInit() {
     // Get orderID from navigation state
     const navigation = this.router.getCurrentNavigation();
@@ -93,15 +125,16 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
    */
   loadSavedAddresses() {
     this.isLoadingAddresses = true;
-    this.userService.getShippingAddresses()
+    this.userService.getUserAddresses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (addresses) => {
-          this.savedAddresses = addresses;
+        next: (response) => {
+          this.savedAddresses = response.body || [];
           this.isLoadingAddresses = false;
         },
         error: (error) => {
           console.error('Error loading addresses:', error);
+          this.savedAddresses = [];
           this.isLoadingAddresses = false;
         }
       });
@@ -172,8 +205,45 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
     this.addressForm.province = suggestion.province || '';
     this.addressForm.postalCode = suggestion.postalCode || '';
 
+    // Update city options when province is set from autocomplete
+    if (this.addressForm.province) {
+      this.updateCityOptions(this.addressForm.province);
+    }
+
     this.showAutocompleteSuggestions = false;
     this.autocompleteSuggestions = [];
+  }
+
+  /**
+   * Updates city options based on selected province
+   */
+  updateCityOptions(province: string) {
+    const cities = this.citiesByProvince[province] || [];
+    this.cityOptions = cities.map(city => ({ label: city, value: city }));
+  }
+
+  /**
+   * Handles province selection change
+   */
+  onProvinceChange() {
+    // Clear city when province changes
+    this.addressForm.city = '';
+    // Update available cities
+    if (this.addressForm.province) {
+      this.updateCityOptions(this.addressForm.province);
+    } else {
+      this.cityOptions = [];
+    }
+  }
+
+  /**
+   * Handles changes to the "Use my profile" checkbox
+   */
+  onUseMyProfileChange() {
+    if (!this.useMyProfile) {
+      // Clear selected address when checkbox is unchecked
+      this.selectedSavedAddress = null;
+    }
   }
 
   /**
@@ -187,6 +257,11 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
       this.addressForm.city = this.selectedSavedAddress.city;
       this.addressForm.province = this.selectedSavedAddress.province;
       this.addressForm.postalCode = this.selectedSavedAddress.postalCode;
+
+      // Update city options when province is set from saved address
+      if (this.addressForm.province) {
+        this.updateCityOptions(this.addressForm.province);
+      }
     }
   }
 
