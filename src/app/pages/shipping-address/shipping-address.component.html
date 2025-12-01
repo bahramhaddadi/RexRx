@@ -21,7 +21,7 @@
           </div>
 
           <!-- Saved Addresses Dropdown -->
-          <div class="saved-addresses-section" *ngIf="useMyProfile">
+          <div class="saved-addresses-section">
             <div class="form-field">
               <p-dropdown
                 id="savedAddress"
@@ -32,7 +32,7 @@
                 optionLabel="nickName"
                 [style]="{ width: '100%' }"
                 [showClear]="true"
-                [disabled]="savedAddresses.length === 0"
+                [disabled]="!useMyProfile || savedAddresses.length === 0"
               />
             </div>
           </div>
