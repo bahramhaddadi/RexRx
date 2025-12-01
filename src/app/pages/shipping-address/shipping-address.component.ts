@@ -128,12 +128,13 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
     this.userService.getUserAddresses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (addresses) => {
-          this.savedAddresses = addresses;
+        next: (response) => {
+          this.savedAddresses = response.body || [];
           this.isLoadingAddresses = false;
         },
         error: (error) => {
           console.error('Error loading addresses:', error);
+          this.savedAddresses = [];
           this.isLoadingAddresses = false;
         }
       });

@@ -10,7 +10,8 @@ import {
   UpdateUserAddressRequest,
   ApiResponse,
   AutocompleteAddressRequest,
-  AutocompleteAddressResponse
+  AutocompleteAddressResponse,
+  GetUserAddressesResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -44,10 +45,10 @@ export class UserService {
 
   /**
    * Fetches the user's shipping addresses
-   * @returns Observable of user addresses array
+   * @returns Observable of user addresses response
    */
-  getUserAddresses(): Observable<UserAddress[]> {
-    return this.apiService.post<UserAddress[]>(
+  getUserAddresses(): Observable<GetUserAddressesResponse> {
+    return this.apiService.post<GetUserAddressesResponse>(
       '/Pharma/User/GetUserAddresses',
       {}
     );

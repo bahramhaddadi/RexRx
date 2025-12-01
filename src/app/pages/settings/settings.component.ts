@@ -170,13 +170,14 @@ export class SettingsComponent implements OnInit {
     this.errorMessage = '';
 
     this.userService.getUserAddresses().subscribe({
-      next: (addresses) => {
-        this.addresses = addresses || [];
+      next: (response) => {
+        this.addresses = response.body || [];
         this.isLoadingAddresses = false;
       },
       error: (error) => {
         console.error('Error loading user addresses:', error);
         this.errorMessage = 'Failed to load addresses. Please try again.';
+        this.addresses = [];
         this.isLoadingAddresses = false;
       }
     });
