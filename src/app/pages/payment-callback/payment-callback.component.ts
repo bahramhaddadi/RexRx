@@ -23,6 +23,7 @@ export class PaymentCallbackComponent implements OnInit, OnDestroy {
 
   paymentStatus: 'success' | 'failed' | 'pending' = 'pending';
   sessionId: string = '';
+  orderId: string = '';
   countdown: number = 5;
   private countdownInterval?: any;
 
@@ -30,7 +31,8 @@ export class PaymentCallbackComponent implements OnInit, OnDestroy {
     // Get payment status from query parameters
     this.route.queryParams.subscribe(params => {
       this.sessionId = params['session_id'] || '';
-
+      this.orderId = params['orderId'] || '';
+      
       // Stripe typically sends 'success' or redirects with session_id for success
       // and may include 'canceled' for failed payments
       if (params['success'] === 'true' || params['payment_status'] === 'success') {
@@ -63,7 +65,7 @@ export class PaymentCallbackComponent implements OnInit, OnDestroy {
       if (this.countdown <= 0) {
         clearInterval(this.countdownInterval);
         this.router.navigate(['/shipping-address'], {
-          state: { orderID: this.sessionId }
+          state: { orderID: this.orderId }
         });
       }
     }, 1000);
