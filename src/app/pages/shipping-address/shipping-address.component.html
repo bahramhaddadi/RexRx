@@ -22,17 +22,19 @@
 
           <!-- Saved Addresses Dropdown -->
           <div class="saved-addresses-section" *ngIf="useMyProfile">
-            <p-dropdown
-              id="savedAddress"
-              [(ngModel)]="selectedSavedAddress"
-              [options]="savedAddresses"
-              (onChange)="onSavedAddressSelect()"
-              placeholder="Select address"
-              optionLabel="nickName"
-              [style]="{ width: '100%' }"
-              [showClear]="true"
-              [disabled]="savedAddresses.length === 0"
-            />
+            <div class="form-field">
+              <p-dropdown
+                id="savedAddress"
+                [(ngModel)]="selectedSavedAddress"
+                [options]="savedAddresses"
+                (onChange)="onSavedAddressSelect()"
+                placeholder="Select address"
+                optionLabel="nickName"
+                [style]="{ width: '100%' }"
+                [showClear]="true"
+                [disabled]="savedAddresses.length === 0"
+              />
+            </div>
           </div>
 
           <!-- Shipping Info Section -->
