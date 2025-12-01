@@ -291,18 +291,6 @@
 
       <div class="form-row">
         <div class="form-field">
-          <label for="city">City</label>
-          <input
-            pInputText
-            id="city"
-            [(ngModel)]="addressForm.city"
-            name="city"
-            placeholder="City"
-            required
-          />
-        </div>
-
-        <div class="form-field">
           <label for="province">Province</label>
           <p-dropdown
             id="province"
@@ -313,6 +301,23 @@
             optionLabel="label"
             optionValue="value"
             [style]="{ width: '100%' }"
+            (onChange)="onProvinceChange()"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="city">City</label>
+          <p-dropdown
+            id="city"
+            [(ngModel)]="addressForm.city"
+            [options]="cityOptions"
+            name="city"
+            placeholder="City"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{ width: '100%' }"
+            [disabled]="!addressForm.province"
             required
           />
         </div>

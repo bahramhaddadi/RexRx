@@ -111,18 +111,23 @@
                     optionLabel="label"
                     optionValue="value"
                     [style]="{ width: '100%' }"
+                    (onChange)="onProvinceChange()"
                     required
                   />
                 </div>
 
                 <!-- City -->
                 <div class="form-field">
-                  <input
-                    pInputText
+                  <p-dropdown
                     id="city"
                     [(ngModel)]="addressForm.city"
+                    [options]="cityOptions"
                     name="city"
                     placeholder="City"
+                    optionLabel="label"
+                    optionValue="value"
+                    [style]="{ width: '100%' }"
+                    [disabled]="!addressForm.province"
                     required
                   />
                 </div>
