@@ -11,7 +11,9 @@ import {
   ApiResponse,
   AutocompleteAddressRequest,
   AutocompleteAddressResponse,
-  GetUserAddressesResponse
+  GetUserAddressesResponse,
+  GetOrdersRequest,
+  GetOrdersResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -91,6 +93,33 @@ export class UserService {
     return this.apiService.post<AutocompleteAddressResponse>(
       '/Pharma/Shopping/AutocompleteAddress',
       request
+    );
+  }
+
+  /**
+   * Fetches user orders with pagination and search
+   * @param orderStatus The order status filter (0 for all)
+   * @param searchCriteria The search text filter
+   * @param pageNumber The page number (0-indexed)
+   * @param pageSize The number of items per page
+   * @returns Observable of orders response
+   */
+  getOrders(
+    orderStatus: number = 0,
+    searchCriteria: string = '',
+    pageNumber: number = 0,
+    pageSize: number = 10
+  ): Observable<GetOrdersResponse> {
+    const request: GetOrdersRequest = {
+      orderStatus,
+      searchCriteria,
+      pageNumber,
+      pageSize
+    };
+
+    return this.apiService.post<GetOrdersResponse>(
+      '/Pharma/User/GetOrders',
+      { body: request }
     );
   }
 }
