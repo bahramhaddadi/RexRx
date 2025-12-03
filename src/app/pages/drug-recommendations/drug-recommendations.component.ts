@@ -43,9 +43,12 @@ export class DrugRecommendationsComponent implements OnInit {
 
   ngOnInit() {
     // Extract questionnaire answers from navigation state
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state || history.state;
+    // getCurrentNavigation() is null in ngOnInit, so we use history.state
+    const state = history.state;
     this.questionnaireAnswers = state?.['questionnaireAnswers'] || [];
+
+    console.log('Navigation state:', state);
+    console.log('Questionnaire answers received:', this.questionnaireAnswers);
 
     this.route.queryParams.subscribe(params => {
       this.doseId = params['doseId'] ? +params['doseId'] : undefined;
