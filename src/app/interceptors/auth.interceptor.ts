@@ -1,9 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { tap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const router = inject(Router);
   const session = authService.getSession();
 
   // Skip adding Authorization header for authentication endpoints
@@ -18,7 +21,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${session.sessionID}`
       }
     });
-    return next(clonedRequest);
+
+    return next(clonedRequest).pipe(
+      tap({
+        error: (error) => {
+          // Handle 401 Unauthorized - redirect to home page
+          if (error.status === 401) {
+            authService.logout();
+            router.navigate(['/']);
+          }
+        }
+      })
+    );
   }
 
   return next(req);

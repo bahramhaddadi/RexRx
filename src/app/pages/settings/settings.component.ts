@@ -12,11 +12,12 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PaginatorModule } from 'primeng/paginator';
 
 // Local imports
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { UserService } from '../../services/user.service';
-import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest } from '../../models/user.model';
+import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order } from '../../models/user.model';
 
 interface MenuItem {
   label: string;
@@ -39,6 +40,7 @@ interface MenuItem {
     DialogModule,
     CheckboxModule,
     ProgressSpinnerModule,
+    PaginatorModule,
     PageLayoutComponent
   ],
   templateUrl: './settings.component.html',
@@ -56,7 +58,7 @@ export class SettingsComponent implements OnInit {
     { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card', disabled: true },
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
     { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit', disabled: true },
-    { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag', disabled: true },
+    { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag' },
     { label: 'Prescriptions', value: 'prescriptions', icon: 'pi pi-file', disabled: true }
   ];
 
@@ -65,6 +67,7 @@ export class SettingsComponent implements OnInit {
   isLoadingAddresses = false;
   isSavingProfile = false;
   isSavingAddress = false;
+  isLoadingOrders = false;
 
   // Personal Info
   userProfile: UserProfile | null = null;
@@ -119,6 +122,14 @@ export class SettingsComponent implements OnInit {
   showAddressDialog = false;
   isEditMode = false;
   addressForm: UserAddress = this.getEmptyAddress();
+
+  // Orders
+  orders: Order[] = [];
+  ordersSearchCriteria = '';
+  ordersSearchInput = '';
+  ordersTotalRecords = 0;
+  ordersPageNumber = 0;
+  ordersPageSize = 10;
 
   // Error handling
   errorMessage = '';
@@ -378,6 +389,96 @@ export class SettingsComponent implements OnInit {
       this.selectedSection = sectionValue;
       this.errorMessage = '';
       this.successMessage = '';
+
+      // Load orders when navigating to orders section
+      if (sectionValue === 'orders' && this.orders.length === 0) {
+        this.loadOrders();
+      }
     }
+  }
+
+  /**
+   * Loads orders with pagination and search
+   */
+  loadOrders(): void {
+    this.isLoadingOrders = true;
+    this.errorMessage = '';
+
+    this.userService.getOrders(
+      0, // orderStatus: 0 for all statuses
+      this.ordersSearchCriteria,
+      this.ordersPageNumber,
+      this.ordersPageSize
+    ).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.orders = response.body.orders || [];
+          this.ordersTotalRecords = response.body.totalCount || 0;
+        } else {
+          console.error('API Error:', response.errorMessage);
+          this.errorMessage = response.errorMessage || 'Failed to load orders.';
+          this.orders = [];
+          this.ordersTotalRecords = 0;
+        }
+        this.isLoadingOrders = false;
+      },
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        this.errorMessage = 'Failed to load orders. Please try again.';
+        this.orders = [];
+        this.ordersTotalRecords = 0;
+        this.isLoadingOrders = false;
+      }
+    });
+  }
+
+  /**
+   * Handles page change event from paginator
+   */
+  onOrdersPageChange(event: any): void {
+    this.ordersPageNumber = event.page;
+    this.ordersPageSize = event.rows;
+    this.loadOrders();
+  }
+
+  /**
+   * Handles search button click
+   */
+  searchOrders(): void {
+    this.ordersSearchCriteria = this.ordersSearchInput.trim();
+    this.ordersPageNumber = 0; // Reset to first page
+    this.loadOrders();
+  }
+
+  /**
+   * Handles enter key press in search input
+   */
+  onOrdersSearchKeyPress(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.searchOrders();
+    }
+  }
+
+  /**
+   * Formats order date for display
+   */
+  formatOrderDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  /**
+   * Formats order items for display
+   */
+  formatOrderItems(order: Order): string {
+    if (!order.items || order.items.length === 0) return '';
+    return order.items.map(item =>
+      `${item.quantity} x ${item.itemName}${item.dose ? ' (' + item.dose + ')' : ''}`
+    ).join('\n');
   }
 }

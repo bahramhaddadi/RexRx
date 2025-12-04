@@ -17,8 +17,9 @@ export const routes: Routes = [
 
   // Public route (accessible to everyone)
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(mod => mod.HomeComponent)
+    path: '',
+    loadComponent: () => import('./pages/home/home.component').then(mod => mod.HomeComponent),
+    pathMatch: 'full'
   },
 
   // Protected routes (require authentication)
@@ -68,14 +69,9 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
-  // Default redirect
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
+  // Fallback redirect
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: '',
   },
 ];

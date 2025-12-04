@@ -96,7 +96,7 @@ export class DrugRecommendationsComponent implements OnInit {
    * Navigates back to home page
    */
   goBackHome(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
   /**

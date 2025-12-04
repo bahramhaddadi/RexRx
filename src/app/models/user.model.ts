@@ -147,3 +147,50 @@ export interface AutocompleteAddressResponse {
 export interface ShippingAddress extends UserAddress {
   id: number;
 }
+
+/**
+ * Order item model
+ */
+export interface OrderItem {
+  itemName: string;
+  quantity: number;
+  dose: string;
+}
+
+/**
+ * Order model
+ */
+export interface Order {
+  id: string;
+  orderDate: string;
+  orderStatus: number;
+  orderStatusName: string;
+  trackingNumber: string | null;
+  items: OrderItem[];
+  totalAmount: number;
+  shippingAddress: string | null;
+}
+
+/**
+ * Get orders request model
+ */
+export interface GetOrdersRequest {
+  orderStatus: number;
+  searchCriteria: string;
+  pageNumber: number;
+  pageSize: number;
+}
+
+/**
+ * Get orders response
+ */
+export interface GetOrdersResponse {
+  body: {
+    orders: Order[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+  };
+  errorCode: number;
+  errorMessage: string | null;
+}

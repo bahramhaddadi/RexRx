@@ -230,8 +230,101 @@
         </section>
 
         <section *ngIf="selectedSection === 'orders'" class="settings-section">
-          <h2>Orders</h2>
-          <p class="placeholder-text">This section is coming soon.</p>
+          <h2>My orders</h2>
+
+          <!-- Search Bar -->
+          <div class="orders-search-bar">
+            <span class="p-input-icon-left search-input-wrapper">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="ordersSearchInput"
+                placeholder="Search Criteria"
+                class="search-input"
+                (keypress)="onOrdersSearchKeyPress($event)"
+              />
+            </span>
+            <button
+              pButton
+              type="button"
+              label="Search"
+              class="search-button"
+              (click)="searchOrders()"
+            ></button>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="isLoadingOrders" class="loading-container">
+            <p-progressSpinner />
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!isLoadingOrders && orders.length === 0 && !ordersSearchCriteria" class="empty-state">
+            <i class="pi pi-shopping-bag"></i>
+            <p>No orders yet</p>
+          </div>
+
+          <!-- No Results State -->
+          <div *ngIf="!isLoadingOrders && orders.length === 0 && ordersSearchCriteria" class="empty-state">
+            <i class="pi pi-search"></i>
+            <p>No orders found matching "{{ ordersSearchCriteria }}"</p>
+          </div>
+
+          <!-- Orders Table -->
+          <div *ngIf="!isLoadingOrders && orders.length > 0" class="orders-table-container">
+            <p-table
+              [value]="orders"
+              [tableStyle]="{ 'min-width': '50rem' }"
+              styleClass="p-datatable-striped"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Drugs</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Delivery</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-order>
+                <tr>
+                  <td>
+                    <div class="order-items">
+                      <div *ngFor="let item of order.items" class="order-item">
+                        {{ item.quantity }} x {{ item.itemName }}
+                        <span *ngIf="item.dose" class="item-dose">({{ item.dose }})</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ formatOrderDate(order.orderDate) }}</td>
+                  <td>
+                    <span class="order-status" [ngClass]="'status-' + order.orderStatus">
+                      {{ order.orderStatusName }}
+                    </span>
+                  </td>
+                  <td>
+                    <a
+                      *ngIf="order.trackingNumber"
+                      [href]="'https://track.example.com/' + order.trackingNumber"
+                      target="_blank"
+                      class="tracking-link"
+                    >
+                      {{ order.trackingNumber }}
+                    </a>
+                    <span *ngIf="!order.trackingNumber">-</span>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- Pagination -->
+            <p-paginator
+              [rows]="ordersPageSize"
+              [totalRecords]="ordersTotalRecords"
+              [first]="ordersPageNumber * ordersPageSize"
+              (onPageChange)="onOrdersPageChange($event)"
+              [rowsPerPageOptions]="[10, 20, 30]"
+            ></p-paginator>
+          </div>
         </section>
 
         <section *ngIf="selectedSection === 'prescriptions'" class="settings-section">

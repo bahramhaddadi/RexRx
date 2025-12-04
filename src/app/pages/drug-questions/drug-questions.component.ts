@@ -470,6 +470,6 @@ export class DrugQuestionsComponent implements OnInit {
    * Navigates back to home or drugs list
    */
   goBackHome(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 }

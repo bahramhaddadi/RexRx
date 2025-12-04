@@ -99,7 +99,7 @@ export class SignInComponent implements OnInit {
         if (response.exceptionCode === 0) {
           // Success - navigate to home or dashboard
           console.log('Authentication successful:', response);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
         } else {
           // Authentication failed with error
           this.errorMessage = response.exceptionMessage || 'Authentication failed';
