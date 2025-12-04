@@ -328,6 +328,6 @@ export class CheckoutComponent implements OnInit {
    * Navigates back to home
    */
   onCancel(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 }

@@ -307,7 +307,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
 
             // Navigate to home after 1.5 seconds
             setTimeout(() => {
-              this.router.navigate(['/home']);
+              this.router.navigate(['/']);
             }, 1500);
           } else {
             this.errorMessage = response.errorMessage || 'Failed to save shipping address';

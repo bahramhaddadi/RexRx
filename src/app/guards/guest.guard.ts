@@ -21,7 +21,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
   if (isAuthenticated) {
     // User is already logged in, redirect to home
     console.log('Already authenticated. Redirecting to home...');
-    router.navigate(['/home']);
+    router.navigate(['/']);
     return false;
   } else {
     // User is not authenticated, allow access to login/signup

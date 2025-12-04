@@ -76,7 +76,7 @@ export class DrugListComponent implements OnInit {
    * Navigates back to home page
    */
   onBackClick(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 
   /**
