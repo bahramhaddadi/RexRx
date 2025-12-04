@@ -8,20 +8,16 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-drug-recommendations',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ButtonModule,
     CardModule,
     ProgressSpinnerModule,
     MessageModule,
-    DropdownModule,
     PageLayoutComponent
   ],
   templateUrl: './drug-recommendations.component.html',
@@ -38,8 +34,6 @@ export class DrugRecommendationsComponent implements OnInit {
   questionnaireAnswers: QuestionnaireAnswer[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
-  quantityOptions = [8, 12, 16].map(v => ({ label: `${v}`, value: v }));
-  selectedQuantity = this.quantityOptions[0]?.value ?? 8;
 
   ngOnInit() {
     // Extract questionnaire answers from navigation state
@@ -128,7 +122,6 @@ export class DrugRecommendationsComponent implements OnInit {
     this.router.navigate(['/checkout'], {
       state: {
         doseId: this.doseId,
-        quantity: this.selectedQuantity,
         selectedDrugs: this.selectedDrugs
       }
     });

@@ -194,23 +194,86 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     margin-bottom: 2rem;
+    justify-content: center;
 
     > * {
       flex: 1 1 300px;
       min-width: 300px;
+      max-width: 400px;
     }
-  }
 
-  .quantity {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin: 2rem 0;
-    max-width: 300px;
+    ::ng-deep .drug-card {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      height: 100%;
 
-    label {
-      font-weight: 600;
-      color: var(--text-color);
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .p-card-header {
+        padding: 0 !important;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .p-card-body {
+        padding: 0 !important;
+      }
+
+      .p-card-content {
+        padding: 0 !important;
+      }
+
+      .p-card-footer {
+        padding: 1.25rem !important;
+        border-top: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+
+        button {
+          width: 100%;
+          padding: 0.75rem;
+          font-weight: 600;
+          border-radius: 8px;
+          transition: all 0.2s ease;
+        }
+      }
+
+      .card-header {
+        padding: 1.5rem !important;
+
+        .drug-title {
+          font-size: 1.5rem;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+      }
+
+      .drug-details {
+        padding: 1.5rem !important;
+
+        .detail-row {
+          padding: 0.75rem 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 1rem;
+
+          .label {
+            font-weight: 600;
+            color: #6c757d;
+            min-width: 80px;
+          }
+
+          .value {
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: right;
+            flex: 1;
+          }
+        }
+      }
     }
   }
 
