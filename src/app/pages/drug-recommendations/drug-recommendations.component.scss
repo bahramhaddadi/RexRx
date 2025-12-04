@@ -193,11 +193,12 @@
     width: 100%;
     padding: 2rem 0;
     margin-bottom: 2rem;
+    position: relative;
 
     swiper-container {
       width: 100%;
       height: auto;
-      padding: 0 2rem 3rem;
+      padding: 0 60px 4rem;
 
       ::ng-deep {
         // Swiper navigation buttons
@@ -210,6 +211,7 @@
           border-radius: 50%;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
           transition: all 0.3s ease;
+          top: 40%;
 
           &:hover {
             background: #3498db;
@@ -224,16 +226,18 @@
         }
 
         .swiper-button-prev {
-          left: 0;
+          left: 10px;
         }
 
         .swiper-button-next {
-          right: 0;
+          right: 10px;
         }
 
         // Swiper pagination
         .swiper-pagination {
-          bottom: 0 !important;
+          position: relative !important;
+          bottom: auto !important;
+          margin-top: 1.5rem;
 
           .swiper-pagination-bullet {
             width: 10px;
@@ -373,17 +377,26 @@
       padding: 1rem 0;
 
       swiper-container {
-        padding: 0 1rem 3rem;
+        padding: 0 50px 4rem;
 
         ::ng-deep {
           .swiper-button-next,
           .swiper-button-prev {
             width: 36px;
             height: 36px;
+            top: 35%;
 
             &::after {
               font-size: 14px;
             }
+          }
+
+          .swiper-button-prev {
+            left: 5px;
+          }
+
+          .swiper-button-next {
+            right: 5px;
           }
         }
       }
