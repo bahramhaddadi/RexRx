@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
@@ -8,6 +8,10 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
+import { register } from 'swiper/element/bundle';
+
+// Register Swiper custom elements
+register();
 
 @Component({
   selector: 'app-drug-recommendations',
@@ -20,6 +24,7 @@ import { MessageModule } from 'primeng/message';
     MessageModule,
     PageLayoutComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './drug-recommendations.component.html',
   styleUrls: ['./drug-recommendations.component.scss']
 })

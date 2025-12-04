@@ -189,54 +189,117 @@
     margin-bottom: 2rem;
   }
 
-  .drugs-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+  .swiper-container {
+    width: 100%;
+    padding: 2rem 0;
     margin-bottom: 2rem;
-    justify-content: center;
 
-    > * {
-      flex: 1 1 300px;
-      min-width: 300px;
-      max-width: 400px;
+    swiper-container {
+      width: 100%;
+      height: auto;
+      padding: 0 2rem 3rem;
+
+      ::ng-deep {
+        // Swiper navigation buttons
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #3498db;
+          background: white;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+          }
+
+          &::after {
+            font-size: 18px;
+            font-weight: bold;
+          }
+        }
+
+        .swiper-button-prev {
+          left: 0;
+        }
+
+        .swiper-button-next {
+          right: 0;
+        }
+
+        // Swiper pagination
+        .swiper-pagination {
+          bottom: 0 !important;
+
+          .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            background: #cbd5e0;
+            opacity: 1;
+            transition: all 0.3s ease;
+
+            &-active {
+              background: #3498db;
+              width: 24px;
+              border-radius: 5px;
+            }
+          }
+        }
+      }
     }
 
-    ::ng-deep .drug-card {
+    swiper-slide {
+      height: auto;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .drug-card {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       border-radius: 12px;
       transition: all 0.3s ease;
       height: 100%;
+      width: 100%;
 
       &:hover {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         transform: translateY(-2px);
       }
 
-      .p-card-header {
-        padding: 0 !important;
-        border-bottom: 1px solid #e9ecef;
-      }
+      ::ng-deep {
+        .p-card-header {
+          padding: 0 !important;
+          border-bottom: 1px solid #e9ecef;
+        }
 
-      .p-card-body {
-        padding: 0 !important;
-      }
+        .p-card-body {
+          padding: 0 !important;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
 
-      .p-card-content {
-        padding: 0 !important;
-      }
+        .p-card-content {
+          padding: 0 !important;
+          flex: 1;
+        }
 
-      .p-card-footer {
-        padding: 1.25rem !important;
-        border-top: 1px solid #e9ecef;
-        background-color: #f8f9fa;
+        .p-card-footer {
+          padding: 1.25rem !important;
+          border-top: 1px solid #e9ecef;
+          background-color: #f8f9fa;
 
-        button {
-          width: 100%;
-          padding: 0.75rem;
-          font-weight: 600;
-          border-radius: 8px;
-          transition: all 0.2s ease;
+          button {
+            width: 100%;
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+          }
         }
       }
 
@@ -296,6 +359,59 @@
   .header {
     h1 {
       font-size: 1.5rem;
+    }
+  }
+
+  .centered {
+    padding: 1rem;
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .swiper-container {
+      padding: 1rem 0;
+
+      swiper-container {
+        padding: 0 1rem 3rem;
+
+        ::ng-deep {
+          .swiper-button-next,
+          .swiper-button-prev {
+            width: 36px;
+            height: 36px;
+
+            &::after {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .drug-card {
+        .card-header {
+          padding: 1rem !important;
+
+          .drug-title {
+            font-size: 1.25rem;
+          }
+        }
+
+        .drug-details {
+          padding: 1rem !important;
+
+          .detail-row {
+            padding: 0.5rem 0;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .label,
+            .value {
+              text-align: left;
+            }
+          }
+        }
+      }
     }
   }
 }
