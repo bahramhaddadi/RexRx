@@ -38,6 +38,10 @@
           class="dose-card"
           (click)="onDoseSelect(dose)">
           <div class="dose-content">
+            <div class="drug-image-container">
+              <img [src]=dose.imageUrl [alt]=dose.dose class="drug-image">
+            </div>
+
             <div class="dose-header">
               <h3>{{ dose.dose }}</h3>
               <span class="price">{{ dose.price | currency:'USD':'symbol':'1.2-2' }}</span>
