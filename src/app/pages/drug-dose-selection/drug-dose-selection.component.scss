@@ -1,25 +1,29 @@
 @import "../../../styles/variables";
 
-// Minimal Dose Selection Page Design
+// Modern Pharmacy-Themed Dose Selection Design
 .dose-selection-container {
   padding: $spacing-xl $spacing-2xl;
   direction: ltr;
   min-height: 100vh;
-  background: $gray-50;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
 
   .header {
     display: flex;
     align-items: center;
     gap: $spacing-md;
-    margin-bottom: $spacing-xl;
-    padding-bottom: $spacing-md;
-    border-bottom: 1px solid $gray-300;
+    margin-bottom: $spacing-2xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(90deg, #2563EB 0%, #10B981 100%) 1;
 
     h1 {
       margin: 0;
       font-size: $font-size-2xl;
-      font-weight: $font-weight-semibold;
-      color: $primary-color;
+      font-weight: $font-weight-bold;
+      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .back-button {
@@ -33,11 +37,27 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: $spacing-md;
+    gap: $spacing-lg;
+    padding: $spacing-2xl;
+    background: $white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    ::ng-deep .custom-spinner {
+      .p-progress-spinner-circle {
+        stroke: url(#gradient);
+        animation: spin 1.5s linear infinite;
+      }
+    }
 
     p {
-      color: $gray-600;
+      color: $gray-700;
       font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
   }
 
@@ -47,78 +67,153 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: $spacing-md;
+    gap: $spacing-lg;
     text-align: center;
+    padding: $spacing-2xl;
+    background: $white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(239, 68, 68, 0.2);
 
     i {
-      font-size: 3rem;
-      color: $error-color;
+      font-size: 4rem;
+      color: #EF4444;
+      animation: shake 0.5s ease;
     }
 
     p {
       color: $gray-700;
-      font-size: $font-size-base;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      max-width: 400px;
     }
-  }
 
-  .dose-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: $spacing-lg;
-
-    .dose-card {
-      cursor: pointer;
-      transition: all $transition-base;
-      flex: 0 1 calc(25% - $spacing-lg);
-      min-width: 250px;
-      background: $white;
-      border: 1px solid $gray-200;
-      border-radius: $border-radius-md;
-      box-shadow: $shadow-sm;
+    ::ng-deep .p-button {
+      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: $font-weight-semibold;
+      transition: all 0.3s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: $shadow-md;
-        border-color: $accent-color;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+      }
+    }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+
+  .dose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-xl;
+
+    .dose-card {
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: $white;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 16px;
+        padding: 2px;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15), 0 8px 16px rgba(16, 185, 129, 0.1);
+
+        &::before {
+          opacity: 1;
+        }
+
+        .drug-image-container {
+          transform: scale(1.05);
+        }
+
+        .dose-footer .select-button {
+          background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+          transform: translateY(-2px);
+        }
       }
 
       .dose-content {
         display: flex;
         flex-direction: column;
-        gap: $spacing-sm;
+        gap: $spacing-md;
         height: 100%;
-        padding: $spacing-md;
+        padding: $spacing-lg;
 
         .drug-image-container {
           width: 100%;
-          height: 200px;
-          margin-bottom: $spacing-md;
-          border-radius: $border-radius-md;
+          height: 220px;
+          margin-bottom: $spacing-sm;
+          border-radius: 12px;
           overflow: hidden;
-          background: $gray-100;
+          background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: transform 0.3s ease;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
+
         .dose-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding-bottom: $spacing-sm;
-          border-bottom: 1px solid $gray-200;
+          padding-bottom: $spacing-md;
+          border-bottom: 2px solid $gray-100;
 
           h3 {
             margin: 0;
-            font-size: $font-size-lg;
-            font-weight: $font-weight-semibold;
-            color: $primary-color;
+            font-size: $font-size-xl;
+            font-weight: $font-weight-bold;
+            color: $gray-900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            &::before {
+              content: '💊';
+              font-size: 1.2em;
+            }
           }
 
           .price {
-            font-size: $font-size-base;
+            font-size: $font-size-lg;
             font-weight: $font-weight-bold;
-            color: $success-color;
+            background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
           }
         }
 
@@ -128,22 +223,43 @@
           .quantity {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
             margin: 0;
-            color: $gray-600;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+            border-radius: 8px;
+            color: $gray-700;
             font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
 
             i {
-              color: $accent-color;
-              font-size: 0.875rem;
+              color: #2563EB;
+              font-size: 1rem;
             }
           }
         }
 
         .dose-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: stretch;
           padding-top: $spacing-sm;
+
+          ::ng-deep .p-button {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: $font-weight-semibold;
+            font-size: $font-size-base;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+
+            &:hover {
+              background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+              box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+            }
+          }
         }
       }
     }
@@ -155,17 +271,26 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: $spacing-md;
+    gap: $spacing-lg;
     text-align: center;
+    padding: $spacing-2xl;
+    background: $white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 2px dashed $gray-300;
 
     i {
-      font-size: 3rem;
-      color: $gray-400;
+      font-size: 4rem;
+      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     p {
       color: $gray-600;
       font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
     }
   }
 }
