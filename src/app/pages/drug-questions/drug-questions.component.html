@@ -63,7 +63,7 @@
       @if (currentQuestion.questionTypeID === QuestionType.SingleChoice) {
         <div class="choices-container">
           @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item">
+            <div class="choice-item" (click)="onSingleChoiceSelect(choice.id)">
               <p-radioButton
                 [name]="'question_' + currentQuestion.id"
                 [value]="choice.id"
@@ -94,7 +94,7 @@
         <div class="choices-container">
           <p class="instruction-text">Select at least one option</p>
           @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item">
+            <div class="choice-item" (click)="onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})">
               <p-checkbox
                 [name]="'question_' + currentQuestion.id"
                 [value]="choice.id"
@@ -127,7 +127,9 @@
         <div class="choices-container">
           <p class="instruction-text">Select all that apply, or choose "None of these apply"</p>
           @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item">
+            <div class="choice-item"
+                 (click)="!currentQuestion.noneSelected && onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})"
+                 [class.disabled]="!!currentQuestion.noneSelected">
               <p-checkbox
                 [name]="'question_' + currentQuestion.id"
                 [value]="choice.id"
@@ -195,7 +197,7 @@
           </p-message>
           <div class="terminate-choices">
             @for (choice of currentQuestion.questionChoices; track choice.id) {
-              <div class="choice-item">
+              <div class="choice-item" (click)="onSingleChoiceSelect(choice.id)">
                 <p-radioButton
                   [name]="'question_' + currentQuestion.id"
                   [value]="choice.id"

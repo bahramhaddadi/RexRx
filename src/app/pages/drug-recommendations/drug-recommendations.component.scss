@@ -189,28 +189,158 @@
     margin-bottom: 2rem;
   }
 
-  .drugs-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+  .swiper-container {
+    width: 100%;
+    padding: 2rem 0;
     margin-bottom: 2rem;
+    position: relative;
 
-    > * {
-      flex: 1 1 300px;
-      min-width: 300px;
+    swiper-container {
+      width: 100%;
+      height: auto;
+      padding: 0 60px 4rem;
+
+      ::ng-deep {
+        // Swiper navigation buttons
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #3498db;
+          background: white;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+          top: 40%;
+
+          &:hover {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+          }
+
+          &::after {
+            font-size: 18px;
+            font-weight: bold;
+          }
+        }
+
+        .swiper-button-prev {
+          left: 10px;
+        }
+
+        .swiper-button-next {
+          right: 10px;
+        }
+
+        // Swiper pagination
+        .swiper-pagination {
+          position: relative !important;
+          bottom: auto !important;
+          margin-top: 1.5rem;
+
+          .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            background: #cbd5e0;
+            opacity: 1;
+            transition: all 0.3s ease;
+
+            &-active {
+              background: #3498db;
+              width: 24px;
+              border-radius: 5px;
+            }
+          }
+        }
+      }
     }
-  }
 
-  .quantity {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin: 2rem 0;
-    max-width: 300px;
+    swiper-slide {
+      height: auto;
+      display: flex;
+      align-items: stretch;
+    }
 
-    label {
-      font-weight: 600;
-      color: var(--text-color);
+    .drug-card {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      height: 100%;
+      width: 100%;
+
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      ::ng-deep {
+        .p-card-header {
+          padding: 0 !important;
+          border-bottom: 1px solid #e9ecef;
+        }
+
+        .p-card-body {
+          padding: 0 !important;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .p-card-content {
+          padding: 0 !important;
+          flex: 1;
+        }
+
+        .p-card-footer {
+          padding: 1.25rem !important;
+          border-top: 1px solid #e9ecef;
+          background-color: #f8f9fa;
+
+          button {
+            width: 100%;
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+          }
+        }
+      }
+
+      .card-header {
+        padding: 1.5rem !important;
+
+        .drug-title {
+          font-size: 1.5rem;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+      }
+
+      .drug-details {
+        padding: 1.5rem !important;
+
+        .detail-row {
+          padding: 0.75rem 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 1rem;
+
+          .label {
+            font-weight: 600;
+            color: #6c757d;
+            min-width: 80px;
+          }
+
+          .value {
+            color: #2c3e50;
+            font-weight: 500;
+            text-align: right;
+            flex: 1;
+          }
+        }
+      }
     }
   }
 
@@ -233,6 +363,68 @@
   .header {
     h1 {
       font-size: 1.5rem;
+    }
+  }
+
+  .centered {
+    padding: 1rem;
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .swiper-container {
+      padding: 1rem 0;
+
+      swiper-container {
+        padding: 0 50px 4rem;
+
+        ::ng-deep {
+          .swiper-button-next,
+          .swiper-button-prev {
+            width: 36px;
+            height: 36px;
+            top: 35%;
+
+            &::after {
+              font-size: 14px;
+            }
+          }
+
+          .swiper-button-prev {
+            left: 5px;
+          }
+
+          .swiper-button-next {
+            right: 5px;
+          }
+        }
+      }
+
+      .drug-card {
+        .card-header {
+          padding: 1rem !important;
+
+          .drug-title {
+            font-size: 1.25rem;
+          }
+        }
+
+        .drug-details {
+          padding: 1rem !important;
+
+          .detail-row {
+            padding: 0.5rem 0;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .label,
+            .value {
+              text-align: left;
+            }
+          }
+        }
+      }
     }
   }
 }

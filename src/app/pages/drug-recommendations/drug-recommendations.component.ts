@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
@@ -8,22 +8,23 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
+import { register } from 'swiper/element/bundle';
+
+// Register Swiper custom elements
+register();
 
 @Component({
   selector: 'app-drug-recommendations',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     ButtonModule,
     CardModule,
     ProgressSpinnerModule,
     MessageModule,
-    DropdownModule,
     PageLayoutComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './drug-recommendations.component.html',
   styleUrls: ['./drug-recommendations.component.scss']
 })
@@ -38,8 +39,6 @@ export class DrugRecommendationsComponent implements OnInit {
   questionnaireAnswers: QuestionnaireAnswer[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
-  quantityOptions = [8, 12, 16].map(v => ({ label: `${v}`, value: v }));
-  selectedQuantity = this.quantityOptions[0]?.value ?? 8;
 
   ngOnInit() {
     // Extract questionnaire answers from navigation state
@@ -128,7 +127,6 @@ export class DrugRecommendationsComponent implements OnInit {
     this.router.navigate(['/checkout'], {
       state: {
         doseId: this.doseId,
-        quantity: this.selectedQuantity,
         selectedDrugs: this.selectedDrugs
       }
     });
