@@ -23,13 +23,13 @@
     </div>
 
     <!-- Related products box -->
-    <div class="related-box">
+    <div class="related-box" *ngIf="isLoading || errorMessage || (relatedItems && relatedItems.length > 0)">
       <h3>Related products</h3>
 
       <div *ngIf="isLoading" class="loading"><p-progressSpinner></p-progressSpinner></div>
       <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
 
-      <div class="related-list" *ngIf="!isLoading && !errorMessage">
+      <div class="related-list" *ngIf="!isLoading && !errorMessage && relatedItems.length > 0">
         <p-card class="related-card" *ngFor="let r of relatedItems">
           <ng-template pTemplate="header">
             <div class="card-header">
