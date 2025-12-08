@@ -148,20 +148,21 @@
       background: $white;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      border-left: 3px solid transparent;
-      border-image: linear-gradient(180deg, #2563EB 0%, #10B981 100%) 1;
+      border-left: 3px solid #2563EB;
       transition: all 0.3s ease;
       padding: $spacing-lg;
+      position: relative;
+      overflow: hidden;
 
       &:hover {
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
         transform: translateY(-1px);
+        border-left-color: #10B981;
       }
 
       .question-header {
-        margin-bottom: $spacing-lg;
+        margin-bottom: $spacing-md;
         padding-bottom: $spacing-md;
-        border-bottom: 1px solid $gray-100;
 
         h2 {
           font-size: $font-size-base;
@@ -355,8 +356,7 @@
       justify-content: flex-end;
       gap: $spacing-md;
       margin-top: $spacing-lg;
-      padding-top: $spacing-md;
-      border-top: 1px solid $gray-100;
+      padding-top: $spacing-lg;
 
       ::ng-deep .p-button {
         min-width: 140px;
@@ -524,13 +524,13 @@
 
   // Instruction Text
   .instruction-text {
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-xs $spacing-sm;
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
     border-radius: 6px;
     color: $gray-700;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-sm;
     border-left: 3px solid #2563EB;
   }
 
