@@ -1,110 +1,168 @@
-<app-page-layout [showHeader]="false" [showBackButton]="false" backgroundColor="var(--surface-50)">
+<app-page-layout [showHeader]="false" [showBackButton]="false" backgroundColor="#ffffff">
   <div class="signin-container">
-    <div class="signin-card">
-    <h1 class="signin-title">Sign in to your account</h1>
-    <p class="signin-subtitle">
-      Don't have an account?<a href="#" class="signup-link" (click)="onSignUp(); $event.preventDefault()">Sign up</a>
-    </p>
-
-    <form class="signin-form">
-      <!-- Error Message -->
-      @if (errorMessage) {
-        <div class="field">
-          <p-message severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
+    <!-- Left Side - Brand Section -->
+    <div class="brand-section">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <i class="pi pi-heart-fill"></i>
         </div>
-      }
+        <h2 class="brand-title">Welcome to Pharma</h2>
+        <p class="brand-description">Your trusted healthcare companion for personalized medication management and wellness support.</p>
 
-      <div class="field">
-        <input
-          type="email"
-          pInputText
-          [(ngModel)]="email"
-          name="email"
-          placeholder="Email"
-          class="input-field"
-          [disabled]="isLoading"
-        />
+        <div class="features-list">
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Secure & Private</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>24/7 Support</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Expert Guidance</span>
+          </div>
+        </div>
       </div>
 
-      <div class="field">
-        <p-password
-          [(ngModel)]="password"
-          name="password"
-          placeholder="Password"
-          [toggleMask]="true"
-          [feedback]="false"
-          styleClass="input-field-password"
-          inputStyleClass="input-field"
-          [disabled]="isLoading"
-        ></p-password>
-      </div>
+      <!-- Decorative Elements -->
+      <div class="gradient-orb gradient-orb-1"></div>
+      <div class="gradient-orb gradient-orb-2"></div>
+      <div class="gradient-orb gradient-orb-3"></div>
+    </div>
 
-      <!-- CAPTCHA Section -->
-      <div class="field captcha-container">
-        <div class="captcha-image-wrapper">
-          @if (captchaImageUrl && !captchaLoading) {
-            <img
-              [src]="captchaImageUrl"
-              alt="CAPTCHA"
-              class="captcha-image"
-            />
-          }
-          @if (captchaLoading) {
-            <div class="captcha-loading">
-              Loading CAPTCHA...
+    <!-- Right Side - Form Section -->
+    <div class="form-section">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h1 class="signin-title">Sign in</h1>
+          <p class="signin-subtitle">
+            Don't have an account?
+            <a href="#" class="signup-link" (click)="onSignUp(); $event.preventDefault()">Sign up</a>
+          </p>
+        </div>
+
+        <form class="signin-form">
+          <!-- Error Message -->
+          @if (errorMessage) {
+            <div class="field">
+              <p-message severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
             </div>
           }
+
+          <!-- Email Field -->
+          <div class="field">
+            <label class="field-label">Email Address</label>
+            <div class="input-wrapper">
+              <i class="pi pi-envelope input-icon"></i>
+              <input
+                type="email"
+                pInputText
+                [(ngModel)]="email"
+                name="email"
+                placeholder="you@example.com"
+                class="input-field"
+                [disabled]="isLoading"
+              />
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="field">
+            <label class="field-label">Password</label>
+            <div class="input-wrapper">
+              <i class="pi pi-lock input-icon"></i>
+              <p-password
+                [(ngModel)]="password"
+                name="password"
+                placeholder="Enter your password"
+                [toggleMask]="true"
+                [feedback]="false"
+                styleClass="input-field-password"
+                inputStyleClass="input-field-password-input"
+                [disabled]="isLoading"
+              ></p-password>
+            </div>
+          </div>
+
+          <!-- CAPTCHA Section -->
+          <div class="field">
+            <label class="field-label">Security Verification</label>
+            <div class="captcha-wrapper">
+              <div class="captcha-image-container">
+                @if (captchaImageUrl && !captchaLoading) {
+                  <img
+                    [src]="captchaImageUrl"
+                    alt="CAPTCHA"
+                    class="captcha-image"
+                  />
+                }
+                @if (captchaLoading) {
+                  <div class="captcha-loading">
+                    <i class="pi pi-spin pi-spinner"></i>
+                    <span>Loading...</span>
+                  </div>
+                }
+                <button
+                  type="button"
+                  class="captcha-refresh"
+                  (click)="refreshCaptcha()"
+                  [disabled]="captchaLoading || isLoading"
+                  title="Refresh CAPTCHA"
+                >
+                  <i class="pi pi-refresh"></i>
+                </button>
+              </div>
+              <div class="input-wrapper">
+                <i class="pi pi-shield input-icon"></i>
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="captchaCode"
+                  name="captchaCode"
+                  placeholder="Enter code from image"
+                  class="input-field"
+                  [disabled]="isLoading"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="forgot-password-container">
+            <a href="#" class="forgot-password-link" (click)="onForgotPassword(); $event.preventDefault()">
+              <i class="pi pi-question-circle"></i>
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Sign In Button -->
           <p-button
-            icon="pi pi-refresh"
-            (onClick)="refreshCaptcha()"
-            [disabled]="captchaLoading || isLoading"
-            [text]="true"
-            [rounded]="true"
-            styleClass="captcha-refresh-btn"
-            [title]="'Refresh CAPTCHA'"
+            [label]="isLoading ? 'Signing in...' : 'Sign in'"
+            (onClick)="onSignIn()"
+            styleClass="signin-button"
+            [disabled]="isLoading"
+            [loading]="isLoading"
+            icon="pi pi-sign-in"
+            iconPos="right"
           ></p-button>
+
+        </form>
+
+        <!-- Footer -->
+        <div class="terms-container">
+          <p class="terms-text">
+            By signing in, you agree to our
+            <a href="#" class="terms-link">Terms</a>,
+            <a href="#" class="terms-link">Privacy Policy</a> and
+            <a href="#" class="terms-link">Telehealth Consent</a>
+          </p>
+          <div class="security-badge">
+            <i class="pi pi-lock"></i>
+            <span>PIPEDA Compliant • Your data is secure</span>
+          </div>
         </div>
-        <input
-          type="text"
-          pInputText
-          [(ngModel)]="captchaCode"
-          name="captchaCode"
-          placeholder="Enter CAPTCHA code"
-          class="input-field captcha-input"
-          [disabled]="isLoading"
-          autocomplete="off"
-        />
       </div>
-
-      <div class="forgot-password-container">
-        <a href="#" class="forgot-password-link" (click)="onForgotPassword(); $event.preventDefault()">
-          Forgot password
-        </a>
-      </div>
-
-      <div class="button-container">
-        <p-button
-          [label]="isLoading ? 'Signing in...' : 'Sign-in'"
-          (onClick)="onSignIn()"
-          styleClass="signin-button"
-          [disabled]="isLoading"
-          [loading]="isLoading"
-        ></p-button>
-      </div>
-    </form>
-
-    <div class="terms-container">
-      <p class="terms-text">
-        By continuing, you agree to and have read the
-        <a href="#" class="terms-link">Terms and Conditions</a>,
-        <a href="#" class="terms-link">Professional Disclosure</a>,
-        <a href="#" class="terms-link">Privacy Policy</a> and
-        <a href="#" class="terms-link">Telehealth Consent</a>
-      </p>
-      <p class="privacy-text">
-        We respect your privacy. All of your information is securely stored on our PIPEDA Compliant server.
-      </p>
-    </div>
     </div>
   </div>
 </app-page-layout>
