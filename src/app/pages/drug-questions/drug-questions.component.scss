@@ -148,9 +148,7 @@
       background: $white;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      border-left: 3px solid #2563EB;
       transition: all 0.3s ease;
-      padding: 0 $spacing-lg $spacing-lg $spacing-lg;
       position: relative;
       overflow: hidden;
 
@@ -161,15 +159,13 @@
       }
 
       .question-header {
-        padding-top: $spacing-lg;
-        margin-bottom: $spacing-md;
         padding-bottom: $spacing-md;
 
         h2 {
           font-size: $font-size-base;
           font-weight: $font-weight-bold;
           color: $gray-900;
-          margin-bottom: $spacing-sm;
+          margin-bottom: 0;
           line-height: 1.5;
           position: relative;
           padding-left: 26px;
@@ -636,10 +632,7 @@
     padding: $spacing-md;
     .header h1 { font-size: $font-size-lg; }
     .question-content .question-card {
-      padding: 0 $spacing-md $spacing-md $spacing-md;
       .question-header {
-        padding-top: $spacing-md;
-        margin-bottom: $spacing-lg;
         h2 { font-size: $font-size-base; }
       }
       .choices-container {
