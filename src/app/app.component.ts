@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Button } from 'primeng/button';
+import { AppUpdateService } from './services/app-update.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,12 @@ import { Button } from 'primeng/button';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private readonly appUpdateService = inject(AppUpdateService);
   title = 'pharma';
+
+  ngOnInit(): void {
+    // Initialize service worker update checker
+    this.appUpdateService.init();
+  }
 }
