@@ -1,18 +1,19 @@
 @import "../../../styles/variables";
-// Drug List Page Design
+
+// Modern Pharmacy Drug List Page Design
 .drug-list-container {
-  padding: 3rem 4rem;
+  padding: 2rem 3rem;
   min-height: 100vh;
-  background: var(--surface-ground);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%);
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--surface-border);
+  border-bottom: 2px solid rgba(37, 99, 235, 0.1);
 
   .back-btn {
     flex-shrink: 0;
@@ -20,70 +21,108 @@
 
   .page-title {
     font-size: 2rem;
-    font-weight: 600;
-    color: var(--primary-color);
+    font-weight: 700;
+    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin: 0;
+    font-family: $font-family-heading;
   }
 }
 
-// Introduction / Banner Section
+// Introduction / Banner Section - Modern Pharmacy Style
 .intro-section {
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  .info-card {
-    max-width: 800px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  ::ng-deep .info-card {
+    max-width: 900px;
+    border-radius: 16px;
+    border: 2px solid rgba(37, 99, 235, 0.1);
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08);
+    overflow: hidden;
+    background: $white;
 
-    .info-content {
-      padding: 1.5rem;
+    .p-card-body {
+      padding: 0;
+    }
 
-      .info-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--text-color);
-        margin: 0 0 2rem 0;
-      }
+    .p-card-content {
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%);
+    }
+  }
 
-      .features-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 3rem 0;
+  .info-content {
+    .info-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $gray-900;
+      margin: 0 0 1.5rem 0;
+      font-family: $font-family-heading;
+    }
 
-        li {
-          position: relative;
-          padding-left: 2rem;
-          margin-bottom: 1rem;
-          color: var(--text-color-secondary);
-          font-size: 1rem;
-          line-height: 1.6;
+    .features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
 
-          &::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 1.2em;
-          }
+      li {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 0.875rem;
+        color: $gray-700;
+        font-size: 1rem;
+        line-height: 1.6;
+        font-weight: 500;
+
+        &::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: #10B981;
+          font-weight: 700;
+          font-size: 1.2em;
         }
       }
+    }
 
-      .help-button {
-        width: 100%;
+    ::ng-deep .help-button {
+      width: auto;
+
+      .p-button {
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
       }
     }
   }
 }
 
-// Selection Section
+// Selection Section - Modern Pharmacy Style
 .selection-section {
-  margin-top: 4rem;
+  margin-top: 3rem;
 
   .section-title {
     font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
+    font-weight: 700;
+    color: $gray-900;
     margin: 0 0 2rem 0;
+    font-family: $font-family-heading;
   }
 }
 
@@ -95,9 +134,14 @@
   padding: 6rem 2rem;
   gap: 1.5rem;
 
+  ::ng-deep .p-progress-spinner-circle {
+    stroke: #2563EB;
+  }
+
   p {
-    color: var(--text-color-secondary);
+    color: $gray-600;
     font-size: 1rem;
+    font-weight: 500;
   }
 }
 
@@ -108,51 +152,72 @@
   justify-content: center;
   padding: 6rem 2rem;
   gap: 1.5rem;
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 16px;
+  margin: 2rem 0;
 
   .error-icon {
     font-size: 3rem;
-    color: var(--red-500);
+    color: #ef4444;
   }
 
   .error-message {
-    color: var(--text-color);
+    color: $gray-900;
     font-size: 1rem;
     text-align: center;
+    font-weight: 500;
+  }
+
+  ::ng-deep .p-button {
+    background: #ef4444;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+
+    &:hover {
+      background: #dc2626;
+    }
   }
 }
 
 .drug-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 1.5rem 0;
-
-  > * {
-    flex: 1 1 calc(33.333% - 1.333rem);
-    min-width: 280px;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
 
   .drug-item {
-    min-height: 150px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
   }
 
   .empty-state {
-    flex: 1 1 100%;
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 6rem 2rem;
     gap: 1.5rem;
+    background: rgba(37, 99, 235, 0.03);
+    border-radius: 16px;
+    border: 2px dashed rgba(37, 99, 235, 0.2);
 
     .empty-icon {
       font-size: 3rem;
-      color: var(--surface-400);
+      color: #2563EB;
+      opacity: 0.5;
     }
 
     p {
-      color: var(--text-color-secondary);
+      color: $gray-600;
       font-size: 1rem;
+      font-weight: 500;
     }
   }
 }
@@ -160,72 +225,98 @@
 // Responsive design
 @media (max-width: 1024px) {
   .drug-grid {
-    > * {
-      flex: 1 1 calc(50% - 1rem);
-      min-width: 280px;
-    }
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
   }
 }
 
 @media (max-width: 768px) {
   .drug-list-container {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
   }
 
   .header {
+    margin-bottom: 1.5rem;
+
     .page-title {
       font-size: 1.5rem;
     }
   }
 
   .intro-section {
-    .info-card {
+    margin-bottom: 2rem;
+
+    ::ng-deep .info-card {
       max-width: 100%;
+
+      .p-card-content {
+        padding: 1.5rem;
+      }
+    }
+
+    .info-content {
+      .info-title {
+        font-size: 1.375rem;
+      }
+
+      .features-list {
+        margin-bottom: 1.5rem;
+
+        li {
+          font-size: 0.9375rem;
+        }
+      }
     }
   }
 
   .drug-grid {
-    gap: 1.5rem;
-
-    > * {
-      flex: 1 1 100%;
-    }
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
   }
 }
 
 @media (max-width: 640px) {
   .drug-list-container {
-    padding: 1.5rem;
+    padding: 1rem 1.25rem;
   }
 
   .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    margin-bottom: 1.25rem;
 
     .page-title {
-      font-size: 1.125rem;
+      font-size: 1.25rem;
     }
   }
 
   .intro-section {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 
-    .info-card {
-      .info-content {
-        padding: 1rem;
+    ::ng-deep .info-card .p-card-content {
+      padding: 1.25rem;
+    }
 
-        .info-title {
-          font-size: 1.125rem;
+    .info-content {
+      .info-title {
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+      }
+
+      .features-list {
+        margin-bottom: 1.25rem;
+
+        li {
+          font-size: 0.875rem;
+          margin-bottom: 0.75rem;
         }
+      }
 
-        .features-list {
-          margin-bottom: 2rem;
-
-          li {
-            font-size: 0.875rem;
-          }
-        }
+      ::ng-deep .help-button .p-button {
+        width: 100%;
+        padding: 0.625rem 1.5rem;
+        font-size: 0.9375rem;
       }
     }
   }
@@ -235,12 +326,16 @@
 
     .section-title {
       font-size: 1.125rem;
+      margin-bottom: 1.25rem;
     }
   }
 
   .loading-container,
-  .error-container,
-  .empty-state {
+  .error-container {
     padding: 3rem 1.5rem;
+  }
+
+  .drug-grid {
+    grid-template-columns: 1fr;
   }
 }
