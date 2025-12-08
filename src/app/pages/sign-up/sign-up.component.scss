@@ -1,6 +1,6 @@
 @import "../../../styles/variables";
 
-// Minimal Sign-Up Page Design
+// Modern Pharmacy Sign-Up Page Design
 .signup-container {
   display: flex;
   justify-content: center;
@@ -8,45 +8,81 @@
   min-height: 100vh;
   width: 100%;
   padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
 }
 
 .signup-card {
   background-color: $white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
   border: 1px solid $gray-200;
   padding: $spacing-3xl;
-  max-width: 900px;
+  max-width: 950px;
   width: 100%;
   box-sizing: border-box;
 }
 
-.signup-title {
-  font-size: $font-size-3xl;
-  font-weight: $font-weight-semibold;
+.signup-header {
   text-align: center;
-  margin: 0 0 $spacing-xs 0;
-  color: $primary-color;
+  margin-bottom: $spacing-3xl;
+}
+
+.header-logo {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto $spacing-lg;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+  position: relative;
+
+  i {
+    font-size: 36px;
+    color: $white;
+  }
+
+  .logo-plus {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 22px;
+    background: #10B981;
+    border-radius: 50%;
+    padding: 3px;
+    border: 3px solid $white;
+  }
+}
+
+.signup-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 $spacing-sm 0;
+  color: $gray-900;
   font-family: $font-family-heading;
 }
 
 .signup-subtitle {
   text-align: center;
-  font-size: $font-size-sm;
-  margin: 0 0 $spacing-xl 0;
+  font-size: 15px;
+  margin: 0;
   color: $gray-600;
 }
 
 .login-link {
-  color: $accent-color;
+  color: #2563EB;
   text-decoration: none;
   margin-left: 4px;
   cursor: pointer;
-  font-weight: $font-weight-medium;
+  font-weight: 600;
   transition: color $transition-base;
 
   &:hover {
-    color: $accent-hover;
+    color: #10B981;
+    text-decoration: underline;
   }
 }
 
@@ -83,24 +119,28 @@
 
 .input-field {
   width: 100%;
-  padding: $input-padding-y $input-padding-x;
-  font-size: $input-font-size;
-  border: 1px solid $input-border;
-  border-radius: $input-border-radius;
+  padding: 13px 16px;
+  font-size: 15px;
+  border: 2px solid $gray-200;
+  border-radius: 12px;
   box-sizing: border-box;
   font-family: $font-family-base;
-  transition: all $transition-base;
-  background: $input-bg;
-  color: $gray-800;
+  transition: all 0.3s ease;
+  background: $white;
+  color: $gray-900;
+
+  &:hover {
+    border-color: $gray-300;
+  }
 
   &:focus {
     outline: none;
-    border-color: $input-focus-border;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
   }
 
   &::placeholder {
-    color: $gray-500;
+    color: $gray-400;
   }
 }
 
@@ -110,13 +150,18 @@
 
 ::ng-deep .input-field-password .p-password-input {
   width: 100%;
-  padding: $input-padding-y $input-padding-x;
-  border: 1px solid $input-border;
-  border-radius: $input-border-radius;
+  padding: 13px 16px;
+  border: 2px solid $gray-200;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
 
   &:focus {
-    border-color: $input-focus-border;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
   }
 }
 
@@ -126,13 +171,18 @@
 
 ::ng-deep .custom-calendar .p-inputtext {
   width: 100%;
-  padding: $input-padding-y $input-padding-x;
-  border: 1px solid $input-border;
-  border-radius: $input-border-radius;
+  padding: 13px 16px;
+  border: 2px solid $gray-200;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
 
   &:focus {
-    border-color: $input-focus-border;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
   }
 }
 
@@ -142,13 +192,18 @@
 
 ::ng-deep .custom-dropdown .p-dropdown {
   width: 100%;
-  border: 1px solid $input-border;
-  border-radius: $input-border-radius;
+  border: 2px solid $gray-200;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
 
   &:focus,
   &.p-focus {
-    border-color: $input-focus-border;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
   }
 }
 
@@ -159,18 +214,24 @@
 }
 
 ::ng-deep .continue-button {
-  font-size: $font-size-base;
-  padding: $button-padding-y $button-padding-x;
-  font-weight: $font-weight-medium;
-  background: $accent-color;
+  font-size: 16px;
+  padding: 14px 32px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
   border: none;
   color: $white;
-  border-radius: $button-border-radius;
-  min-width: 200px;
-  transition: all $transition-base;
+  border-radius: 12px;
+  min-width: 220px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 
-  &:hover {
-    background: $accent-hover;
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 }
 
@@ -190,14 +251,15 @@
 }
 
 .terms-link {
-  color: $accent-color;
+  color: #2563EB;
   text-decoration: none;
   cursor: pointer;
-  font-weight: $font-weight-medium;
+  font-weight: 500;
   transition: color $transition-base;
 
   &:hover {
-    color: $accent-hover;
+    color: #10B981;
+    text-decoration: underline;
   }
 }
 
@@ -211,10 +273,15 @@
   display: flex;
   justify-content: center;
   margin-bottom: $spacing-md;
-  background: $gray-100;
-  border-radius: $border-radius-md;
-  padding: $spacing-md;
-  border: 1px solid $gray-200;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: $spacing-lg;
+  border: 2px solid $gray-200;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
 }
 
 .captcha-image {
@@ -237,21 +304,24 @@
 
   .p-button {
     background: $white;
-    border: 1px solid $gray-300;
-    color: $gray-700;
-    width: 32px;
-    height: 32px;
+    border: 2px solid $gray-200;
+    color: #2563EB;
+    width: 40px;
+    height: 40px;
     padding: 0;
-    transition: all $transition-base;
-    box-shadow: $shadow-sm;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
     &:hover:not(:disabled) {
-      background: $gray-50;
-      border-color: $gray-400;
-      color: $primary-color;
+      background: #2563EB;
+      border-color: #2563EB;
+      color: $white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 
       .p-button-icon {
-        transform: rotate(90deg);
+        transform: rotate(180deg);
       }
     }
 
@@ -261,7 +331,7 @@
     }
 
     .p-button-icon {
-      transition: transform $transition-base;
+      transition: transform 0.4s ease;
     }
   }
 }
