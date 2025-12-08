@@ -2,16 +2,16 @@
 
 // Modern Pharmacy-Themed Questions Design
 .questions-container {
-  padding: $spacing-xl $spacing-2xl;
+  padding: $spacing-lg $spacing-xl;
   min-height: 100vh;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
 
   .header {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-2xl;
-    padding-bottom: $spacing-lg;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-sm;
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(90deg, #2563EB 0%, #10B981 100%) 1;
 
@@ -26,7 +26,7 @@
 
     h1 {
       margin: 0;
-      font-size: $font-size-2xl;
+      font-size: $font-size-lg;
       font-weight: $font-weight-bold;
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       -webkit-background-clip: text;
@@ -41,15 +41,15 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: $spacing-2xl;
+    padding: $spacing-xl;
     background: $white;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   }
 
   .loading-container {
-    gap: $spacing-lg;
-    min-height: 400px;
+    gap: $spacing-md;
+    min-height: 300px;
 
     ::ng-deep .custom-spinner .p-progress-spinner-circle {
       stroke: url(#gradient);
@@ -58,7 +58,7 @@
 
     p {
       color: $gray-700;
-      font-size: $font-size-base;
+      font-size: $font-size-sm;
       font-weight: $font-weight-medium;
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       -webkit-background-clip: text;
@@ -68,18 +68,18 @@
   }
 
   .error-container {
-    gap: $spacing-lg;
+    gap: $spacing-md;
     border: 2px solid rgba(239, 68, 68, 0.2);
 
     i {
-      font-size: 4rem;
+      font-size: 3rem;
       color: #EF4444;
       animation: shake 0.5s ease;
     }
 
     p {
       color: $gray-700;
-      font-size: $font-size-lg;
+      font-size: $font-size-base;
       font-weight: $font-weight-medium;
       max-width: 400px;
     }
@@ -87,14 +87,15 @@
     ::ng-deep .p-button {
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: $font-size-sm;
       font-weight: $font-weight-semibold;
       transition: all 0.3s ease;
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
       }
     }
   }
@@ -106,27 +107,27 @@
   }
 
   .question-content {
-    max-width: 900px;
+    max-width: 850px;
     margin: 0 auto;
 
     .progress-indicator {
-      margin-bottom: $spacing-2xl;
-      padding: $spacing-lg;
+      margin-bottom: $spacing-lg;
+      padding: $spacing-md;
       background: $white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 
       span {
         display: block;
         text-align: center;
         color: $gray-700;
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-weight: $font-weight-medium;
-        margin-bottom: $spacing-md;
+        margin-bottom: $spacing-sm;
       }
 
       .progress-bar {
-        height: 8px;
+        height: 6px;
         background: $gray-200;
         border-radius: 20px;
         overflow: hidden;
@@ -143,72 +144,72 @@
     }
 
     .question-card {
-      margin-bottom: $spacing-2xl;
+      margin-bottom: $spacing-xl;
       background: $white;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border-left: 4px solid transparent;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      border-left: 3px solid transparent;
       border-image: linear-gradient(180deg, #2563EB 0%, #10B981 100%) 1;
       transition: all 0.3s ease;
-      padding: $spacing-2xl;
+      padding: $spacing-lg;
 
       &:hover {
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
-        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        transform: translateY(-1px);
       }
 
       .question-header {
-        margin-bottom: $spacing-2xl;
-        padding-bottom: $spacing-lg;
-        border-bottom: 2px solid $gray-100;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $gray-100;
 
         h2 {
-          font-size: $font-size-2xl;
+          font-size: $font-size-base;
           font-weight: $font-weight-bold;
           color: $gray-900;
-          margin-bottom: $spacing-md;
-          line-height: 1.4;
+          margin-bottom: $spacing-sm;
+          line-height: 1.5;
           position: relative;
-          padding-left: 30px;
+          padding-left: 26px;
 
           &::before {
             content: '❓';
             position: absolute;
             left: 0;
-            font-size: 1.2em;
+            font-size: 1.1em;
           }
         }
 
         .question-note {
           color: $gray-600;
-          font-size: $font-size-sm;
-          margin-top: $spacing-md;
-          padding: $spacing-md;
+          font-size: $font-size-xs;
+          margin-top: $spacing-sm;
+          padding: $spacing-sm;
           background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
-          border-radius: 8px;
-          border-left: 3px solid #2563EB;
+          border-radius: 6px;
+          border-left: 2px solid #2563EB;
         }
 
         .question-image {
           max-width: 100%;
-          margin-top: $spacing-lg;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          margin-top: $spacing-md;
+          border-radius: 10px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
       }
 
       .choices-container {
         display: flex;
         flex-direction: column;
-        gap: $spacing-lg;
+        gap: $spacing-sm;
 
         .choice-item {
           display: flex;
           align-items: center;
-          gap: $spacing-md;
-          padding: $spacing-lg;
+          gap: $spacing-sm;
+          padding: $spacing-sm $spacing-md;
           border: 2px solid $gray-200;
-          border-radius: 12px;
+          border-radius: 10px;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           cursor: pointer;
           background: $white;
@@ -221,7 +222,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 2px;
             background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -234,8 +235,8 @@
           &:hover {
             border-color: transparent;
             background: linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, rgba(16, 185, 129, 0.04) 100%);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
 
             &::before {
               opacity: 1;
@@ -262,8 +263,8 @@
             .p-checkbox-box {
               border: 2px solid $gray-300;
               border-radius: 50%;
-              width: 22px;
-              height: 22px;
+              width: 20px;
+              height: 20px;
               transition: all 0.3s ease;
 
               &.p-highlight {
@@ -279,7 +280,7 @@
             }
 
             .p-checkbox-box {
-              border-radius: 6px;
+              border-radius: 5px;
             }
           }
 
@@ -288,14 +289,14 @@
             cursor: pointer;
             color: $gray-800;
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $font-size-sm;
             font-weight: $font-weight-medium;
             line-height: 1.5;
           }
 
           .extra-info {
             width: 100%;
-            margin-top: $spacing-md;
+            margin-top: $spacing-sm;
             padding-left: 0;
           }
         }
@@ -352,25 +353,25 @@
     .navigation-buttons {
       display: flex;
       justify-content: flex-end;
-      gap: $spacing-lg;
-      margin-top: $spacing-2xl;
-      padding-top: $spacing-xl;
-      border-top: 2px solid $gray-100;
+      gap: $spacing-md;
+      margin-top: $spacing-lg;
+      padding-top: $spacing-md;
+      border-top: 1px solid $gray-100;
 
       ::ng-deep .p-button {
-        min-width: 180px;
+        min-width: 140px;
         background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
         border: none;
-        border-radius: 10px;
-        padding: 14px 28px;
+        border-radius: 8px;
+        padding: 10px 20px;
         font-weight: $font-weight-bold;
-        font-size: $font-size-base;
+        font-size: $font-size-sm;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 
         &:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         &:disabled {
@@ -380,18 +381,18 @@
         }
 
         .p-button-icon {
-          font-size: 1.1em;
+          font-size: 1em;
         }
       }
     }
   }
 
   .no-questions {
-    gap: $spacing-lg;
+    gap: $spacing-md;
     border: 2px dashed $gray-300;
 
     i {
-      font-size: 4rem;
+      font-size: 3rem;
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -400,42 +401,43 @@
 
     p {
       color: $gray-600;
-      font-size: $font-size-lg;
+      font-size: $font-size-base;
       font-weight: $font-weight-medium;
     }
   }
 
   // Termination Container
   .termination-container {
-    padding: $spacing-2xl;
+    padding: $spacing-lg;
     background: $white;
-    border-radius: 16px;
+    border-radius: 12px;
     border: 2px solid rgba(239, 68, 68, 0.2);
     text-align: center;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
 
     ::ng-deep .p-message {
-      border-radius: 10px;
-      font-size: $font-size-base;
+      border-radius: 8px;
+      font-size: $font-size-sm;
       font-weight: $font-weight-medium;
     }
 
     .termination-actions {
-      margin-top: $spacing-2xl;
+      margin-top: $spacing-lg;
       display: flex;
       justify-content: center;
 
       ::ng-deep .p-button {
         background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
         border: none;
-        border-radius: 10px;
-        padding: 12px 24px;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: $font-size-sm;
         font-weight: $font-weight-semibold;
         transition: all 0.3s ease;
 
         &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
       }
     }
@@ -445,23 +447,23 @@
   .form-fill-container {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xl;
+    gap: $spacing-md;
 
     .form-field {
       label {
         display: block;
-        margin-bottom: $spacing-md;
+        margin-bottom: $spacing-sm;
         color: $gray-800;
-        font-size: $font-size-base;
+        font-size: $font-size-sm;
         font-weight: $font-weight-semibold;
       }
 
       .form-input {
         width: 100%;
-        padding: 14px 18px;
+        padding: 10px 14px;
         border: 2px solid $gray-200;
-        border-radius: 10px;
-        font-size: $font-size-base;
+        border-radius: 8px;
+        font-size: $font-size-sm;
         font-family: $font-family-base;
         transition: all 0.3s ease;
         background: $white;
@@ -469,7 +471,7 @@
         &:focus {
           outline: 0;
           border-color: #2563EB;
-          box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
           transform: translateY(-1px);
         }
 
@@ -482,28 +484,28 @@
 
   // Extra Text Field Styles (for hasExtraInfo choices)
   .extra-text-field {
-    margin-top: $spacing-lg;
-    margin-bottom: $spacing-md;
-    padding: $spacing-lg;
+    margin-top: $spacing-sm;
+    margin-bottom: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
-    border-radius: 10px;
-    border-left: 4px solid transparent;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
     border-image: linear-gradient(180deg, #2563EB 0%, #10B981 100%) 1;
 
     label {
       display: block;
-      margin-bottom: $spacing-md;
+      margin-bottom: $spacing-sm;
       color: $gray-800;
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       font-weight: $font-weight-semibold;
     }
 
     .form-input {
       width: 100%;
-      padding: 12px 16px;
+      padding: 8px 12px;
       border: 2px solid $gray-200;
-      border-radius: 8px;
-      font-size: $font-size-base;
+      border-radius: 6px;
+      font-size: $font-size-sm;
       font-family: $font-family-base;
       background: $white;
       transition: all 0.3s ease;
@@ -522,65 +524,68 @@
 
   // Instruction Text
   .instruction-text {
-    padding: $spacing-md $spacing-lg;
+    padding: $spacing-sm $spacing-md;
     background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
-    border-radius: 8px;
+    border-radius: 6px;
     color: $gray-700;
-    font-size: $font-size-sm;
+    font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-md;
     border-left: 3px solid #2563EB;
   }
 
   // None of These Apply Button
   .none-option {
-    margin-top: $spacing-xl;
-    padding-top: $spacing-lg;
-    border-top: 2px solid $gray-100;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $gray-100;
     display: flex;
     justify-content: center;
   }
 
   ::ng-deep .none-button {
-    min-width: 240px;
+    min-width: 180px;
     border: 2px solid $gray-300;
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+    padding: 8px 16px;
     transition: all 0.3s ease;
 
     &:hover {
       border-color: transparent;
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       color: $white;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     }
   }
 
   // Terminate Container inside Card
   .terminate-container {
-    padding: $spacing-xl;
+    padding: $spacing-md;
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%);
-    border-radius: 12px;
+    border-radius: 10px;
     border: 2px solid rgba(239, 68, 68, 0.2);
 
     ::ng-deep .p-message {
-      margin-bottom: $spacing-lg;
+      margin-bottom: $spacing-md;
+      font-size: $font-size-sm;
     }
 
     .terminate-choices {
-      margin-top: $spacing-xl;
+      margin-top: $spacing-md;
       display: flex;
       flex-direction: column;
-      gap: $spacing-lg;
+      gap: $spacing-sm;
 
       .choice-item {
         display: flex;
         align-items: center;
-        gap: $spacing-md;
-        padding: $spacing-lg;
+        gap: $spacing-sm;
+        padding: $spacing-sm $spacing-md;
         border: 2px solid rgba(239, 68, 68, 0.3);
-        border-radius: 10px;
+        border-radius: 8px;
         transition: all 0.3s ease;
         cursor: pointer;
         background: $white;
@@ -588,8 +593,8 @@
         &:hover {
           border-color: #EF4444;
           background: rgba(239, 68, 68, 0.05);
-          transform: translateX(4px);
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+          transform: translateX(3px);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
         }
 
         .choice-label {
@@ -597,6 +602,7 @@
           cursor: pointer;
           color: $gray-800;
           margin: 0;
+          font-size: $font-size-sm;
           font-weight: $font-weight-medium;
         }
       }
