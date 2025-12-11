@@ -223,18 +223,18 @@
           </div>
         </div>
       }
-    </p-card>
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <p-button
-        [label]="getSubmitButtonLabel()"
-        icon="pi pi-arrow-right"
-        iconPos="right"
-        [disabled]="!isCurrentQuestionAnswered()"
-        (onClick)="onNextQuestion()">
-      </p-button>
-    </div>
+      <!-- Navigation Buttons -->
+      <div class="navigation-buttons">
+        <p-button
+          [label]="getSubmitButtonLabel()"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          [disabled]="!isCurrentQuestionAnswered()"
+          (onClick)="onNextQuestion()">
+        </p-button>
+      </div>
+    </p-card>
   </div>
   }
 

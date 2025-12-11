@@ -352,12 +352,13 @@
       display: flex;
       justify-content: flex-end;
       gap: $spacing-md;
-      margin-top: $spacing-lg;
+      margin-top: $spacing-xl;
       padding-top: $spacing-lg;
+      border-top: 1px solid $gray-100;
 
       ::ng-deep .p-button {
         min-width: 140px;
-        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        background: #2563EB;
         border: none;
         border-radius: 8px;
         padding: 10px 20px;
@@ -367,6 +368,7 @@
         box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 
         &:hover:not(:disabled) {
+          background: #1d4ed8;
           transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
