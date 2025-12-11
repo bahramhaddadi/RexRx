@@ -1,37 +1,173 @@
 <app-page-layout [showHeader]="true" [showBackButton]="false" backgroundColor="var(--surface-50)">
-  <div class="home-container">
-    <!-- Carousel Section -->
-    <div class="carousel-section">
+  <div class="home-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="pi pi-verified"></i>
+          <span>Licensed Online Pharmacy</span>
+        </div>
+        <h1>Your Health, <span class="highlight">Delivered</span></h1>
+        <p>Get your medications delivered safely to your door. Fast, secure, and with expert pharmacist support available 24/7.</p>
+        <div class="hero-features">
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Free Shipping</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Discreet Packaging</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="image-placeholder">
+          <i class="pi pi-heart"></i>
+        </div>
+      </div>
+    </section>
 
-    <div class="carousel-container">
-      <p-carousel
-        [value]="categories"
-        [numVisible]="4"
-        [numScroll]="1"
-        [circular]="true"
-        [autoplayInterval]="5000"
-        [responsiveOptions]="responsiveOptions"
-        styleClass="custom-carousel"
-      >
-        <ng-template let-category pTemplate="item">
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="section-header">
+        <h2><i class="pi pi-th-large"></i> Browse Categories</h2>
+        <p>Select a category to find the right treatment for you</p>
+      </div>
+
+      <div class="categories-grid">
+        @for (category of categories; track category.id) {
           <div class="category-card" (click)="onCategoryClick(category)">
-            <div class="card-content">
-              <h3 class="card-title">{{ category.title }}</h3>
-
+            <div class="card-image">
               @if (category.image) {
-                <div class="card-image-container">
-                  <img [src]="category.image" [alt]="category.title" class="card-image">
-                </div>
+                <img [src]="category.image" [alt]="category.title">
               } @else {
-                <div class="card-placeholder"></div>
+                <div class="image-placeholder">
+                  <i class="pi pi-box"></i>
+                </div>
               }
-
-              <p class="card-description">{{ category.description }}</p>
+            </div>
+            <div class="card-content">
+              <h3>{{ category.title }}</h3>
+              <p>{{ category.description }}</p>
+              <div class="card-action">
+                <span>Browse Products</span>
+                <i class="pi pi-arrow-right"></i>
+              </div>
             </div>
           </div>
-        </ng-template>
-      </p-carousel>
-    </div>
-    </div>
+        }
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section">
+      <div class="section-header centered">
+        <h2>How It Works</h2>
+        <p>Get your medication in 4 simple steps</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-icon">
+            <i class="pi pi-search"></i>
+          </div>
+          <h3>Choose Your Treatment</h3>
+          <p>Browse our categories and select the medication you need</p>
+        </div>
+
+        <div class="step-connector">
+          <i class="pi pi-arrow-right"></i>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-icon">
+            <i class="pi pi-list-check"></i>
+          </div>
+          <h3>Health Assessment</h3>
+          <p>Answer a few questions so we can ensure the medication is safe for you</p>
+        </div>
+
+        <div class="step-connector">
+          <i class="pi pi-arrow-right"></i>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-icon">
+            <i class="pi pi-credit-card"></i>
+          </div>
+          <h3>Checkout Securely</h3>
+          <p>Complete your order with our secure payment system</p>
+        </div>
+
+        <div class="step-connector">
+          <i class="pi pi-arrow-right"></i>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-icon">
+            <i class="pi pi-truck"></i>
+          </div>
+          <h3>Fast Delivery</h3>
+          <p>Receive your medication in discreet packaging at your door</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h4>Secure & Private</h4>
+          <p>Your data is encrypted and protected with the highest security standards</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon">
+            <i class="pi pi-verified"></i>
+          </div>
+          <h4>Licensed Pharmacy</h4>
+          <p>We are a fully licensed and regulated online pharmacy</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <h4>Expert Pharmacists</h4>
+          <p>Our team of qualified pharmacists reviews every order</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon">
+            <i class="pi pi-truck"></i>
+          </div>
+          <h4>Free Shipping</h4>
+          <p>Enjoy free delivery on all orders with discreet packaging</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Ready to Get Started?</h2>
+        <p>Browse our categories and find the right treatment for you today.</p>
+        <button class="cta-button" (click)="scrollToCategories()">
+          <i class="pi pi-arrow-up"></i>
+          <span>Browse Categories</span>
+        </button>
+      </div>
+    </section>
   </div>
 </app-page-layout>

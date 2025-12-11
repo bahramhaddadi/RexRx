@@ -1,322 +1,542 @@
 @import "../../../styles/variables";
 
-// Modern Pharmacy Home Page Design
-.home-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%);
+.home-page {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 0;
-  position: relative;
 }
 
-/* Header - Clean and minimal */
-.header {
-  padding: $spacing-lg $spacing-xl;
-  display: flex;
-  justify-content: flex-end;
+// Hero Section
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
   align-items: center;
-  background: $white;
-  border-bottom: 1px solid $gray-200;
-}
+  padding: 3rem 2rem;
+  min-height: 500px;
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-}
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    min-height: auto;
+  }
 
-.cart-btn {
-  background: $white;
-  border: 2px solid $gray-200;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  .hero-content {
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
 
-  &:hover {
-    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-    border-color: #2563EB;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      i {
+        font-size: 0.9rem;
+      }
+    }
 
-    i {
-      color: $white;
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: $gray-900;
+      margin: 0 0 1rem;
+      line-height: 1.2;
+
+      .highlight {
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        font-size: 2.25rem;
+      }
+    }
+
+    > p {
+      font-size: 1.125rem;
+      color: $gray-600;
+      line-height: 1.7;
+      margin: 0 0 2rem;
+      max-width: 500px;
+
+      @media (max-width: $breakpoint-lg) {
+        max-width: 100%;
+      }
+    }
+
+    .hero-features {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+
+      @media (max-width: $breakpoint-lg) {
+        justify-content: center;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $gray-700;
+        font-size: 0.9rem;
+        font-weight: 500;
+
+        i {
+          color: #10B981;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: $breakpoint-lg) {
+      display: none;
+    }
+
+    .image-placeholder {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        border: 3px dashed rgba(37, 99, 235, 0.2);
+        border-radius: 50%;
+      }
+
+      i {
+        font-size: 8rem;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
     }
   }
 }
 
-.cart-btn i {
-  font-size: 1.25rem;
-  color: #2563EB;
-  transition: color 0.3s ease;
-}
+// Section Header
+.section-header {
+  margin-bottom: 2rem;
 
-.login-btn {
-  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-  border: none;
-  padding: 0.75rem 1.75rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  color: $white;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  &.centered {
+    text-align: center;
   }
 
-  &:active {
-    transform: translateY(0);
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $gray-900;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    i {
+      color: #2563EB;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+      justify-content: center;
+    }
+  }
+
+  p {
+    font-size: 1rem;
+    color: $gray-600;
+    margin: 0;
   }
 }
 
-/* Carousel Section - Modern Pharmacy Design */
-.carousel-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 100px);
-  padding: $spacing-3xl $spacing-lg;
-  position: relative;
-}
-
-.dotted-line {
-  display: none; // Remove dotted lines for cleaner look
-}
-
-.dotted-line-top,
-.dotted-line-middle,
-.dotted-line-bottom {
-  display: none;
-}
-
-.carousel-container {
-  width: 100%;
-  max-width: $container-max-width;
+// Categories Section
+.categories-section {
+  padding: 3rem 2rem;
   background: $white;
-  border-radius: 20px;
-  padding: $spacing-3xl $spacing-xl;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(37, 99, 235, 0.08);
-}
+  border-radius: 24px 24px 0 0;
+  margin-top: -2rem;
 
-// Carousel controls - Modern Pharmacy style
-::ng-deep .custom-carousel .p-carousel-content {
-  padding: $spacing-lg 0;
-}
-
-::ng-deep .custom-carousel .p-carousel-prev,
-::ng-deep .custom-carousel .p-carousel-next {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  background: $white;
-  color: #2563EB;
-  border: 2px solid $gray-200;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-    color: $white;
-    border-color: #2563EB;
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  @media (max-width: $breakpoint-md) {
+    padding: 2rem 1rem;
   }
 }
 
-::ng-deep .custom-carousel .p-carousel-indicators {
-  padding: $spacing-md 0;
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
-::ng-deep .custom-carousel .p-carousel-indicator button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: $gray-300;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: $gray-400;
-  }
-}
-
-::ng-deep .custom-carousel .p-carousel-indicator.p-highlight button {
-  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-  width: 24px;
-  height: 10px;
-  border-radius: 5px;
-}
-
-/* Category Cards - Modern Pharmacy Design */
 .category-card {
-  margin: 0 $spacing-sm;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-8px);
-  }
-}
-
-.card-content {
   background: $white;
   border: 2px solid $gray-200;
   border-radius: 16px;
-  padding: $spacing-xl $spacing-lg;
-  text-align: center;
-  height: 380px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  position: relative;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
     border-color: #2563EB;
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12);
+    transform: translateY(-4px);
 
-    &::before {
-      opacity: 1;
+    .card-action {
+      color: #2563EB;
+
+      i {
+        transform: translateX(4px);
+      }
+    }
+
+    .card-image img,
+    .card-image .image-placeholder {
+      transform: scale(1.05);
+    }
+  }
+
+  .card-image {
+    height: 180px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+
+      i {
+        font-size: 4rem;
+        color: #2563EB;
+        opacity: 0.3;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 1.25rem;
+
+    h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $gray-900;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      font-size: 0.875rem;
+      color: $gray-600;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $gray-700;
+      transition: color 0.2s ease;
+
+      i {
+        font-size: 0.8rem;
+        transition: transform 0.2s ease;
+      }
     }
   }
 }
 
-.card-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 $spacing-md 0;
-  font-family: $font-family-heading;
+// How It Works Section
+.how-it-works-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
+
+  @media (max-width: $breakpoint-md) {
+    padding: 3rem 1rem;
+  }
 }
 
-.card-image-container {
-  width: 100%;
-  height: 200px;
-  margin-bottom: $spacing-md;
-  border-radius: 12px;
-  overflow: hidden;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.steps-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+
+  @media (max-width: $breakpoint-lg) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.step-card {
+  background: $white;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  width: 220px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+
+    .step-icon {
+      background: #2563EB;
+
+      i {
+        color: white;
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .step-number {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    background: #2563EB;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(37, 99, 235, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 1.5rem;
+      color: #2563EB;
+      transition: color 0.3s ease;
+    }
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $gray-900;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: $gray-600;
+    line-height: 1.5;
+  }
 }
 
-.card-placeholder {
-  width: 100%;
-  height: 200px;
-  margin-bottom: $spacing-md;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
-  border-radius: 12px;
+.step-connector {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2563EB;
-  font-size: 48px;
+  padding: 0 0.5rem;
+  margin-top: 3rem;
 
-  &::before {
-    content: '\e923';
-    font-family: 'primeicons';
+  @media (max-width: $breakpoint-lg) {
+    transform: rotate(90deg);
+    margin: 0;
+  }
+
+  i {
+    color: $gray-300;
+    font-size: 1.25rem;
   }
 }
 
-.card-description {
-  font-size: $font-size-sm;
-  color: $gray-600;
-  line-height: $line-height-normal;
-  margin: 0;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+// Trust Section
+.trust-section {
+  padding: 3rem 2rem;
+  background: $white;
 
-/* Responsive - Minimal design */
-@media (max-width: $breakpoint-lg) {
-  .carousel-container {
-    padding: $spacing-xl $spacing-lg;
-  }
-
-  .card-content {
-    height: 340px;
+  @media (max-width: $breakpoint-md) {
+    padding: 2rem 1rem;
   }
 }
 
-@media (max-width: $breakpoint-md) {
-  .header {
-    padding: $spacing-md $spacing-lg;
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .carousel-section {
-    padding: $spacing-xl $spacing-md;
-  }
-
-  .carousel-container {
-    padding: $spacing-lg $spacing-md;
-  }
-
-  .card-content {
-    height: 320px;
-    padding: $spacing-lg $spacing-md;
-  }
-
-  .card-title {
-    font-size: $font-size-lg;
-  }
-
-  .card-image-container,
-  .card-placeholder {
-    height: 160px;
-  }
-
-  .category-card {
-    margin: 0 $spacing-xs;
-  }
-
-  .login-btn {
-    padding: 0.5rem 1rem;
-    font-size: $font-size-sm;
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr;
   }
 }
 
+.trust-card {
+  text-align: center;
+  padding: 1.5rem;
+
+  .trust-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+
+    i {
+      font-size: 1.5rem;
+      color: #10B981;
+    }
+  }
+
+  h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $gray-900;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: $gray-600;
+    line-height: 1.5;
+  }
+}
+
+// CTA Section
+.cta-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%);
+  border-radius: 0 0 24px 24px;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 3rem 1.5rem;
+    border-radius: 0;
+  }
+
+  .cta-content {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+
+    h2 {
+      color: white;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0 0 0.75rem;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      margin: 0 0 1.5rem;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      color: #2563EB;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      i {
+        font-size: 0.9rem;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+// Responsive
 @media (max-width: $breakpoint-sm) {
-  .header {
-    padding: $spacing-sm $spacing-md;
+  .hero-section {
+    padding: 1.5rem 1rem;
+
+    .hero-content {
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      > p {
+        font-size: 1rem;
+      }
+
+      .hero-features {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
   }
 
-  .carousel-section {
-    padding: $spacing-lg $spacing-sm;
+  .categories-grid {
+    grid-template-columns: 1fr;
   }
 
-  .carousel-container {
-    padding: $spacing-md;
-  }
-
-  .card-content {
-    height: 300px;
+  .category-card .card-image {
+    height: 150px;
   }
 }

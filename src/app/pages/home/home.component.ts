@@ -115,4 +115,11 @@ export class HomeComponent implements OnInit {
   onCartClick() {
     console.log('Cart clicked');
   }
+
+  scrollToCategories() {
+    const categoriesSection = document.querySelector('.categories-section');
+    if (categoriesSection) {
+      categoriesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 }
