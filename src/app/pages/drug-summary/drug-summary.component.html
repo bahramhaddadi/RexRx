@@ -1,101 +1,206 @@
 <app-page-layout>
-  <div class="summary-container">
-    <div class="summary-header">
-      <h2>Drugs</h2>
+  <div class="cart-page">
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Select Drug</span>
+      </div>
+      <div class="step-line completed"></div>
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Choose Dose</span>
+      </div>
+      <div class="step-line completed"></div>
+      <div class="step active">
+        <div class="step-icon">3</div>
+        <span class="step-label">Review Order</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-icon">4</div>
+        <span class="step-label">Checkout</span>
+      </div>
     </div>
 
-    <!-- Two Column Layout -->
-    <div class="summary-content">
-      <!-- Left Column - Products -->
-      <div class="products-column">
-        <!-- Selected Product Row -->
-        <div class="product-row">
-          <div class="product-content">
-            <div class="product-info">
-              <div class="thumb" aria-hidden="true"></div>
-              <div class="details">
-                <div class="name">{{ drugName }}</div>
-                <div class="desc">Number of pills</div>
-                <span class="badge">Selected</span>
+    <div class="cart-layout">
+      <!-- Left Column: Cart Items -->
+      <div class="cart-main">
+        <!-- Main Product Card -->
+        <div class="section-card main-product">
+          <div class="section-header">
+            <h2><i class="pi pi-shopping-cart"></i> Your Selection</h2>
+            <span class="item-count">1 item</span>
+          </div>
+
+          <div class="product-card selected">
+            <div class="product-image">
+              <div class="image-placeholder">
+                <i class="pi pi-box"></i>
               </div>
             </div>
-            <div class="price-section">
-              <div class="price-label">Total Price</div>
-              <div class="price">$12</div>
+            <div class="product-details">
+              <div class="product-header">
+                <h3 class="product-name">{{ drugName }}</h3>
+                <span class="badge primary">Selected</span>
+              </div>
+              <div class="product-meta">
+                <span class="meta-item"><i class="pi pi-tag"></i> Standard Dose</span>
+                <span class="meta-item"><i class="pi pi-box"></i> Number of pills</span>
+              </div>
+            </div>
+            <div class="product-price">
+              <span class="price-label">Price</span>
+              <span class="price-value">$12.00</span>
             </div>
           </div>
         </div>
 
-        <!-- Related products box -->
-        <div class="related-box" *ngIf="isLoading || errorMessage || (relatedItems && relatedItems.length > 0)">
-          <h3>Related products</h3>
+        <!-- Related Products Section -->
+        <div class="section-card related-section" *ngIf="isLoading || errorMessage || (relatedItems && relatedItems.length > 0)">
+          <div class="section-header">
+            <h2><i class="pi pi-sparkles"></i> Recommended For You</h2>
+            <span class="subtitle">Enhance your treatment with these related products</span>
+          </div>
 
-          <div *ngIf="isLoading" class="loading"><p-progressSpinner></p-progressSpinner></div>
-          <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
+          <div *ngIf="isLoading" class="loading-state">
+            <p-progressSpinner strokeWidth="3" animationDuration="1s"></p-progressSpinner>
+            <p>Loading recommendations...</p>
+          </div>
 
-          <div class="related-list" *ngIf="!isLoading && !errorMessage && relatedItems.length > 0">
-            <p-card class="related-card" *ngFor="let r of relatedItems">
-              <ng-template pTemplate="header">
-                <div class="card-header">
-                  <h4 class="drug-title">{{ r.title }}</h4>
-                  <div class="badges">
-                    <span class="status-badge related">Related Drug</span>
-                    <span *ngIf="isSelected(r)" class="status-badge added">Added to Cart</span>
-                    <span *ngIf="!r.isActive" class="status-badge inactive">Inactive</span>
-                  </div>
-                </div>
-              </ng-template>
-              <div class="drug-details">
-                <div class="detail-row">
-                  <span class="label">Brand:</span>
-                  <span class="value">{{ r.brandName }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="label">Category:</span>
-                  <span class="value">{{ r.categoryName }}</span>
-                </div>
-                <div *ngIf="r.note" class="detail-row">
-                  <span class="label">Note:</span>
-                  <span class="value">{{ r.note }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="label">Type:</span>
-                  <span class="value">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+          <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
+
+          <div class="related-grid" *ngIf="!isLoading && !errorMessage && relatedItems.length > 0">
+            <div class="related-card"
+                 *ngFor="let r of relatedItems"
+                 [class.selected]="isSelected(r)"
+                 [class.inactive]="!r.isActive"
+                 (click)="r.isActive && toggleRelated(r)">
+
+              <div class="card-selection">
+                <div class="checkbox" [class.checked]="isSelected(r)">
+                  <i class="pi pi-check" *ngIf="isSelected(r)"></i>
                 </div>
               </div>
-              <ng-template pTemplate="footer">
-                <button pButton type="button"
-                        (click)="toggleRelated(r)"
-                        [label]="isSelected(r) ? 'Remove from Cart' : 'Add to Cart'"
-                        [class]="isSelected(r) ? 'p-button-danger' : 'p-button-success'"
-                        [icon]="isSelected(r) ? 'pi pi-times' : 'pi pi-plus'"
-                ></button>
-              </ng-template>
-            </p-card>
+
+              <div class="card-content">
+                <div class="card-icon">
+                  <i class="pi pi-box"></i>
+                </div>
+
+                <div class="card-info">
+                  <h4 class="card-title">{{ r.title }}</h4>
+                  <div class="card-badges">
+                    <span class="badge info">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+                    <span class="badge success" *ngIf="isSelected(r)">Added</span>
+                  </div>
+
+                  <div class="card-details">
+                    <div class="detail"><span class="label">Brand:</span> {{ r.brandName }}</div>
+                    <div class="detail"><span class="label">Category:</span> {{ r.categoryName }}</div>
+                    <div class="detail" *ngIf="r.note"><span class="label">Note:</span> {{ r.note }}</div>
+                  </div>
+                </div>
+
+                <div class="card-action">
+                  <button pButton
+                          type="button"
+                          [class]="isSelected(r) ? 'p-button-outlined p-button-danger' : 'p-button-outlined p-button-primary'"
+                          [icon]="isSelected(r) ? 'pi pi-minus' : 'pi pi-plus'"
+                          [disabled]="!r.isActive"
+                          (click)="$event.stopPropagation(); toggleRelated(r)">
+                  </button>
+                </div>
+              </div>
+
+              <div class="inactive-overlay" *ngIf="!r.isActive">
+                <span>Currently Unavailable</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="!isLoading && !errorMessage && relatedItems.length === 0">
+            <i class="pi pi-inbox"></i>
+            <p>No related products available</p>
           </div>
         </div>
       </div>
 
-      <!-- Right Sidebar - Order Summary -->
-      <div class="order-summary">
-        <h3>Order Summary</h3>
+      <!-- Right Column: Order Summary (Sticky) -->
+      <div class="cart-sidebar">
+        <div class="summary-card">
+          <h3 class="summary-title">Order Summary</h3>
 
-        <div class="summary-item">
-          <span class="label">Subtotal</span>
-          <span class="value">$12.00</span>
+          <div class="summary-items">
+            <div class="summary-item">
+              <span class="item-name">{{ drugName }}</span>
+              <span class="item-price">$12.00</span>
+            </div>
+            <div class="summary-item" *ngFor="let r of getSelectedRelatedItems()">
+              <span class="item-name">{{ r.title }}</span>
+              <span class="item-price">--</span>
+            </div>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span class="value">$12.00</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Tax (10%)</span>
+            <span class="value">$1.20</span>
+          </div>
+
+          <div class="summary-row shipping">
+            <span><i class="pi pi-truck"></i> Shipping</span>
+            <span class="value free">FREE</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="total-value">$13.20</span>
+          </div>
+
+          <button pButton
+                  type="button"
+                  class="checkout-btn p-button-lg"
+                  icon="pi pi-lock"
+                  iconPos="left"
+                  [loading]="isLoading"
+                  (click)="proceedToCheckout()"
+                  label="Secure Checkout">
+          </button>
+
+          <!-- Trust Badges -->
+          <div class="trust-badges">
+            <div class="badge-item">
+              <i class="pi pi-shield"></i>
+              <span>Secure Payment</span>
+            </div>
+            <div class="badge-item">
+              <i class="pi pi-verified"></i>
+              <span>Licensed Pharmacy</span>
+            </div>
+            <div class="badge-item">
+              <i class="pi pi-truck"></i>
+              <span>Free Shipping</span>
+            </div>
+          </div>
         </div>
 
-        <div class="summary-item">
-          <span class="label">Tax</span>
-          <span class="value">$1.20</span>
+        <!-- Help Card -->
+        <div class="help-card">
+          <i class="pi pi-question-circle"></i>
+          <div class="help-content">
+            <h4>Need Help?</h4>
+            <p>Our pharmacists are available 24/7 to answer your questions.</p>
+          </div>
         </div>
-
-        <div class="summary-item total">
-          <span class="label">Total</span>
-          <span class="value">$13.20</span>
-        </div>
-
-        <button pButton type="button" (click)="proceedToCheckout()" label="Checkout" icon="pi pi-shopping-cart"></button>
       </div>
     </div>
   </div>
