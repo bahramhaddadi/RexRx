@@ -1,249 +1,315 @@
 <app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Doses'">
-  <div class="questions-container">
-    <!-- Page Title -->
-    <div class="header">
-      <h1>{{ drugName }} - Questions</h1>
-    </div>
-
-  <!-- Loading Spinner -->
-  @if (isLoading) {
-    <div class="loading-container">
-      <p-progressSpinner
-        styleClass="custom-spinner"
-        strokeWidth="4"
-        animationDuration="1s">
-      </p-progressSpinner>
-      <p>Loading questions...</p>
-    </div>
-  }
-
-  <!-- Error Message -->
-  @if (errorMessage && !isLoading) {
-    <div class="error-container">
-      <i class="pi pi-exclamation-triangle"></i>
-      <p>{{ errorMessage }}</p>
-      <p-button
-        label="Try Again"
-        icon="pi pi-refresh"
-        (onClick)="loadFirstQuestion()">
-      </p-button>
-    </div>
-  }
-
-  <!-- Termination Message -->
-  @if (isTerminated) {
-    <div class="termination-container">
-      <p-message severity="warn" [text]="terminationMessage" styleClass="w-full"></p-message>
-      <div class="termination-actions">
-        <p-button
-          label="Back to Home"
-          icon="pi pi-home"
-          (onClick)="goBackHome()">
-        </p-button>
+  <div class="questions-page">
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Select Drug</span>
+      </div>
+      <div class="step-line completed"></div>
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Choose Dose</span>
+      </div>
+      <div class="step-line active"></div>
+      <div class="step active">
+        <div class="step-icon"><i class="pi pi-list-check"></i></div>
+        <span class="step-label">Health Check</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-icon">4</div>
+        <span class="step-label">Review</span>
       </div>
     </div>
-  }
 
-  <!-- Questions -->
-  @if (!isLoading && !errorMessage && !isTerminated && currentQuestion) {
-    <div class="question-content">
-    <!-- Question Card -->
-    <p-card class="question-card">
-      <div class="question-header">
-        <h2>{{ currentQuestion.title }}</h2>
-        @if (currentQuestion.note) {
-          <p class="question-note">{{ currentQuestion.note }}</p>
-        }
-        @if (currentQuestion.imageURL) {
-          <img [src]="currentQuestion.imageURL" alt="Question image" class="question-image">
-        }
-      </div>
-
-      <!-- SingleChoice = 1: Radio Buttons (must select one) -->
-      @if (currentQuestion.questionTypeID === QuestionType.SingleChoice) {
-        <div class="choices-container">
-          @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item" (click)="onSingleChoiceSelect(choice.id)">
-              <p-radioButton
-                [name]="'question_' + currentQuestion.id"
-                [value]="choice.id"
-                [(ngModel)]="currentQuestion.selectedChoiceId"
-                [inputId]="'choice_' + choice.id">
-              </p-radioButton>
-              <label [for]="'choice_' + choice.id" class="choice-label">
-                {{ choice.title }}
-              </label>
-            </div>
-            @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
-              <div class="extra-text-field">
-                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
-                <input
-                  type="text"
-                  pInputText
-                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
-                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
-                  class="form-input">
-              </div>
-            }
-          }
+    <div class="questions-layout">
+      <!-- Main Content -->
+      <div class="questions-main">
+        <!-- Page Header Card -->
+        <div class="header-card">
+          <div class="header-icon">
+            <i class="pi pi-clipboard"></i>
+          </div>
+          <div class="header-content">
+            <h1>{{ drugName }}</h1>
+            <p>Please answer these questions so our pharmacists can ensure this medication is safe for you.</p>
+          </div>
         </div>
-      }
 
-      <!-- MultipleChoice = 2: Checkboxes (must select at least one) -->
-      @if (currentQuestion.questionTypeID === QuestionType.MultipleChoice) {
-        <div class="choices-container">
-          <p class="instruction-text">Select at least one option</p>
-          @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item" (click)="onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})">
-              <p-checkbox
-                [name]="'question_' + currentQuestion.id"
-                [value]="choice.id"
-                [inputId]="'choice_' + choice.id"
-                [binary]="true"
-                [ngModel]="isChoiceSelected(choice.id)"
-                (onChange)="onMultiChoiceToggle(choice.id, $event)">
-              </p-checkbox>
-              <label [for]="'choice_' + choice.id" class="choice-label">
-                {{ choice.title }}
-              </label>
+        <!-- Loading State -->
+        @if (isLoading) {
+          <div class="state-card loading-state">
+            <p-progressSpinner strokeWidth="3" animationDuration="1s"></p-progressSpinner>
+            <p>Loading questions...</p>
+          </div>
+        }
+
+        <!-- Error State -->
+        @if (errorMessage && !isLoading) {
+          <div class="state-card error-state">
+            <div class="state-icon error">
+              <i class="pi pi-exclamation-triangle"></i>
             </div>
-            @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
-              <div class="extra-text-field">
-                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
-                <input
-                  type="text"
-                  pInputText
-                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
-                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
-                  class="form-input">
-              </div>
-            }
-          }
-        </div>
-      }
-
-      <!-- MultipleChoiceWithNone = 3: Checkboxes with "None of these apply" -->
-      @if (currentQuestion.questionTypeID === QuestionType.MultipleChoiceWithNone) {
-        <div class="choices-container">
-          <p class="instruction-text">Select all that apply, or choose "None of these apply"</p>
-          @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="choice-item"
-                 (click)="!currentQuestion.noneSelected && onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})"
-                 [class.disabled]="!!currentQuestion.noneSelected">
-              <p-checkbox
-                [name]="'question_' + currentQuestion.id"
-                [value]="choice.id"
-                [inputId]="'choice_' + choice.id"
-                [binary]="true"
-                [ngModel]="isChoiceSelected(choice.id)"
-                [disabled]="!!currentQuestion.noneSelected"
-                (onChange)="onMultiChoiceToggle(choice.id, $event)">
-              </p-checkbox>
-              <label [for]="'choice_' + choice.id" class="choice-label">
-                {{ choice.title }}
-              </label>
-            </div>
-            @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
-              <div class="extra-text-field">
-                <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
-                <input
-                  type="text"
-                  pInputText
-                  [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
-                  [placeholder]="choice.extraInfoTitle || 'Enter details'"
-                  class="form-input">
-              </div>
-            }
-          }
-
-          <!-- None of These Apply Button -->
-          <div class="none-option">
+            <h3>Something went wrong</h3>
+            <p>{{ errorMessage }}</p>
             <p-button
-              [label]="currentQuestion.noneSelected ? 'None selected' : 'None of these apply'"
-              [outlined]="!currentQuestion.noneSelected"
-              severity="secondary"
-              icon="pi pi-times-circle"
-              (onClick)="onNoneOfTheseApply()"
-              styleClass="none-button">
+              label="Try Again"
+              icon="pi pi-refresh"
+              (onClick)="loadFirstQuestion()">
             </p-button>
           </div>
-        </div>
-      }
+        }
 
-      <!-- FormFill = 4: Text input fields -->
-      @if (currentQuestion.questionTypeID === QuestionType.FormFill) {
-        <div class="form-fill-container">
-          @for (choice of currentQuestion.questionChoices; track choice.id) {
-            <div class="form-field">
-              <label>{{ choice.title }}</label>
-              <input
-                type="text"
-                pInputText
-                [(ngModel)]="currentQuestion.textAnswers![choice.id]"
-                [placeholder]="'Enter ' + choice.title.toLowerCase()"
-                class="form-input">
+        <!-- Termination Message -->
+        @if (isTerminated) {
+          <div class="state-card termination-state">
+            <div class="state-icon warning">
+              <i class="pi pi-exclamation-circle"></i>
             </div>
-          }
-        </div>
-      }
+            <h3>Important Notice</h3>
+            <p-message severity="warn" [text]="terminationMessage" styleClass="w-full"></p-message>
+            <p-button
+              label="Back to Home"
+              icon="pi pi-home"
+              (onClick)="goBackHome()">
+            </p-button>
+          </div>
+        }
 
-      <!-- Terminate = 5: Termination message -->
-      @if (currentQuestion.questionTypeID === QuestionType.Terminate) {
-        <div class="terminate-container">
-          <p-message
-            severity="error"
-            text="Based on your previous answers, this medication may not be suitable for you."
-            styleClass="w-full">
-          </p-message>
-          <div class="terminate-choices">
-            @for (choice of currentQuestion.questionChoices; track choice.id) {
-              <div class="choice-item" (click)="onSingleChoiceSelect(choice.id)">
-                <p-radioButton
-                  [name]="'question_' + currentQuestion.id"
-                  [value]="choice.id"
-                  [(ngModel)]="currentQuestion.selectedChoiceId"
-                  [inputId]="'choice_' + choice.id">
-                </p-radioButton>
-                <label [for]="'choice_' + choice.id" class="choice-label">
-                  {{ choice.title }}
-                </label>
+        <!-- Question Card -->
+        @if (!isLoading && !errorMessage && !isTerminated && currentQuestion) {
+          <div class="question-card">
+            <!-- Question Header -->
+            <div class="question-header">
+              <div class="question-badge">
+                <i class="pi pi-question-circle"></i>
+                <span>Health Question</span>
               </div>
-              @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
-                <div class="extra-text-field">
-                  <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
-                  <input
-                    type="text"
-                    pInputText
-                    [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
-                    [placeholder]="choice.extraInfoTitle || 'Enter details'"
-                    class="form-input">
+              <h2>{{ currentQuestion.title }}</h2>
+              @if (currentQuestion.note) {
+                <div class="question-note">
+                  <i class="pi pi-info-circle"></i>
+                  <span>{{ currentQuestion.note }}</span>
                 </div>
               }
+              @if (currentQuestion.imageURL) {
+                <img [src]="currentQuestion.imageURL" alt="Question image" class="question-image">
+              }
+            </div>
+
+            <!-- SingleChoice = 1 -->
+            @if (currentQuestion.questionTypeID === QuestionType.SingleChoice) {
+              <div class="choices-container">
+                @for (choice of currentQuestion.questionChoices; track choice.id) {
+                  <div class="choice-card"
+                       [class.selected]="currentQuestion.selectedChoiceId === choice.id"
+                       (click)="onSingleChoiceSelect(choice.id)">
+                    <div class="choice-radio">
+                      <div class="radio-dot"></div>
+                    </div>
+                    <span class="choice-label">{{ choice.title }}</span>
+                  </div>
+                  @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
+                    <div class="extra-field">
+                      <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                      <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                        [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                        class="extra-input">
+                    </div>
+                  }
+                }
+              </div>
             }
+
+            <!-- MultipleChoice = 2 -->
+            @if (currentQuestion.questionTypeID === QuestionType.MultipleChoice) {
+              <div class="choices-container">
+                <div class="instruction-badge">
+                  <i class="pi pi-info-circle"></i>
+                  <span>Select at least one option</span>
+                </div>
+                @for (choice of currentQuestion.questionChoices; track choice.id) {
+                  <div class="choice-card"
+                       [class.selected]="isChoiceSelected(choice.id)"
+                       (click)="onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})">
+                    <div class="choice-checkbox" [class.checked]="isChoiceSelected(choice.id)">
+                      <i class="pi pi-check" *ngIf="isChoiceSelected(choice.id)"></i>
+                    </div>
+                    <span class="choice-label">{{ choice.title }}</span>
+                  </div>
+                  @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
+                    <div class="extra-field">
+                      <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                      <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                        [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                        class="extra-input">
+                    </div>
+                  }
+                }
+              </div>
+            }
+
+            <!-- MultipleChoiceWithNone = 3 -->
+            @if (currentQuestion.questionTypeID === QuestionType.MultipleChoiceWithNone) {
+              <div class="choices-container">
+                <div class="instruction-badge">
+                  <i class="pi pi-info-circle"></i>
+                  <span>Select all that apply, or choose "None of these apply"</span>
+                </div>
+                @for (choice of currentQuestion.questionChoices; track choice.id) {
+                  <div class="choice-card"
+                       [class.selected]="isChoiceSelected(choice.id)"
+                       [class.disabled]="!!currentQuestion.noneSelected"
+                       (click)="!currentQuestion.noneSelected && onMultiChoiceToggle(choice.id, {checked: !isChoiceSelected(choice.id)})">
+                    <div class="choice-checkbox" [class.checked]="isChoiceSelected(choice.id)">
+                      <i class="pi pi-check" *ngIf="isChoiceSelected(choice.id)"></i>
+                    </div>
+                    <span class="choice-label">{{ choice.title }}</span>
+                  </div>
+                  @if (choice.hasExtraInfo && isChoiceSelected(choice.id)) {
+                    <div class="extra-field">
+                      <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                      <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                        [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                        class="extra-input">
+                    </div>
+                  }
+                }
+
+                <div class="none-option">
+                  <button class="none-button"
+                          [class.selected]="currentQuestion.noneSelected"
+                          (click)="onNoneOfTheseApply()">
+                    <i class="pi" [class.pi-times-circle]="!currentQuestion.noneSelected" [class.pi-check-circle]="currentQuestion.noneSelected"></i>
+                    <span>{{ currentQuestion.noneSelected ? 'None selected' : 'None of these apply' }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+
+            <!-- FormFill = 4 -->
+            @if (currentQuestion.questionTypeID === QuestionType.FormFill) {
+              <div class="form-fill-container">
+                @for (choice of currentQuestion.questionChoices; track choice.id) {
+                  <div class="form-field">
+                    <label>{{ choice.title }}</label>
+                    <input
+                      type="text"
+                      pInputText
+                      [(ngModel)]="currentQuestion.textAnswers![choice.id]"
+                      [placeholder]="'Enter ' + choice.title.toLowerCase()"
+                      class="form-input">
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Terminate = 5 -->
+            @if (currentQuestion.questionTypeID === QuestionType.Terminate) {
+              <div class="terminate-section">
+                <div class="terminate-warning">
+                  <i class="pi pi-exclamation-triangle"></i>
+                  <p>Based on your previous answers, this medication may not be suitable for you.</p>
+                </div>
+                <div class="choices-container">
+                  @for (choice of currentQuestion.questionChoices; track choice.id) {
+                    <div class="choice-card"
+                         [class.selected]="currentQuestion.selectedChoiceId === choice.id"
+                         (click)="onSingleChoiceSelect(choice.id)">
+                      <div class="choice-radio">
+                        <div class="radio-dot"></div>
+                      </div>
+                      <span class="choice-label">{{ choice.title }}</span>
+                    </div>
+                    @if (choice.hasExtraInfo && currentQuestion.selectedChoiceId === choice.id) {
+                      <div class="extra-field">
+                        <label>{{ choice.extraInfoTitle || 'Please provide additional details' }}</label>
+                        <input
+                          type="text"
+                          pInputText
+                          [(ngModel)]="currentQuestion.extraTextAnswers![choice.id]"
+                          [placeholder]="choice.extraInfoTitle || 'Enter details'"
+                          class="extra-input">
+                      </div>
+                    }
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Navigation -->
+            <div class="question-footer">
+              <button pButton
+                      type="button"
+                      class="next-button"
+                      [label]="getSubmitButtonLabel()"
+                      icon="pi pi-arrow-right"
+                      iconPos="right"
+                      [disabled]="!isCurrentQuestionAnswered()"
+                      (click)="onNextQuestion()">
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- No Questions -->
+        @if (!isLoading && !errorMessage && !isTerminated && !currentQuestion) {
+          <div class="state-card empty-state">
+            <div class="state-icon info">
+              <i class="pi pi-info-circle"></i>
+            </div>
+            <h3>No Questions Available</h3>
+            <p>No health screening questions are required for this drug.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Sidebar -->
+      <div class="questions-sidebar">
+        <!-- Info Card -->
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h4>Your Privacy Matters</h4>
+          <p>All your health information is encrypted and handled with strict confidentiality.</p>
+        </div>
+
+        <!-- Help Card -->
+        <div class="help-card">
+          <i class="pi pi-question-circle"></i>
+          <div class="help-content">
+            <h4>Need Assistance?</h4>
+            <p>Our pharmacists are here to help you understand these questions.</p>
           </div>
         </div>
-      }
 
-      <!-- Navigation Buttons -->
-      <div class="navigation-buttons">
-        <p-button
-          [label]="getSubmitButtonLabel()"
-          icon="pi pi-arrow-right"
-          iconPos="right"
-          [disabled]="!isCurrentQuestionAnswered()"
-          (onClick)="onNextQuestion()">
-        </p-button>
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+          <div class="badge-item">
+            <i class="pi pi-verified"></i>
+            <span>Licensed Pharmacy</span>
+          </div>
+          <div class="badge-item">
+            <i class="pi pi-lock"></i>
+            <span>HIPAA Compliant</span>
+          </div>
+          <div class="badge-item">
+            <i class="pi pi-users"></i>
+            <span>Expert Pharmacists</span>
+          </div>
+        </div>
       </div>
-    </p-card>
-  </div>
-  }
-
-  <!-- No Questions Available -->
-  @if (!isLoading && !errorMessage && !isTerminated && !currentQuestion) {
-    <div class="no-questions">
-      <i class="pi pi-info-circle"></i>
-      <p>No questions available for this drug</p>
     </div>
-  }
   </div>
 </app-page-layout>
