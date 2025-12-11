@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { CartItem, QuestionnaireAnswer, RelatedDrug } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, RelatedDrug, SaveCartBody } from '../../models/drug.model';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -103,11 +103,69 @@ export class DrugSummaryComponent implements OnInit {
       }
     });
 
-    this.router.navigate(['/checkout'], {
-      state: {
-        drugName: this.drugName,
-        cartItems: items
+    // Save cart before navigating to checkout
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const cartData: SaveCartBody = {
+      isPatientSameAsUser: true,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      sex: '',
+      phone: '',
+      weight: '',
+      birthDate: '1900-01-01',
+      healthCardNumber: '',
+      allergies: '',
+      medications: '',
+      surgeries: '',
+      otherMedicalConditions: '',
+      orderDate: this.formatDate(new Date()),
+      promoCode: '',
+      items: items
+    };
+
+    this.drugService.SaveCart(cartData).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.errorCode === 0 && response.body) {
+          const cartId = response.body;
+          console.log('Cart saved successfully before checkout, cartId:', cartId);
+
+          // Navigate to checkout with cartId
+          this.router.navigate(['/checkout'], {
+            state: {
+              drugName: this.drugName,
+              cartId: cartId,
+              cartItems: items
+            }
+          });
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to save cart';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to save cart. Please try again.';
+        console.error('Error saving cart:', error);
       }
     });
+  }
+
+  /**
+   * Formats a Date object to the required string format with time
+   */
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
   }
 }
