@@ -1,9 +1,9 @@
 @import "../../../styles/variables";
 
-// Minimal Home Page Design
+// Modern Pharmacy Home Page Design
 .home-container {
   min-height: 100vh;
-  background: $white;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%);
   padding: 0;
   position: relative;
 }
@@ -26,43 +26,57 @@
 
 .cart-btn {
   background: $white;
-  border: 1px solid $gray-300;
-  padding: 0.625rem 1rem;
-  border-radius: $border-radius-md;
+  border: 2px solid $gray-200;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all $transition-base;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   &:hover {
-    background: $gray-100;
-    border-color: $gray-400;
+    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+    border-color: #2563EB;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+    i {
+      color: $white;
+    }
   }
 }
 
 .cart-btn i {
   font-size: 1.25rem;
-  color: $gray-700;
+  color: #2563EB;
+  transition: color 0.3s ease;
 }
 
 .login-btn {
-  background: $accent-color;
+  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
   border: none;
-  padding: 0.625rem 1.5rem;
-  border-radius: $border-radius-md;
+  padding: 0.75rem 1.75rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: $font-size-base;
-  font-weight: $font-weight-medium;
+  font-size: 15px;
+  font-weight: 600;
   color: $white;
-  transition: all $transition-base;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 
   &:hover {
-    background: $accent-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
-/* Carousel Section - Clean minimal design */
+/* Carousel Section - Modern Pharmacy Design */
 .carousel-section {
   display: flex;
   flex-direction: column;
@@ -71,7 +85,6 @@
   min-height: calc(100vh - 100px);
   padding: $spacing-3xl $spacing-lg;
   position: relative;
-  background: $gray-50;
 }
 
 .dotted-line {
@@ -88,31 +101,34 @@
   width: 100%;
   max-width: $container-max-width;
   background: $white;
-  border-radius: $border-radius-lg;
+  border-radius: 20px;
   padding: $spacing-3xl $spacing-xl;
-  box-shadow: $shadow-sm;
-  border: 1px solid $gray-200;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
-// Carousel controls - minimal style
+// Carousel controls - Modern Pharmacy style
 ::ng-deep .custom-carousel .p-carousel-content {
   padding: $spacing-lg 0;
 }
 
 ::ng-deep .custom-carousel .p-carousel-prev,
 ::ng-deep .custom-carousel .p-carousel-next {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 50%;
   background: $white;
-  color: $accent-color;
-  border: 1px solid $gray-300;
-  transition: all $transition-base;
+  color: #2563EB;
+  border: 2px solid $gray-200;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: $accent-color;
+    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
     color: $white;
-    border-color: $accent-color;
+    border-color: #2563EB;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
   }
 }
 
@@ -121,11 +137,11 @@
 }
 
 ::ng-deep .custom-carousel .p-carousel-indicator button {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: $gray-300;
-  transition: all $transition-base;
+  transition: all 0.3s ease;
 
   &:hover {
     background: $gray-400;
@@ -133,55 +149,75 @@
 }
 
 ::ng-deep .custom-carousel .p-carousel-indicator.p-highlight button {
-  background: $accent-color;
-  width: 10px;
+  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+  width: 24px;
   height: 10px;
+  border-radius: 5px;
 }
 
-/* Category Cards - Clean minimal design */
+/* Category Cards - Modern Pharmacy Design */
 .category-card {
   margin: 0 $spacing-sm;
   cursor: pointer;
-  transition: transform $transition-base;
+  transition: transform 0.3s ease;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-8px);
   }
 }
 
 .card-content {
   background: $white;
-  border: 1px solid $gray-300;
-  border-radius: $border-radius-lg;
+  border: 2px solid $gray-200;
+  border-radius: 16px;
   padding: $spacing-xl $spacing-lg;
   text-align: center;
-  height: 360px;
+  height: 380px;
   display: flex;
   flex-direction: column;
-  transition: all $transition-base;
-  box-shadow: $shadow-xs;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   &:hover {
-    border-color: $accent-color;
-    box-shadow: $shadow-md;
+    border-color: #2563EB;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
 .card-title {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
-  color: $primary-color;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
   margin: 0 0 $spacing-md 0;
   font-family: $font-family-heading;
 }
 
 .card-image-container {
   width: 100%;
-  height: 180px;
+  height: 200px;
   margin-bottom: $spacing-md;
-  border-radius: $border-radius-md;
+  border-radius: 12px;
   overflow: hidden;
-  background: $gray-100;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .card-image {
@@ -192,14 +228,20 @@
 
 .card-placeholder {
   width: 100%;
-  height: 180px;
+  height: 200px;
   margin-bottom: $spacing-md;
-  background: $gray-100;
-  border-radius: $border-radius-md;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $gray-400;
+  color: #2563EB;
+  font-size: 48px;
+
+  &::before {
+    content: '\e923';
+    font-family: 'primeicons';
+  }
 }
 
 .card-description {

@@ -84,6 +84,7 @@ export class CheckoutComponent implements OnInit {
     this.doseId = state?.['doseId'];
     this.questionnaireAnswers = state?.['questionnaireAnswers'] || [];
     this.cartItems = state?.['cartItems'] || [];
+    this.cartId = state?.['cartId'] || ''; // Get cartId from navigation state
 
     // If cartItems are provided (from /drug-summary), prefer them.
     // For backward-compatibility, set doseId from the first item if present.
@@ -94,72 +95,17 @@ export class CheckoutComponent implements OnInit {
     console.log('Checkout initialized with:', {
       drugName: this.drugName,
       doseId: this.doseId,
-      answersCount: this.questionnaireAnswers.length
+      answersCount: this.questionnaireAnswers.length,
+      cartId: this.cartId
     });
 
-    // If neither cartItems nor the legacy doseId+answers are provided, show error
-    const hasCartItems = this.cartItems && this.cartItems.length > 0;
-    const hasLegacy = !!this.doseId && this.questionnaireAnswers.length > 0;
-    if (!hasCartItems && !hasLegacy) {
-      this.errorMessage = 'Missing required checkout data. Please complete the questionnaire first.';
+    // If cartId is not provided, show error
+    if (!this.cartId) {
+      this.errorMessage = 'Missing cart ID. Please go back and try again.';
     }
 
     // Fetch user profile and pre-fill form fields
     this.loadUserProfile();
-
-    // Save cart on page load to get cartId
-    this.saveCartOnLoad();
-  }
-
-  /**
-   * Saves cart on page load to get cartId
-   */
-  saveCartOnLoad(): void {
-    // Build cart data with empty patient info
-    const cartData: SaveCartBody = {
-      isPatientSameAsUser: true,
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      sex: '',
-      phone: '',
-      weight: '',
-      birthDate: '1900-01-01',
-      healthCardNumber: '',
-      allergies: '',
-      medications: '',
-      surgeries: '',
-      otherMedicalConditions: '',
-      orderDate: this.formatDate(new Date()),
-      promoCode: '',
-      items: (this.cartItems && this.cartItems.length > 0)
-        ? this.cartItems
-        : [
-            {
-              itemDosageId: this.doseId!,
-              quantity: 1,
-              questionnaireAnswers: this.questionnaireAnswers
-            }
-          ]
-    };
-
-    console.log('Saving cart on page load:', cartData);
-
-    this.drugService.SaveCart(cartData).subscribe({
-      next: (response) => {
-        if (response.errorCode === 0 && response.body) {
-          this.cartId = response.body;
-          console.log('Cart saved successfully, cartId:', this.cartId);
-        } else {
-          console.error('Failed to save cart:', response.errorMessage);
-          this.errorMessage = 'Failed to initialize checkout. Please try again.';
-        }
-      },
-      error: (error) => {
-        console.error('Error saving cart:', error);
-        this.errorMessage = 'Failed to initialize checkout. Please try again.';
-      }
-    });
   }
 
   /**

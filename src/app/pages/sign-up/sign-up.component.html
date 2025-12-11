@@ -1,10 +1,17 @@
-<app-page-layout [showHeader]="false" [showBackButton]="false" backgroundColor="var(--surface-50)">
+<app-page-layout [showHeader]="false" [showBackButton]="false" backgroundColor="#ffffff">
   <div class="signup-container">
     <div class="signup-card">
-      <h1 class="signup-title">Welcome to Pharma</h1>
-      <p class="signup-subtitle">
-        Already have an account?<a href="#" class="login-link" (click)="onLogIn(); $event.preventDefault()">Log in</a>
-      </p>
+      <div class="signup-header">
+        <div class="header-logo">
+          <i class="pi pi-heart-fill"></i>
+          <i class="pi pi-plus-circle logo-plus"></i>
+        </div>
+        <h1 class="signup-title">Join Pharma Community</h1>
+        <p class="signup-subtitle">
+          Already have an account?
+          <a href="#" class="login-link" (click)="onLogIn(); $event.preventDefault()">Log in</a>
+        </p>
+      </div>
 
       <form class="signup-form">
         <!-- Error Message -->

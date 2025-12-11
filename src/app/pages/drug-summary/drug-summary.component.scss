@@ -1,137 +1,510 @@
+@import "../../../styles/variables";
+
+// Modern Pharmacy-Themed Drug Summary Design
 .summary-container {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-}
+  padding: $spacing-lg;
+  min-height: 100vh;
+  background: $gray-50;
 
-.summary-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--surface-border);
-  padding-bottom: .75rem;
-  margin-bottom: 1rem;
+  .summary-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-sm;
+    border-bottom: 2px solid #2563EB;
 
-  > :last-child {
-    flex: 0 0 120px;
+    h2 {
+      margin: 0;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $gray-900;
+
+      &::before {
+        content: '🛒';
+        margin-right: $spacing-sm;
+      }
+    }
   }
-}
 
-.product-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--surface-border);
-
-  > :last-child {
-    flex: 0 0 120px;
+  // Two Column Layout
+  .summary-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: $spacing-lg;
+    align-items: start;
   }
-}
 
-.product-info {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.thumb {
-  width: 56px;
-  height: 40px;
-  background: #e6e6e6;
-  border-radius: 6px;
-}
-
-.name { font-weight: 600; }
-.desc { color: var(--text-color-secondary); font-size: .9rem; }
-.price { text-align: right; font-weight: 600; }
-
-.related-box {
-  margin-top: 2rem;
-  border: 1px solid var(--surface-border);
-  border-radius: 16px;
-  padding: 1.5rem;
-}
-
-.related-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-
-  > * {
-    flex: 1 1 300px;
-    min-width: 300px;
-  }
-}
-
-.related-card {
-  .card-header {
+  // Left Column - Products
+  .products-column {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1rem;
+    gap: $spacing-lg;
+  }
 
-    .drug-title {
-      margin: 0;
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--text-color);
+  // Selected Product Card - Compact Style
+  .product-row {
+    background: $white;
+    border-radius: 12px;
+    padding: $spacing-lg;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 2px solid $gray-200;
+    border-left: 4px solid #2563EB;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+      border-left-color: #10B981;
     }
 
-    .badges {
+    .product-content {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      gap: $spacing-md;
     }
 
-    .status-badge {
-      padding: 0.25rem 0.75rem;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .product-info {
+      display: flex;
+      gap: $spacing-md;
+      align-items: center;
+      flex: 1;
+    }
 
-      &.related {
-        background-color: #e3f2fd;
-        color: #1976d2;
+    .thumb {
+      width: 60px;
+      height: 60px;
+      background: rgba(37, 99, 235, 0.08);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      border: 2px solid rgba(37, 99, 235, 0.2);
+      flex-shrink: 0;
+
+      &::before {
+        content: '💊';
+      }
+    }
+
+    .details {
+      flex: 1;
+      min-width: 0;
+
+      .name {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        color: $gray-900;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      &.added {
-        background-color: #e8f5e9;
-        color: #388e3c;
+      .desc {
+        color: $gray-600;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
       }
 
-      &.inactive {
-        background-color: #ffebee;
-        color: #d32f2f;
+      .badge {
+        display: inline-block;
+        margin-top: 4px;
+        padding: 2px 8px;
+        background: rgba(37, 99, 235, 0.1);
+        border-radius: 12px;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        color: #2563EB;
+        text-transform: uppercase;
+      }
+    }
+
+    .price-section {
+      text-align: right;
+      flex-shrink: 0;
+
+      .price-label {
+        font-size: $font-size-xs;
+        color: $gray-600;
+        text-transform: uppercase;
+        font-weight: $font-weight-semibold;
+        margin-bottom: 2px;
+      }
+
+      .price {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: #2563EB;
       }
     }
   }
 
-  .drug-details {
-    padding: 1rem;
+  // Related Products Section
+  .related-box {
+    background: $white;
+    border-radius: 12px;
+    padding: $spacing-lg;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
-    .detail-row {
+    h3 {
+      margin: 0 0 $spacing-md 0;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $gray-900;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      &::before {
+        content: '💼';
+        font-size: 1.1em;
+      }
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 150px;
+
+      ::ng-deep .p-progress-spinner-circle {
+        stroke: url(#gradient);
+        animation: spin 1.5s linear infinite;
+      }
+    }
+
+    ::ng-deep .p-message {
+      margin: $spacing-md 0;
+      border-radius: 8px;
+    }
+  }
+
+  .related-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+  }
+
+  .related-card {
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid $gray-200;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+      border-color: #2563EB;
+    }
+
+    ::ng-deep .p-card-header {
+      background: rgba(37, 99, 235, 0.02);
+      padding: 0;
+      border-bottom: 1px solid $gray-100;
+    }
+
+    ::ng-deep .p-card-body {
+      padding: 0;
+    }
+
+    ::ng-deep .p-card-content {
+      padding: $spacing-sm $spacing-md;
+    }
+
+    ::ng-deep .p-card-footer {
+      padding: $spacing-sm $spacing-md;
+      background: $gray-50;
+      border-top: 1px solid $gray-100;
+    }
+
+    .card-header {
+      padding: $spacing-md;
+
+      .drug-title {
+        margin: 0 0 $spacing-sm 0;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        color: $gray-900;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        &::before {
+          content: '💊';
+          font-size: 1em;
+        }
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-xs;
+      }
+
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        transition: all 0.2s ease;
+
+        &.related {
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563EB;
+          border: 1px solid rgba(37, 99, 235, 0.3);
+        }
+
+        &.added {
+          background: rgba(16, 185, 129, 0.1);
+          color: #059669;
+          border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        &.inactive {
+          background: rgba(239, 68, 68, 0.1);
+          color: #DC2626;
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+      }
+    }
+
+    .drug-details {
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-xs 0;
+        border-bottom: 1px solid $gray-100;
+        gap: $spacing-sm;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .label {
+          font-size: $font-size-xs;
+          font-weight: $font-weight-semibold;
+          color: $gray-600;
+          flex-shrink: 0;
+        }
+
+        .value {
+          font-size: $font-size-xs;
+          color: $gray-900;
+          font-weight: $font-weight-medium;
+          text-align: right;
+          word-break: break-word;
+        }
+      }
+    }
+
+    ::ng-deep .p-button {
+      width: 100%;
+      justify-content: center;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-xs;
+      padding: 8px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+
+      &.p-button-success {
+        background: #2563EB;
+        border: none;
+
+        &:hover {
+          background: #1d4ed8;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+      }
+
+      &.p-button-danger {
+        background: #EF4444;
+        border: none;
+
+        &:hover {
+          background: #DC2626;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+        }
+      }
+    }
+  }
+
+  // Right Sidebar - Order Summary
+  .order-summary {
+    position: sticky;
+    top: $spacing-lg;
+    background: $white;
+    border-radius: 12px;
+    padding: $spacing-lg;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid $gray-200;
+
+    h3 {
+      margin: 0 0 $spacing-md 0;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $gray-900;
+      padding-bottom: $spacing-sm;
+      border-bottom: 2px solid #2563EB;
+    }
+
+    .summary-item {
       display: flex;
       justify-content: space-between;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--surface-border);
+      align-items: center;
+      padding: $spacing-sm 0;
+      border-bottom: 1px solid $gray-100;
 
       &:last-child {
         border-bottom: none;
+        padding-top: $spacing-md;
+        margin-top: $spacing-sm;
+        border-top: 2px solid $gray-200;
       }
 
       .label {
-        font-weight: 600;
-        color: var(--text-color-secondary);
+        font-size: $font-size-sm;
+        color: $gray-600;
+        font-weight: $font-weight-medium;
       }
 
       .value {
-        color: var(--text-color);
+        font-size: $font-size-sm;
+        color: $gray-900;
+        font-weight: $font-weight-semibold;
+      }
+
+      &.total {
+        .label {
+          font-size: $font-size-base;
+          font-weight: $font-weight-bold;
+          color: $gray-900;
+        }
+
+        .value {
+          font-size: $font-size-xl;
+          font-weight: $font-weight-bold;
+          color: #2563EB;
+        }
+      }
+    }
+
+    ::ng-deep .p-button {
+      width: 100%;
+      margin-top: $spacing-lg;
+      padding: 12px;
+      font-size: $font-size-base;
+      font-weight: $font-weight-bold;
+      border-radius: 8px;
+      background: #2563EB;
+      border: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }
 }
 
-.actions { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+// Responsive Design
+@media (max-width: $breakpoint-lg) {
+  .summary-container {
+    .summary-content {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+
+    .order-summary {
+      position: static;
+    }
+
+    .related-list {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .summary-container {
+    padding: $spacing-md;
+
+    .summary-header h2 {
+      font-size: $font-size-base;
+    }
+
+    .product-row {
+      padding: $spacing-md;
+
+      .product-info {
+        gap: $spacing-sm;
+      }
+
+      .thumb {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+
+      .details .name {
+        font-size: $font-size-base;
+      }
+    }
+
+    .related-list {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .summary-container {
+    padding: $spacing-sm;
+
+    .summary-header {
+      margin-bottom: $spacing-md;
+
+      h2 {
+        font-size: $font-size-sm;
+      }
+    }
+
+    .product-row {
+      padding: $spacing-sm;
+
+      .details .name {
+        font-size: $font-size-sm;
+      }
+    }
+
+    .related-box {
+      padding: $spacing-sm;
+
+      h3 {
+        font-size: $font-size-base;
+      }
+    }
+
+    .order-summary {
+      padding: $spacing-md;
+    }
+  }
+}

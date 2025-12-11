@@ -4,69 +4,99 @@
       <h2>Drugs</h2>
     </div>
 
-    <!-- Selected Product Row -->
-    <div class="product-row">
-      <div class="product-info">
-        <div class="thumb" aria-hidden="true"></div>
-        <div class="details">
-          <div class="name">{{ drugName }} (Dose)</div>
-          <div class="desc">Number of pills</div>
-        </div>
-      </div>
-      <div class="price">$12</div>
-    </div>
-
-    <!-- Related products box -->
-    <div class="related-box">
-      <h3>Related products</h3>
-
-      <div *ngIf="isLoading" class="loading"><p-progressSpinner></p-progressSpinner></div>
-      <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
-
-      <div class="related-list" *ngIf="!isLoading && !errorMessage">
-        <p-card class="related-card" *ngFor="let r of relatedItems">
-          <ng-template pTemplate="header">
-            <div class="card-header">
-              <h4 class="drug-title">{{ r.title }}</h4>
-              <div class="badges">
-                <span class="status-badge related">Related Drug</span>
-                <span *ngIf="isSelected(r)" class="status-badge added">Added to Cart</span>
-                <span *ngIf="!r.isActive" class="status-badge inactive">Inactive</span>
+    <!-- Two Column Layout -->
+    <div class="summary-content">
+      <!-- Left Column - Products -->
+      <div class="products-column">
+        <!-- Selected Product Row -->
+        <div class="product-row">
+          <div class="product-content">
+            <div class="product-info">
+              <div class="thumb" aria-hidden="true"></div>
+              <div class="details">
+                <div class="name">{{ drugName }}</div>
+                <div class="desc">Number of pills</div>
+                <span class="badge">Selected</span>
               </div>
             </div>
-          </ng-template>
-          <div class="drug-details">
-            <div class="detail-row">
-              <span class="label">Brand:</span>
-              <span class="value">{{ r.brandName }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="label">Category:</span>
-              <span class="value">{{ r.categoryName }}</span>
-            </div>
-            <div *ngIf="r.note" class="detail-row">
-              <span class="label">Note:</span>
-              <span class="value">{{ r.note }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="label">Type:</span>
-              <span class="value">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+            <div class="price-section">
+              <div class="price-label">Total Price</div>
+              <div class="price">$12</div>
             </div>
           </div>
-          <ng-template pTemplate="footer">
-            <button pButton type="button"
-                    (click)="toggleRelated(r)"
-                    [label]="isSelected(r) ? 'Remove from Cart' : 'Add to Cart'"
-                    [class]="isSelected(r) ? 'p-button-danger' : 'p-button-success'"
-                    [icon]="isSelected(r) ? 'pi pi-times' : 'pi pi-plus'"
-            ></button>
-          </ng-template>
-        </p-card>
-      </div>
-    </div>
+        </div>
 
-    <div class="actions">
-      <button pButton type="button" class="p-button-rounded p-button-lg" (click)="proceedToCheckout()" label="Checkout"></button>
+        <!-- Related products box -->
+        <div class="related-box" *ngIf="isLoading || errorMessage || (relatedItems && relatedItems.length > 0)">
+          <h3>Related products</h3>
+
+          <div *ngIf="isLoading" class="loading"><p-progressSpinner></p-progressSpinner></div>
+          <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
+
+          <div class="related-list" *ngIf="!isLoading && !errorMessage && relatedItems.length > 0">
+            <p-card class="related-card" *ngFor="let r of relatedItems">
+              <ng-template pTemplate="header">
+                <div class="card-header">
+                  <h4 class="drug-title">{{ r.title }}</h4>
+                  <div class="badges">
+                    <span class="status-badge related">Related Drug</span>
+                    <span *ngIf="isSelected(r)" class="status-badge added">Added to Cart</span>
+                    <span *ngIf="!r.isActive" class="status-badge inactive">Inactive</span>
+                  </div>
+                </div>
+              </ng-template>
+              <div class="drug-details">
+                <div class="detail-row">
+                  <span class="label">Brand:</span>
+                  <span class="value">{{ r.brandName }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Category:</span>
+                  <span class="value">{{ r.categoryName }}</span>
+                </div>
+                <div *ngIf="r.note" class="detail-row">
+                  <span class="label">Note:</span>
+                  <span class="value">{{ r.note }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Type:</span>
+                  <span class="value">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+                </div>
+              </div>
+              <ng-template pTemplate="footer">
+                <button pButton type="button"
+                        (click)="toggleRelated(r)"
+                        [label]="isSelected(r) ? 'Remove from Cart' : 'Add to Cart'"
+                        [class]="isSelected(r) ? 'p-button-danger' : 'p-button-success'"
+                        [icon]="isSelected(r) ? 'pi pi-times' : 'pi pi-plus'"
+                ></button>
+              </ng-template>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Sidebar - Order Summary -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-item">
+          <span class="label">Subtotal</span>
+          <span class="value">$12.00</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="label">Tax</span>
+          <span class="value">$1.20</span>
+        </div>
+
+        <div class="summary-item total">
+          <span class="label">Total</span>
+          <span class="value">$13.20</span>
+        </div>
+
+        <button pButton type="button" (click)="proceedToCheckout()" label="Checkout" icon="pi pi-shopping-cart"></button>
+      </div>
     </div>
   </div>
 </app-page-layout>
