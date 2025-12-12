@@ -113,7 +113,7 @@
                       <span class="price-value">${{ drug.price }}</span>
                     </div>
                     <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">
-                      {{ drug.isGeneric ? 'Generic' : 'Brand Name' }}
+                      {{ drug.isGeneric ? 'Generic' : drug.brandName }}
                     </span>
                   </div>
 
