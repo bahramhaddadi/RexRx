@@ -162,6 +162,12 @@ export interface RelatedDrug {
   note: string;
   isActive: boolean;
   isGeneric: boolean;
+  imageUrl: string;
+  dose: string;
+  doseId: number;
+  price: number;
+  questionId: number;
+  itemNameAndDose: string;
 }
 
 export interface GetRecommendedDrugsRequest {
