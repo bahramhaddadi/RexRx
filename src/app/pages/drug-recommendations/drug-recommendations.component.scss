@@ -1,429 +1,767 @@
-.recommendations-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
+@import "../../../styles/variables";
 
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+// Modern Pharmacy Recommendations Page Design - 2025
+.recommendations-page {
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.03) 0%, rgba(255, 255, 255, 1) 100%);
 
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0;
-  }
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  gap: 1rem;
-
-  p {
-    color: var(--text-color-secondary);
-    font-size: 1.1rem;
-  }
-}
-
-.results-container {
-  .results-info {
-    font-size: 1.1rem;
-    color: var(--text-color-secondary);
+  // Page Header with Gradient
+  .page-header {
+    padding: 2.5rem 3rem;
     margin-bottom: 2rem;
-  }
+    background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 50%, #10B981 100%);
+    border-radius: 0 0 32px 32px;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.2);
 
-  .drugs-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-
-    > * {
-      flex: 1 1 280px;
-      min-width: 280px;
+    @media (max-width: $breakpoint-md) {
+      padding: 2rem;
+      border-radius: 0 0 24px 24px;
     }
 
-    .drug-card {
-      pre {
+    @media (max-width: $breakpoint-sm) {
+      padding: 1.5rem 1.25rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+
+      .header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        color: $white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 24px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+
+        i {
+          font-size: 1rem;
+        }
+      }
+
+      h1 {
+        margin: 0 0 0.875rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $white;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        line-height: 1.2;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 2rem;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 1.5rem;
+        }
+      }
+
+      .header-subtitle {
         margin: 0;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        font-size: 0.9rem;
-      }
+        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        line-height: 1.7;
+        max-width: 700px;
+        margin: 0 auto;
 
-      .card-header {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1rem;
-
-        .drug-title {
-          margin: 0;
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: var(--text-color);
+        @media (max-width: $breakpoint-md) {
+          font-size: 1rem;
         }
 
-        .badges {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-
-        .status-badge {
-          padding: 0.25rem 0.75rem;
-          border-radius: 12px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-
-          &.related {
-            background-color: #e3f2fd;
-            color: #1976d2;
-          }
-
-          &.added {
-            background-color: #e8f5e9;
-            color: #388e3c;
-          }
-
-          &.inactive {
-            background-color: #ffebee;
-            color: #d32f2f;
-          }
-        }
-      }
-
-      .drug-details {
-        padding: 1rem;
-
-        .detail-row {
-          display: flex;
-          justify-content: space-between;
-          padding: 0.5rem 0;
-          border-bottom: 1px solid var(--surface-border);
-
-          &:last-child {
-            border-bottom: none;
-          }
-
-          .label {
-            font-weight: 600;
-            color: var(--text-color-secondary);
-          }
-
-          .value {
-            color: var(--text-color);
-          }
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9375rem;
         }
       }
     }
   }
-}
 
-.no-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 4rem 2rem;
-
-  .empty-card {
-    width: 100%;
-    max-width: 720px;
-  }
-
-  .empty-state {
+  // Loading State
+  .loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    padding: $spacing-2xl;
+    margin: 0 3rem 2rem;
+    background: $white;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+    @media (max-width: $breakpoint-md) {
+      margin: 0 2rem 2rem;
+      padding: $spacing-xl;
+      border-radius: 20px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      margin: 0 1.25rem 2rem;
+      padding: $spacing-lg;
+      border-radius: 16px;
+    }
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      text-align: center;
+
+      ::ng-deep .p-progress-spinner-circle {
+        stroke: #2563EB;
+      }
+
+      p {
+        color: $gray-700;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+      }
+
+      .loading-subtext {
+        color: $gray-500;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  // Error State
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: $spacing-lg;
     text-align: center;
-    gap: 1rem;
-    padding: 2rem 1.5rem;
-  }
+    padding: $spacing-2xl;
+    margin: 0 3rem 2rem;
+    background: $white;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.1);
+    border: 2px solid rgba(239, 68, 68, 0.2);
 
-  .empty-icon {
-    font-size: 2rem;
-    color: var(--primary-color);
-    opacity: 0.9;
-  }
+    @media (max-width: $breakpoint-md) {
+      margin: 0 2rem 2rem;
+      padding: $spacing-xl;
+      border-radius: 20px;
+    }
 
-  .empty-title {
-    margin: 0.25rem 0 0;
-    font-size: 1.35rem;
-    color: var(--text-color);
-    font-weight: 600;
-  }
+    @media (max-width: $breakpoint-sm) {
+      margin: 0 1.25rem 2rem;
+      padding: $spacing-lg;
+      border-radius: 16px;
+    }
 
-  .empty-text {
-    margin: 0;
-    color: var(--text-color-secondary);
-  }
+    .error-icon-wrapper {
+      width: 100px;
+      height: 100px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  .actions {
-    margin-top: 0.5rem;
-  }
-
-  button {
-    margin-top: 0.5rem;
-  }
-}
-
-.centered {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  .title {
-    text-align: center;
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 2rem;
-  }
-
-  .swiper-container {
-    width: 100%;
-    padding: 2rem 0;
-    margin-bottom: 2rem;
-    position: relative;
-
-    swiper-container {
-      width: 100%;
-      height: auto;
-      padding: 0 60px 4rem;
-
-      ::ng-deep {
-        // Swiper navigation buttons
-        .swiper-button-next,
-        .swiper-button-prev {
-          color: #3498db;
-          background: white;
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-          transition: all 0.3s ease;
-          top: 40%;
-
-          &:hover {
-            background: #3498db;
-            color: white;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-          }
-
-          &::after {
-            font-size: 18px;
-            font-weight: bold;
-          }
-        }
-
-        .swiper-button-prev {
-          left: 10px;
-        }
-
-        .swiper-button-next {
-          right: 10px;
-        }
-
-        // Swiper pagination
-        .swiper-pagination {
-          position: relative !important;
-          bottom: auto !important;
-          margin-top: 1.5rem;
-
-          .swiper-pagination-bullet {
-            width: 10px;
-            height: 10px;
-            background: #cbd5e0;
-            opacity: 1;
-            transition: all 0.3s ease;
-
-            &-active {
-              background: #3498db;
-              width: 24px;
-              border-radius: 5px;
-            }
-          }
-        }
+      i {
+        font-size: 3rem;
+        color: #EF4444;
       }
     }
 
-    swiper-slide {
-      height: auto;
-      display: flex;
-      align-items: stretch;
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $gray-900;
     }
 
-    .drug-card {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    p {
+      color: $gray-700;
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      max-width: 400px;
+      margin: 0;
+    }
+
+    ::ng-deep .p-button {
+      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+      border: none;
       border-radius: 12px;
+      padding: 0.875rem 2rem;
+      font-weight: $font-weight-semibold;
       transition: all 0.3s ease;
-      height: 100%;
-      width: 100%;
 
       &:hover {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+      }
+    }
+  }
+
+  // Recommendations Content
+  .recommendations-content {
+    padding: 0 3rem 3rem;
+
+    @media (max-width: $breakpoint-md) {
+      padding: 0 2rem 2rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 0 1.25rem 2rem;
+    }
+
+    // Info Banner
+    .info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+      border-radius: 16px;
+      border-left: 4px solid #2563EB;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+
+      @media (max-width: $breakpoint-sm) {
+        padding: 1.25rem;
+        margin-bottom: 2rem;
       }
 
-      ::ng-deep {
-        .p-card-header {
-          padding: 0 !important;
-          border-bottom: 1px solid #e9ecef;
-        }
+      .info-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
 
-        .p-card-body {
-          padding: 0 !important;
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-
-        .p-card-content {
-          padding: 0 !important;
-          flex: 1;
-        }
-
-        .p-card-footer {
-          padding: 1.25rem !important;
-          border-top: 1px solid #e9ecef;
-          background-color: #f8f9fa;
-
-          button {
-            width: 100%;
-            padding: 0.75rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-          }
-        }
-      }
-
-      .card-header {
-        padding: 1.5rem !important;
-
-        .drug-title {
+        i {
           font-size: 1.5rem;
-          color: #2c3e50;
-          margin-bottom: 1rem;
+          color: $white;
         }
       }
 
-      .drug-details {
-        padding: 1.5rem !important;
+      .info-text {
+        flex: 1;
 
-        .detail-row {
-          padding: 0.75rem 0;
+        h4 {
+          margin: 0 0 0.5rem;
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: $gray-900;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.9375rem;
+          color: $gray-700;
+          line-height: 1.6;
+          font-weight: 500;
+        }
+      }
+    }
+
+    // Carousel Section
+    .carousel-section {
+      margin-bottom: 2.5rem;
+
+      .swiper-container {
+        width: 100%;
+        padding: 2rem 0 3rem;
+        position: relative;
+
+        @media (max-width: $breakpoint-md) {
+          padding: 1.5rem 0 2.5rem;
+        }
+
+        swiper-container {
+          width: 100%;
+          height: auto;
+          padding: 0 60px 3rem;
+
+          @media (max-width: $breakpoint-md) {
+            padding: 0 50px 2.5rem;
+          }
+
+          @media (max-width: $breakpoint-sm) {
+            padding: 0 40px 2rem;
+          }
+
+          ::ng-deep {
+            // Swiper Navigation - Modern Style
+            .swiper-button-next,
+            .swiper-button-prev {
+              background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+              color: $white;
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+              box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+              transition: all 0.3s ease;
+              top: 45%;
+
+              @media (max-width: $breakpoint-md) {
+                width: 40px;
+                height: 40px;
+              }
+
+              &:hover {
+                background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+                box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+                transform: scale(1.1);
+              }
+
+              &::after {
+                font-size: 20px;
+                font-weight: bold;
+
+                @media (max-width: $breakpoint-md) {
+                  font-size: 16px;
+                }
+              }
+            }
+
+            .swiper-button-prev {
+              left: 0;
+            }
+
+            .swiper-button-next {
+              right: 0;
+            }
+
+            // Swiper Pagination - Modern Style
+            .swiper-pagination {
+              position: relative !important;
+              bottom: auto !important;
+              margin-top: 2rem;
+
+              @media (max-width: $breakpoint-md) {
+                margin-top: 1.5rem;
+              }
+
+              .swiper-pagination-bullet {
+                width: 12px;
+                height: 12px;
+                background: $gray-300;
+                opacity: 1;
+                transition: all 0.3s ease;
+
+                &-active {
+                  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+                  width: 32px;
+                  border-radius: 6px;
+                }
+              }
+            }
+          }
+        }
+
+        swiper-slide {
+          height: auto;
           display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-
-          .label {
-            font-weight: 600;
-            color: #6c757d;
-            min-width: 80px;
-          }
-
-          .value {
-            color: #2c3e50;
-            font-weight: 500;
-            text-align: right;
-            flex: 1;
-          }
+          align-items: stretch;
         }
-      }
-    }
-  }
 
-  .actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
+        // Drug Card
+        .drug-card {
+          height: 100%;
+          width: 100%;
+          background: $white;
+          border-radius: 20px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+          position: relative;
+          border: 2px solid transparent;
 
-    button {
-      min-width: 200px;
-    }
-  }
-}
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
 
-@media (max-width: 768px) {
-  .recommendations-container {
-    padding: 1rem;
-  }
+          &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
 
-  .header {
-    h1 {
-      font-size: 1.5rem;
-    }
-  }
-
-  .centered {
-    padding: 1rem;
-
-    .title {
-      font-size: 1.5rem;
-    }
-
-    .swiper-container {
-      padding: 1rem 0;
-
-      swiper-container {
-        padding: 0 50px 4rem;
-
-        ::ng-deep {
-          .swiper-button-next,
-          .swiper-button-prev {
-            width: 36px;
-            height: 36px;
-            top: 35%;
-
-            &::after {
-              font-size: 14px;
+            &::before {
+              opacity: 0.5;
             }
           }
 
-          .swiper-button-prev {
-            left: 5px;
+          &.selected {
+            border-color: #10B981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.02) 0%, rgba(255, 255, 255, 1) 100%);
+
+            &::before {
+              opacity: 1;
+            }
           }
 
-          .swiper-button-next {
-            right: 5px;
-          }
-        }
-      }
-
-      .drug-card {
-        .card-header {
-          padding: 1rem !important;
-
-          .drug-title {
-            font-size: 1.25rem;
-          }
-        }
-
-        .drug-details {
-          padding: 1rem !important;
-
-          .detail-row {
-            padding: 0.5rem 0;
+          .card-inner {
+            display: flex;
             flex-direction: column;
-            gap: 0.25rem;
+            height: 100%;
+            padding: 1.75rem;
 
-            .label,
-            .value {
-              text-align: left;
+            @media (max-width: $breakpoint-sm) {
+              padding: 1.5rem;
+            }
+
+            // Selection Badge
+            .selection-badge {
+              position: absolute;
+              top: 1.25rem;
+              right: 1.25rem;
+              background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+              color: $white;
+              padding: 0.5rem 1rem;
+              border-radius: 24px;
+              font-size: 0.75rem;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+              z-index: 2;
+
+              i {
+                font-size: 0.875rem;
+              }
+            }
+
+            // Card Header
+            .card-header {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+              padding-bottom: 1.5rem;
+              border-bottom: 2px solid $gray-100;
+              margin-bottom: 1.5rem;
+
+              .drug-icon {
+                width: 64px;
+                height: 64px;
+                background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1rem;
+
+                i {
+                  font-size: 2rem;
+                  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                }
+              }
+
+              .drug-title {
+                margin: 0 0 0.875rem;
+                font-size: 1.375rem;
+                font-weight: 700;
+                color: $gray-900;
+                line-height: 1.3;
+
+                @media (max-width: $breakpoint-sm) {
+                  font-size: 1.25rem;
+                }
+              }
+
+              .related-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: rgba(37, 99, 235, 0.1);
+                color: #2563EB;
+                padding: 0.375rem 0.875rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+
+                i {
+                  font-size: 0.875rem;
+                }
+              }
+            }
+
+            // Drug Details
+            .drug-details {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              margin-bottom: 1.5rem;
+
+              .detail-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+                background: rgba(37, 99, 235, 0.03);
+                border-radius: 12px;
+                border-left: 3px solid #2563EB;
+
+                &.note-item {
+                  background: rgba(16, 185, 129, 0.03);
+                  border-left-color: #10B981;
+
+                  .detail-label i {
+                    color: #10B981;
+                  }
+                }
+
+                .detail-label {
+                  display: flex;
+                  align-items: center;
+                  gap: 0.625rem;
+                  font-size: 0.8125rem;
+                  font-weight: 600;
+                  color: $gray-600;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+
+                  i {
+                    font-size: 1rem;
+                    color: #2563EB;
+                  }
+                }
+
+                .detail-value {
+                  font-size: 0.9375rem;
+                  font-weight: 600;
+                  color: $gray-900;
+                  line-height: 1.5;
+
+                  &.note-value {
+                    color: $gray-700;
+                    font-weight: 500;
+                    line-height: 1.6;
+                  }
+                }
+
+                .type-badge {
+                  display: inline-block;
+                  padding: 0.375rem 0.875rem;
+                  border-radius: 20px;
+                  font-size: 0.8125rem;
+                  font-weight: 600;
+
+                  &.generic {
+                    background: rgba(16, 185, 129, 0.1);
+                    color: #059669;
+                  }
+
+                  &.brand {
+                    background: rgba(37, 99, 235, 0.1);
+                    color: #2563EB;
+                  }
+                }
+              }
+
+              .inactive-notice {
+                display: flex;
+                align-items: center;
+                gap: 0.625rem;
+                padding: 0.875rem 1rem;
+                background: rgba(239, 68, 68, 0.08);
+                border-radius: 12px;
+                border-left: 3px solid #EF4444;
+
+                i {
+                  color: #EF4444;
+                  font-size: 1.125rem;
+                }
+
+                span {
+                  font-size: 0.875rem;
+                  font-weight: 600;
+                  color: #DC2626;
+                }
+              }
+            }
+
+            // Card Footer
+            .card-footer {
+              margin-top: auto;
+
+              ::ng-deep {
+                .add-button .p-button {
+                  width: 100%;
+                  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+                  border: none;
+                  border-radius: 12px;
+                  padding: 1rem;
+                  font-weight: 600;
+                  font-size: 1rem;
+                  transition: all 0.3s ease;
+                  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+                  &:hover:not(:disabled) {
+                    background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+                  }
+
+                  &:disabled {
+                    background: $gray-300;
+                    cursor: not-allowed;
+                    opacity: 0.6;
+                  }
+                }
+
+                .remove-button .p-button {
+                  width: 100%;
+                  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+                  border: 2px solid #EF4444;
+                  color: #DC2626;
+                  border-radius: 12px;
+                  padding: 1rem;
+                  font-weight: 600;
+                  font-size: 1rem;
+                  transition: all 0.3s ease;
+
+                  &:hover {
+                    background: #EF4444;
+                    color: $white;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+                  }
+                }
+              }
             }
           }
         }
+      }
+
+      // Selection Summary
+      .selection-summary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1.25rem 2rem;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+        border-radius: 16px;
+        border: 2px solid #10B981;
+        margin-top: 2rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+
+        @media (max-width: $breakpoint-sm) {
+          padding: 1rem 1.5rem;
+          margin-top: 1.5rem;
+        }
+
+        .summary-icon {
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          i {
+            font-size: 1.5rem;
+            color: $white;
+          }
+        }
+
+        .summary-text {
+          font-size: 1.125rem;
+          color: $gray-900;
+          font-weight: 500;
+
+          strong {
+            font-weight: 700;
+            color: #059669;
+            font-size: 1.375rem;
+          }
+        }
+      }
+    }
+
+    // Actions Section
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 2px solid $gray-100;
+
+      ::ng-deep .continue-button {
+        .p-button {
+          min-width: 280px;
+          background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+          border: none;
+          border-radius: 12px;
+          padding: 1.125rem 2.5rem;
+          font-weight: 700;
+          font-size: 1.125rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+
+          @media (max-width: $breakpoint-sm) {
+            min-width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+          }
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(37, 99, 235, 0.4);
+          }
+
+          &:disabled {
+            background: $gray-300;
+            cursor: not-allowed;
+            opacity: 0.6;
+            box-shadow: none;
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(-1px);
+          }
+        }
+      }
+
+      .action-hint {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: $gray-600;
+        font-weight: 500;
       }
     }
   }
