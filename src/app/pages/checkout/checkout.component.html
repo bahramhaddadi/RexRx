@@ -1,233 +1,482 @@
-<app-page-layout [showHeader]="true" [showBackButton]="false">
-  <div class="checkout-container">
-    <h1>Checkout</h1>
-
-    <!-- Drug Information -->
-    <p-card header="Order Summary" styleClass="mb-4">
-      <div class="order-summary">
-        <p><strong>Drug:</strong> {{ drugName }}</p>
-        <p><strong>Quantity:</strong> 1</p>
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Review'">
+  <div class="checkout-page">
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Select Drug</span>
       </div>
-    </p-card>
+      <div class="step-line completed"></div>
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Choose Dose</span>
+      </div>
+      <div class="step-line completed"></div>
+      <div class="step completed">
+        <div class="step-icon"><i class="pi pi-check"></i></div>
+        <span class="step-label">Health Check</span>
+      </div>
+      <div class="step-line active"></div>
+      <div class="step active">
+        <div class="step-icon"><i class="pi pi-credit-card"></i></div>
+        <span class="step-label">Checkout</span>
+      </div>
+    </div>
 
-    <!-- Error Message -->
-    @if (errorMessage) {
-      <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
-    }
+    <div class="checkout-layout">
+      <!-- Main Content -->
+      <div class="checkout-main">
+        <!-- Page Header Card -->
+        <div class="header-card">
+          <div class="header-icon">
+            <i class="pi pi-credit-card"></i>
+          </div>
+          <div class="header-content">
+            <h1>Complete Your Order</h1>
+            <p>Please fill in your details to complete the checkout process.</p>
+          </div>
+        </div>
 
-    <!-- Success Message -->
-    @if (successMessage) {
-      <p-message severity="success" [text]="successMessage" styleClass="w-full mb-4"></p-message>
-    }
+        <!-- Error Message -->
+        @if (errorMessage) {
+          <div class="alert-card error">
+            <i class="pi pi-exclamation-triangle"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
 
-    <!-- Patient Information Form -->
-    @if (!successMessage) {
-      <p-card header="Patient Information" styleClass="mb-4">
-        <form (ngSubmit)="onSubmit()" #checkoutForm="ngForm">
-          <div class="form-grid">
-            <!-- First Name -->
-            <div class="form-field">
-              <label for="firstName">First Name <span class="required">*</span></label>
-              <input
-                id="firstName"
-                type="text"
-                pInputText
-                [(ngModel)]="firstName"
-                name="firstName"
-                required
-                class="w-full"
-              />
+        <!-- Success Message -->
+        @if (successMessage) {
+          <div class="alert-card success">
+            <i class="pi pi-check-circle"></i>
+            <span>{{ successMessage }}</span>
+          </div>
+        }
+
+        <!-- Patient Information Form -->
+        @if (!successMessage) {
+          <form (ngSubmit)="onSubmit()" #checkoutForm="ngForm">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+              <div class="section-header">
+                <div class="section-icon">
+                  <i class="pi pi-user"></i>
+                </div>
+                <div class="section-title">
+                  <h2>Personal Information</h2>
+                  <p>Please provide your personal details</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <!-- First Name -->
+                <div class="form-field">
+                  <label for="firstName">
+                    <span class="label-text">First Name</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-user input-icon"></i>
+                    <input
+                      id="firstName"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="firstName"
+                      name="firstName"
+                      required
+                      placeholder="Enter your first name"
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+
+                <!-- Middle Name -->
+                <div class="form-field">
+                  <label for="middleName">
+                    <span class="label-text">Middle Name</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-user input-icon"></i>
+                    <input
+                      id="middleName"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="middleName"
+                      name="middleName"
+                      placeholder="Enter your middle name"
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-field">
+                  <label for="lastName">
+                    <span class="label-text">Last Name</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-user input-icon"></i>
+                    <input
+                      id="lastName"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="lastName"
+                      name="lastName"
+                      required
+                      placeholder="Enter your last name"
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+
+                <!-- Sex -->
+                <div class="form-field">
+                  <label for="sex">
+                    <span class="label-text">Sex</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <p-dropdown
+                    id="sex"
+                    [options]="sexOptions"
+                    [(ngModel)]="sex"
+                    name="sex"
+                    placeholder="Select your sex"
+                    optionLabel="label"
+                    optionValue="value"
+                    required
+                    styleClass="styled-dropdown"
+                  ></p-dropdown>
+                </div>
+
+                <!-- Birth Date -->
+                <div class="form-field">
+                  <label for="birthDate">
+                    <span class="label-text">Birth Date</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <p-calendar
+                    id="birthDate"
+                    [(ngModel)]="birthDate"
+                    name="birthDate"
+                    [showIcon]="true"
+                    dateFormat="yy-mm-dd"
+                    placeholder="Select your birth date"
+                    required
+                    styleClass="styled-calendar"
+                  ></p-calendar>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-field">
+                  <label for="phone">
+                    <span class="label-text">Phone Number</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-phone input-icon"></i>
+                    <input
+                      id="phone"
+                      type="tel"
+                      pInputText
+                      [(ngModel)]="phone"
+                      name="phone"
+                      placeholder="(123) 456-7890"
+                      required
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+
+                <!-- Weight -->
+                <div class="form-field">
+                  <label for="weight">
+                    <span class="label-text">Weight (lbs)</span>
+                    <span class="required-badge">Required</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-chart-bar input-icon"></i>
+                    <input
+                      id="weight"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="weight"
+                      name="weight"
+                      placeholder="e.g., 140"
+                      required
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+
+                <!-- Health Card Number -->
+                <div class="form-field">
+                  <label for="healthCardNumber">
+                    <span class="label-text">Health Card Number</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <i class="pi pi-id-card input-icon"></i>
+                    <input
+                      id="healthCardNumber"
+                      type="text"
+                      pInputText
+                      [(ngModel)]="healthCardNumber"
+                      name="healthCardNumber"
+                      placeholder="Enter health card number"
+                      class="styled-input"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- Middle Name -->
-            <div class="form-field">
-              <label for="middleName">Middle Name</label>
-              <input
-                id="middleName"
-                type="text"
-                pInputText
-                [(ngModel)]="middleName"
-                name="middleName"
-                class="w-full"
-              />
+            <!-- Medical Information Section -->
+            <div class="form-section">
+              <div class="section-header">
+                <div class="section-icon medical">
+                  <i class="pi pi-heart"></i>
+                </div>
+                <div class="section-title">
+                  <h2>Medical Information</h2>
+                  <p>Help us ensure your safety by providing health details</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <!-- Allergies -->
+                <div class="form-field full-width">
+                  <label for="allergies">
+                    <span class="label-text">Allergies</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <textarea
+                    id="allergies"
+                    pInputTextarea
+                    [(ngModel)]="allergies"
+                    name="allergies"
+                    rows="3"
+                    placeholder="List any allergies you have..."
+                    class="styled-textarea"
+                  ></textarea>
+                </div>
+
+                <!-- Current Medications -->
+                <div class="form-field full-width">
+                  <label for="medications">
+                    <span class="label-text">Current Medications</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <textarea
+                    id="medications"
+                    pInputTextarea
+                    [(ngModel)]="medications"
+                    name="medications"
+                    rows="3"
+                    placeholder="List any medications you're currently taking..."
+                    class="styled-textarea"
+                  ></textarea>
+                </div>
+
+                <!-- Surgeries -->
+                <div class="form-field full-width">
+                  <label for="surgeries">
+                    <span class="label-text">Past Surgeries</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <textarea
+                    id="surgeries"
+                    pInputTextarea
+                    [(ngModel)]="surgeries"
+                    name="surgeries"
+                    rows="3"
+                    placeholder="List any past surgeries..."
+                    class="styled-textarea"
+                  ></textarea>
+                </div>
+
+                <!-- Other Medical Conditions -->
+                <div class="form-field full-width">
+                  <label for="otherMedicalConditions">
+                    <span class="label-text">Other Medical Conditions</span>
+                    <span class="optional-badge">Optional</span>
+                  </label>
+                  <textarea
+                    id="otherMedicalConditions"
+                    pInputTextarea
+                    [(ngModel)]="otherMedicalConditions"
+                    name="otherMedicalConditions"
+                    rows="3"
+                    placeholder="List any other medical conditions..."
+                    class="styled-textarea"
+                  ></textarea>
+                </div>
+              </div>
             </div>
 
-            <!-- Last Name -->
-            <div class="form-field">
-              <label for="lastName">Last Name <span class="required">*</span></label>
-              <input
-                id="lastName"
-                type="text"
-                pInputText
-                [(ngModel)]="lastName"
-                name="lastName"
-                required
-                class="w-full"
-              />
+            <!-- Promo Code Section -->
+            <div class="form-section compact">
+              <div class="section-header">
+                <div class="section-icon promo">
+                  <i class="pi pi-tag"></i>
+                </div>
+                <div class="section-title">
+                  <h2>Promo Code</h2>
+                  <p>Have a discount code? Enter it here</p>
+                </div>
+              </div>
+
+              <div class="promo-input-wrapper">
+                <div class="input-wrapper">
+                  <i class="pi pi-tag input-icon"></i>
+                  <input
+                    id="promoCode"
+                    type="text"
+                    pInputText
+                    [(ngModel)]="promoCode"
+                    name="promoCode"
+                    placeholder="Enter promo code"
+                    class="styled-input"
+                  />
+                </div>
+                <button type="button" class="apply-btn">
+                  <span>Apply</span>
+                </button>
+              </div>
             </div>
 
-            <!-- Sex -->
-            <div class="form-field">
-              <label for="sex">Sex <span class="required">*</span></label>
-              <p-dropdown
-                id="sex"
-                [options]="sexOptions"
-                [(ngModel)]="sex"
-                name="sex"
-                placeholder="Select sex"
-                optionLabel="label"
-                optionValue="value"
-                required
-                styleClass="w-full"
-              ></p-dropdown>
+            <!-- Form Actions (Mobile) -->
+            <div class="mobile-actions">
+              <button
+                type="button"
+                class="cancel-btn"
+                (click)="onCancel()"
+                [disabled]="isLoading">
+                <i class="pi pi-times"></i>
+                <span>Cancel</span>
+              </button>
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="!checkoutForm.form.valid || isLoading">
+                @if (isLoading) {
+                  <p-progressSpinner strokeWidth="4" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+                } @else {
+                  <i class="pi pi-lock"></i>
+                }
+                <span>{{ isLoading ? 'Processing...' : 'Pay Securely' }}</span>
+              </button>
             </div>
+          </form>
+        }
+      </div>
 
-            <!-- Birth Date -->
-            <div class="form-field">
-              <label for="birthDate">Birth Date <span class="required">*</span></label>
-              <p-calendar
-                id="birthDate"
-                [(ngModel)]="birthDate"
-                name="birthDate"
-                [showIcon]="true"
-                dateFormat="yy-mm-dd"
-                placeholder="Select date"
-                required
-                styleClass="w-full"
-              ></p-calendar>
-            </div>
+      <!-- Sidebar -->
+      <div class="checkout-sidebar">
+        <!-- Order Summary Card -->
+        <div class="summary-card">
+          <div class="summary-header">
+            <i class="pi pi-shopping-cart"></i>
+            <h3>Order Summary</h3>
+          </div>
 
-            <!-- Phone -->
-            <div class="form-field">
-              <label for="phone">Phone <span class="required">*</span></label>
-              <input
-                id="phone"
-                type="tel"
-                pInputText
-                [(ngModel)]="phone"
-                name="phone"
-                placeholder="(123) 456-7890"
-                required
-                class="w-full"
-              />
-            </div>
-
-            <!-- Weight -->
-            <div class="form-field">
-              <label for="weight">Weight (lbs) <span class="required">*</span></label>
-              <input
-                id="weight"
-                type="text"
-                pInputText
-                [(ngModel)]="weight"
-                name="weight"
-                placeholder="e.g., 140"
-                required
-                class="w-full"
-              />
-            </div>
-
-            <!-- Health Card Number -->
-            <div class="form-field">
-              <label for="healthCardNumber">Health Card Number</label>
-              <input
-                id="healthCardNumber"
-                type="text"
-                pInputText
-                [(ngModel)]="healthCardNumber"
-                name="healthCardNumber"
-                class="w-full"
-              />
-            </div>
-
-            <!-- Allergies -->
-            <div class="form-field full-width">
-              <label for="allergies">Allergies</label>
-              <textarea
-                id="allergies"
-                pInputTextarea
-                [(ngModel)]="allergies"
-                name="allergies"
-                rows="3"
-                placeholder="List any allergies..."
-                class="w-full"
-              ></textarea>
-            </div>
-
-            <!-- Current Medications -->
-            <div class="form-field full-width">
-              <label for="medications">Current Medications</label>
-              <textarea
-                id="medications"
-                pInputTextarea
-                [(ngModel)]="medications"
-                name="medications"
-                rows="3"
-                placeholder="List any current medications..."
-                class="w-full"
-              ></textarea>
-            </div>
-
-            <!-- Surgeries -->
-            <div class="form-field full-width">
-              <label for="surgeries">Past Surgeries</label>
-              <textarea
-                id="surgeries"
-                pInputTextarea
-                [(ngModel)]="surgeries"
-                name="surgeries"
-                rows="3"
-                placeholder="List any past surgeries..."
-                class="w-full"
-              ></textarea>
-            </div>
-
-            <!-- Other Medical Conditions -->
-            <div class="form-field full-width">
-              <label for="otherMedicalConditions">Other Medical Conditions</label>
-              <textarea
-                id="otherMedicalConditions"
-                pInputTextarea
-                [(ngModel)]="otherMedicalConditions"
-                name="otherMedicalConditions"
-                rows="3"
-                placeholder="List any other medical conditions..."
-                class="w-full"
-              ></textarea>
-            </div>
-
-            <!-- Promo Code -->
-            <div class="form-field">
-              <label for="promoCode">Promo Code</label>
-              <input
-                id="promoCode"
-                type="text"
-                pInputText
-                [(ngModel)]="promoCode"
-                name="promoCode"
-                placeholder="Enter promo code"
-                class="w-full"
-              />
+          <div class="summary-item main-item">
+            <div class="item-info">
+              <div class="item-icon">
+                <i class="pi pi-box"></i>
+              </div>
+              <div class="item-details">
+                <h4>{{ drugName || 'Your Medication' }}</h4>
+                <span class="item-qty">Qty: 1</span>
+              </div>
             </div>
           </div>
 
-          <!-- Form Actions -->
-          <div class="form-actions">
-            <p-button
-              label="Cancel"
-              severity="secondary"
-              (onClick)="onCancel()"
-              [disabled]="isLoading"
-            ></p-button>
-            <p-button
-              label="Submit Order"
-              type="submit"
-              [disabled]="!checkoutForm.form.valid || isLoading"
-              [loading]="isLoading"
-            ></p-button>
+          <div class="summary-divider"></div>
+
+          <div class="summary-row">
+            <span class="row-label">Subtotal</span>
+            <span class="row-value">Calculated at payment</span>
           </div>
-        </form>
-      </p-card>
-    }
+
+          <div class="summary-row">
+            <span class="row-label">Shipping</span>
+            <span class="row-value free">FREE</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-total">
+            <span class="total-label">Total</span>
+            <span class="total-value">At checkout</span>
+          </div>
+
+          <!-- Desktop Submit Button -->
+          @if (!successMessage) {
+            <div class="desktop-actions">
+              <button
+                type="submit"
+                form="checkoutForm"
+                class="submit-btn full-width"
+                [disabled]="isLoading"
+                (click)="onSubmit()">
+                @if (isLoading) {
+                  <p-progressSpinner strokeWidth="4" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+                } @else {
+                  <i class="pi pi-lock"></i>
+                }
+                <span>{{ isLoading ? 'Processing...' : 'Pay Securely' }}</span>
+              </button>
+              <button
+                type="button"
+                class="cancel-btn full-width"
+                (click)="onCancel()"
+                [disabled]="isLoading">
+                <span>Cancel Order</span>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Security Info Card -->
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h4>Secure Checkout</h4>
+          <p>Your payment information is encrypted and secure. We never store your credit card details.</p>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+          <div class="badge-item">
+            <i class="pi pi-lock"></i>
+            <span>256-bit SSL Encryption</span>
+          </div>
+          <div class="badge-item">
+            <i class="pi pi-verified"></i>
+            <span>Licensed Pharmacy</span>
+          </div>
+          <div class="badge-item">
+            <i class="pi pi-shield"></i>
+            <span>HIPAA Compliant</span>
+          </div>
+          <div class="badge-item">
+            <i class="pi pi-truck"></i>
+            <span>Free Discreet Shipping</span>
+          </div>
+        </div>
+
+        <!-- Help Card -->
+        <div class="help-card">
+          <i class="pi pi-question-circle"></i>
+          <div class="help-content">
+            <h4>Need Help?</h4>
+            <p>Our support team is available 24/7 to assist you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </app-page-layout>

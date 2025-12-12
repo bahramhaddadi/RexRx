@@ -1,510 +1,725 @@
 @import "../../../styles/variables";
 
-// Modern Pharmacy-Themed Drug Summary Design
-.summary-container {
+.cart-page {
   max-width: 1400px;
   margin: 0 auto;
-  padding: $spacing-lg;
-  min-height: 100vh;
-  background: $gray-50;
+  padding: 0 1.5rem 3rem;
+}
 
-  .summary-header {
+// Progress Steps
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 2rem 0;
+  margin-bottom: 1rem;
+
+  .step {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-lg;
-    padding-bottom: $spacing-sm;
-    border-bottom: 2px solid #2563EB;
+    gap: 0.5rem;
 
-    h2 {
-      margin: 0;
-      font-size: $font-size-xl;
-      font-weight: $font-weight-bold;
-      color: $gray-900;
+    .step-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: $gray-200;
+      color: $gray-600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
 
-      &::before {
-        content: '🛒';
-        margin-right: $spacing-sm;
+    .step-label {
+      font-size: 0.75rem;
+      color: $gray-600;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    &.completed {
+      .step-icon {
+        background: #10B981;
+        color: white;
+      }
+      .step-label {
+        color: #059669;
+      }
+    }
+
+    &.active {
+      .step-icon {
+        background: #2563EB;
+        color: white;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+      }
+      .step-label {
+        color: #2563EB;
+        font-weight: 600;
       }
     }
   }
 
-  // Two Column Layout
-  .summary-content {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: $spacing-lg;
-    align-items: start;
-  }
+  .step-line {
+    width: 60px;
+    height: 3px;
+    background: $gray-200;
+    margin: 0 0.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 2px;
 
-  // Left Column - Products
-  .products-column {
+    &.completed {
+      background: #10B981;
+    }
+  }
+}
+
+// Main Layout
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  align-items: start;
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Cart Main Section
+.cart-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Section Cards
+.section-card {
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .section-header {
     display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid $gray-200;
+    background: $gray-50;
+
+    h2 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $gray-900;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      i {
+        color: #2563EB;
+      }
+    }
+
+    .item-count {
+      background: rgba(37, 99, 235, 0.1);
+      color: #2563EB;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: $gray-600;
+    }
+  }
+}
+
+// Main Product Card
+.main-product {
+  .product-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+
+    &.selected {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, $white 100%);
+      border-left: 4px solid #2563EB;
+    }
+
+    .product-image {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      flex-shrink: 0;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $gray-100;
+
+        i {
+          font-size: 2rem;
+          color: $gray-400;
+        }
+      }
+    }
+
+    .product-details {
+      flex: 1;
+      min-width: 0;
+
+      .product-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+
+        .product-name {
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: $gray-900;
+        }
+      }
+
+      .product-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+          font-size: 0.875rem;
+          color: $gray-600;
+
+          i {
+            font-size: 0.75rem;
+            color: $gray-400;
+          }
+        }
+      }
+    }
+
+    .product-price {
+      text-align: right;
+      flex-shrink: 0;
+
+      .price-label {
+        display: block;
+        font-size: 0.75rem;
+        color: $gray-600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+      }
+
+      .price-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563EB;
+      }
+    }
+  }
+}
+
+// Badges
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  &.primary {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563EB;
   }
 
-  // Selected Product Card - Compact Style
-  .product-row {
-    background: $white;
-    border-radius: 12px;
-    padding: $spacing-lg;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 2px solid $gray-200;
-    border-left: 4px solid #2563EB;
-    transition: all 0.3s ease;
+  &.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+  }
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
-      border-left-color: #10B981;
+  &.info {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+  }
+
+  &.warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+  }
+}
+
+// Related Products Section
+.related-section {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.related-card {
+  position: relative;
+  background: $white;
+  border: 2px solid $gray-200;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+
+  &:hover:not(.inactive) {
+    border-color: rgba(37, 99, 235, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  &.selected {
+    border-color: #2563EB;
+    background: rgba(37, 99, 235, 0.03);
+
+    .checkbox {
+      background: #2563EB;
+      border-color: #2563EB;
     }
+  }
 
-    .product-content {
+  &.inactive {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .card-selection {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid $gray-300;
+      border-radius: 6px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: $spacing-md;
-    }
+      justify-content: center;
+      background: white;
+      transition: all 0.2s ease;
 
-    .product-info {
-      display: flex;
-      gap: $spacing-md;
-      align-items: center;
-      flex: 1;
-    }
+      &.checked {
+        background: #2563EB;
+        border-color: #2563EB;
 
-    .thumb {
-      width: 60px;
-      height: 60px;
-      background: rgba(37, 99, 235, 0.08);
+        i {
+          color: white;
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+
+  .card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    padding-right: 3.5rem;
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: $gray-100;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      border: 2px solid rgba(37, 99, 235, 0.2);
       flex-shrink: 0;
 
-      &::before {
-        content: '💊';
+      i {
+        font-size: 1.25rem;
+        color: #2563EB;
       }
     }
 
-    .details {
+    .card-info {
       flex: 1;
       min-width: 0;
 
-      .name {
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+      .card-title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
         color: $gray-900;
-        margin-bottom: 4px;
+      }
+
+      .card-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .card-details {
+        .detail {
+          font-size: 0.8rem;
+          color: $gray-600;
+          margin-bottom: 0.25rem;
+
+          .label {
+            font-weight: 600;
+            margin-right: 0.25rem;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .card-action {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+
+      button {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        padding: 0;
+      }
+    }
+  }
+
+  .inactive-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      background: $gray-600;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Loading State
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+
+  p {
+    margin: 0;
+    color: $gray-600;
+  }
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 0.75rem;
+  color: $gray-600;
+
+  i {
+    font-size: 3rem;
+    color: $gray-300;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+// Sidebar
+.cart-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 2rem;
+
+  @media (max-width: $breakpoint-lg) {
+    position: relative;
+    top: 0;
+  }
+}
+
+// Summary Card
+.summary-card {
+  background: $white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+
+  .summary-title {
+    margin: 0 0 1.25rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $gray-900;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $gray-200;
+  }
+
+  .summary-items {
+    margin-bottom: 1rem;
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+
+      .item-name {
+        color: $gray-900;
+        max-width: 200px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .desc {
+      .item-price {
         color: $gray-600;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-medium;
-      }
-
-      .badge {
-        display: inline-block;
-        margin-top: 4px;
-        padding: 2px 8px;
-        background: rgba(37, 99, 235, 0.1);
-        border-radius: 12px;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
-        color: #2563EB;
-        text-transform: uppercase;
-      }
-    }
-
-    .price-section {
-      text-align: right;
-      flex-shrink: 0;
-
-      .price-label {
-        font-size: $font-size-xs;
-        color: $gray-600;
-        text-transform: uppercase;
-        font-weight: $font-weight-semibold;
-        margin-bottom: 2px;
-      }
-
-      .price {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
-        color: #2563EB;
+        font-weight: 500;
       }
     }
   }
 
-  // Related Products Section
-  .related-box {
-    background: $white;
-    border-radius: 12px;
-    padding: $spacing-lg;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  .summary-divider {
+    height: 1px;
+    background: $gray-200;
+    margin: 1rem 0;
+  }
 
-    h3 {
-      margin: 0 0 $spacing-md 0;
-      font-size: $font-size-lg;
-      font-weight: $font-weight-bold;
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: $gray-600;
+
+    .value {
+      font-weight: 500;
       color: $gray-900;
-      display: flex;
-      align-items: center;
-      gap: $spacing-sm;
-
-      &::before {
-        content: '💼';
-        font-size: 1.1em;
-      }
     }
 
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 150px;
-
-      ::ng-deep .p-progress-spinner-circle {
-        stroke: url(#gradient);
-        animation: spin 1.5s linear infinite;
+    &.shipping {
+      i {
+        margin-right: 0.25rem;
       }
-    }
 
-    ::ng-deep .p-message {
-      margin: $spacing-md 0;
-      border-radius: 8px;
+      .free {
+        color: #059669;
+        font-weight: 600;
+      }
     }
   }
 
-  .related-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: $spacing-md;
-    margin-top: $spacing-md;
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $gray-900;
+
+    .total-value {
+      font-size: 1.5rem;
+      color: #2563EB;
+    }
   }
 
-  .related-card {
+  .checkout-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: #2563EB;
+    border: none;
     border-radius: 10px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid $gray-200;
-    overflow: hidden;
-    position: relative;
+    font-weight: 600;
+    padding: 1rem;
+    transition: all 0.2s ease;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
-      border-color: #2563EB;
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
-    ::ng-deep .p-card-header {
-      background: rgba(37, 99, 235, 0.02);
-      padding: 0;
-      border-bottom: 1px solid $gray-100;
-    }
-
-    ::ng-deep .p-card-body {
-      padding: 0;
-    }
-
-    ::ng-deep .p-card-content {
-      padding: $spacing-sm $spacing-md;
-    }
-
-    ::ng-deep .p-card-footer {
-      padding: $spacing-sm $spacing-md;
-      background: $gray-50;
-      border-top: 1px solid $gray-100;
-    }
-
-    .card-header {
-      padding: $spacing-md;
-
-      .drug-title {
-        margin: 0 0 $spacing-sm 0;
-        font-size: $font-size-base;
-        font-weight: $font-weight-bold;
-        color: $gray-900;
-        display: flex;
-        align-items: center;
-        gap: $spacing-xs;
-
-        &::before {
-          content: '💊';
-          font-size: 1em;
-        }
-      }
-
-      .badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $spacing-xs;
-      }
-
-      .status-badge {
-        padding: 4px 10px;
-        border-radius: 16px;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-        transition: all 0.2s ease;
-
-        &.related {
-          background: rgba(37, 99, 235, 0.1);
-          color: #2563EB;
-          border: 1px solid rgba(37, 99, 235, 0.3);
-        }
-
-        &.added {
-          background: rgba(16, 185, 129, 0.1);
-          color: #059669;
-          border: 1px solid rgba(16, 185, 129, 0.4);
-        }
-
-        &.inactive {
-          background: rgba(239, 68, 68, 0.1);
-          color: #DC2626;
-          border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-      }
-    }
-
-    .drug-details {
-      .detail-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: $spacing-xs 0;
-        border-bottom: 1px solid $gray-100;
-        gap: $spacing-sm;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        .label {
-          font-size: $font-size-xs;
-          font-weight: $font-weight-semibold;
-          color: $gray-600;
-          flex-shrink: 0;
-        }
-
-        .value {
-          font-size: $font-size-xs;
-          color: $gray-900;
-          font-weight: $font-weight-medium;
-          text-align: right;
-          word-break: break-word;
-        }
-      }
-    }
-
-    ::ng-deep .p-button {
-      width: 100%;
-      justify-content: center;
-      font-weight: $font-weight-bold;
-      font-size: $font-size-xs;
-      padding: 8px;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-
-      &.p-button-success {
-        background: #2563EB;
-        border: none;
-
-        &:hover {
-          background: #1d4ed8;
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-        }
-      }
-
-      &.p-button-danger {
-        background: #EF4444;
-        border: none;
-
-        &:hover {
-          background: #DC2626;
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
-        }
-      }
+    &:active {
+      transform: translateY(0);
     }
   }
 
-  // Right Sidebar - Order Summary
-  .order-summary {
-    position: sticky;
-    top: $spacing-lg;
-    background: $white;
-    border-radius: 12px;
-    padding: $spacing-lg;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    border: 2px solid $gray-200;
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid $gray-200;
 
-    h3 {
-      margin: 0 0 $spacing-md 0;
-      font-size: $font-size-lg;
-      font-weight: $font-weight-bold;
-      color: $gray-900;
-      padding-bottom: $spacing-sm;
-      border-bottom: 2px solid #2563EB;
-    }
-
-    .summary-item {
+    .badge-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: $spacing-sm 0;
-      border-bottom: 1px solid $gray-100;
+      gap: 0.375rem;
+      font-size: 0.7rem;
+      color: $gray-600;
+      background: $gray-50;
+      padding: 0.375rem 0.625rem;
+      border-radius: 6px;
 
-      &:last-child {
-        border-bottom: none;
-        padding-top: $spacing-md;
-        margin-top: $spacing-sm;
-        border-top: 2px solid $gray-200;
-      }
-
-      .label {
-        font-size: $font-size-sm;
-        color: $gray-600;
-        font-weight: $font-weight-medium;
-      }
-
-      .value {
-        font-size: $font-size-sm;
-        color: $gray-900;
-        font-weight: $font-weight-semibold;
-      }
-
-      &.total {
-        .label {
-          font-size: $font-size-base;
-          font-weight: $font-weight-bold;
-          color: $gray-900;
-        }
-
-        .value {
-          font-size: $font-size-xl;
-          font-weight: $font-weight-bold;
-          color: #2563EB;
-        }
-      }
-    }
-
-    ::ng-deep .p-button {
-      width: 100%;
-      margin-top: $spacing-lg;
-      padding: 12px;
-      font-size: $font-size-base;
-      font-weight: $font-weight-bold;
-      border-radius: 8px;
-      background: #2563EB;
-      border: none;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: #1d4ed8;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-      }
-
-      &:active {
-        transform: translateY(0);
+      i {
+        font-size: 0.75rem;
+        color: #059669;
       }
     }
   }
 }
 
-// Responsive Design
-@media (max-width: $breakpoint-lg) {
-  .summary-container {
-    .summary-content {
-      grid-template-columns: 1fr;
-      gap: $spacing-md;
+// Help Card
+.help-card {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+
+  > i {
+    font-size: 1.5rem;
+    color: #2563EB;
+    flex-shrink: 0;
+  }
+
+  .help-content {
+    h4 {
+      margin: 0 0 0.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: $gray-900;
     }
 
-    .order-summary {
-      position: static;
-    }
-
-    .related-list {
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: $gray-600;
+      line-height: 1.4;
     }
   }
 }
 
+// Responsive
 @media (max-width: $breakpoint-md) {
-  .summary-container {
-    padding: $spacing-md;
+  .cart-page {
+    padding: 0 1rem 2rem;
+  }
 
-    .summary-header h2 {
-      font-size: $font-size-base;
+  .progress-steps {
+    padding: 1.5rem 0;
+    overflow-x: auto;
+
+    .step-line {
+      width: 30px;
     }
 
-    .product-row {
-      padding: $spacing-md;
+    .step .step-label {
+      font-size: 0.65rem;
+    }
+  }
 
-      .product-info {
-        gap: $spacing-sm;
-      }
+  .main-product .product-card {
+    flex-wrap: wrap;
 
-      .thumb {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-      }
-
-      .details .name {
-        font-size: $font-size-base;
-      }
+    .product-details {
+      flex: 1 1 100%;
+      order: 2;
     }
 
-    .related-list {
-      grid-template-columns: 1fr;
-      gap: $spacing-sm;
+    .product-price {
+      order: 1;
+      text-align: left;
     }
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .summary-card {
+    padding: 1.25rem;
   }
 }
 
 @media (max-width: $breakpoint-sm) {
-  .summary-container {
-    padding: $spacing-sm;
-
-    .summary-header {
-      margin-bottom: $spacing-md;
-
-      h2 {
-        font-size: $font-size-sm;
+  .progress-steps {
+    .step {
+      .step-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
       }
     }
 
-    .product-row {
-      padding: $spacing-sm;
-
-      .details .name {
-        font-size: $font-size-sm;
-      }
-    }
-
-    .related-box {
-      padding: $spacing-sm;
-
-      h3 {
-        font-size: $font-size-base;
-      }
-    }
-
-    .order-summary {
-      padding: $spacing-md;
+    .step-line {
+      width: 20px;
     }
   }
 }

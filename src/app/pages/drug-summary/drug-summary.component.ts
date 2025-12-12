@@ -29,14 +29,25 @@ export class DrugSummaryComponent implements OnInit {
   selectedRelatedIds = new Set<string>();
   questionnaireAnswers: QuestionnaireAnswer[] = [];
 
+  // New properties for display
+  selectedDose: string = '';
+  selectedQuantity: number = 0;
+  selectedPrice: number = 12.00;
+  selectedDrug: { imageUrl?: string } | null = null;
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.doseId = params['doseId'] ? +params['doseId'] : undefined;
       this.drugName = params['name'] || 'Drug';
+      this.selectedDose = params['dose'] || 'Standard Dose';
+      this.selectedQuantity = params['quantity'] ? +params['quantity'] : 1;
+      this.selectedPrice = params['price'] ? +params['price'] : 12.00;
+
       // Read questionnaire answers passed via navigation state
       const navigation = this.router.getCurrentNavigation();
       const state = navigation?.extras?.state || history.state;
       this.questionnaireAnswers = state?.['questionnaireAnswers'] || [];
+
       if (this.doseId) {
         this.fetchRelated();
       } else {
@@ -75,6 +86,22 @@ export class DrugSummaryComponent implements OnInit {
 
   isSelected(item: RelatedDrug): boolean {
     return this.selectedRelatedIds.has(item.id);
+  }
+
+  getSelectedRelatedItems(): RelatedDrug[] {
+    return this.relatedItems.filter(item => this.selectedRelatedIds.has(item.id));
+  }
+
+  calculateTax(): string {
+    const tax = this.selectedPrice * 0.10;
+    return tax.toFixed(2);
+  }
+
+  calculateTotal(): string {
+    const subtotal = this.selectedPrice;
+    const tax = subtotal * 0.10;
+    const total = subtotal + tax;
+    return total.toFixed(2);
   }
 
   proceedToCheckout(): void {
