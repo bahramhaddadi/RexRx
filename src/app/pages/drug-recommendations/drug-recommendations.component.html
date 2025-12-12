@@ -42,134 +42,112 @@
     <!-- Recommendations Content -->
     @if (!isLoading && !errorMessage) {
       <div class="recommendations-content">
-        <!-- Info Card -->
-        <div class="info-banner">
-          <div class="info-icon">
-            <i class="pi pi-info-circle"></i>
+        <!-- Selection Summary (Top) -->
+        @if (selectedDrugs.length > 0) {
+          <div class="selection-summary top">
+            <div class="summary-icon">
+              <i class="pi pi-shopping-cart"></i>
+            </div>
+            <div class="summary-text">
+              <strong>{{ selectedDrugs.length }}</strong>
+              {{ selectedDrugs.length === 1 ? 'medication' : 'medications' }} selected
+            </div>
           </div>
-          <div class="info-text">
-            <h4>How to choose?</h4>
-            <p>Review each recommended option carefully. You can select multiple medications to compare and add to your order.</p>
-          </div>
-        </div>
+        }
 
-        <!-- Carousel Section -->
-        <div class="carousel-section">
-          <div class="swiper-container">
-            <swiper-container
-              slides-per-view="1"
-              space-between="24"
-              navigation="true"
-              pagination="true"
-              pagination-clickable="true"
-              grab-cursor="true"
-              breakpoints='{"640": {"slidesPerView": 1, "spaceBetween": 20}, "768": {"slidesPerView": 2, "spaceBetween": 20}, "1024": {"slidesPerView": 3, "spaceBetween": 24}}'
-            >
-              @for (drug of recommendedDrugs; track drug.id) {
-                <swiper-slide>
-                  <div class="drug-card" [class.selected]="isSelected(drug)">
-                    <div class="card-inner">
-                      <!-- Selection Badge -->
-                      @if (isSelected(drug)) {
-                        <div class="selection-badge">
-                          <i class="pi pi-check-circle"></i>
-                          <span>Added to Order</span>
-                        </div>
-                      }
+        <!-- Drugs Grid -->
+        <div class="drugs-grid">
+          @for (drug of recommendedDrugs; track drug.id) {
+            <div class="drug-card"
+                 [class.selected]="isSelected(drug)"
+                 [class.inactive]="!drug.isActive"
+                 (click)="selectDrug(drug)">
 
-                      <!-- Card Header -->
-                      <div class="card-header">
-                        <div class="drug-icon">
-                          <i class="pi pi-shopping-bag"></i>
-                        </div>
-                        <h3 class="drug-title">{{ drug.title }}</h3>
-                        <span class="related-badge">
-                          <i class="pi pi-heart"></i>
-                          Related Drug
-                        </span>
-                      </div>
+              <!-- Selection Indicator -->
+              @if (isSelected(drug)) {
+                <div class="selection-indicator">
+                  <i class="pi pi-check-circle"></i>
+                </div>
+              }
 
-                      <!-- Drug Details -->
-                      <div class="drug-details">
-                        <div class="detail-item">
-                          <div class="detail-label">
-                            <i class="pi pi-tag"></i>
-                            <span>Brand</span>
-                          </div>
-                          <div class="detail-value">{{ drug.brandName }}</div>
-                        </div>
+              <!-- Card Content -->
+              <div class="card-content">
+                <!-- Left: Icon & Title -->
+                <div class="card-left">
+                  <div class="drug-icon">
+                    <i class="pi pi-shopping-bag"></i>
+                  </div>
+                  <div class="drug-info">
+                    <h3 class="drug-title">{{ drug.title }}</h3>
+                    <span class="related-badge">
+                      <i class="pi pi-heart"></i>
+                      Related Drug
+                    </span>
+                  </div>
+                </div>
 
-                        <div class="detail-item">
-                          <div class="detail-label">
-                            <i class="pi pi-box"></i>
-                            <span>Category</span>
-                          </div>
-                          <div class="detail-value">{{ drug.categoryName }}</div>
-                        </div>
-
-                        @if (drug.note) {
-                          <div class="detail-item note-item">
-                            <div class="detail-label">
-                              <i class="pi pi-info-circle"></i>
-                              <span>Note</span>
-                            </div>
-                            <div class="detail-value note-value">{{ drug.note }}</div>
-                          </div>
-                        }
-
-                        <div class="detail-item">
-                          <div class="detail-label">
-                            <i class="pi pi-clipboard"></i>
-                            <span>Type</span>
-                          </div>
-                          <div class="detail-value">
-                            <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">
-                              {{ drug.isGeneric ? 'Generic' : 'Brand Name' }}
-                            </span>
-                          </div>
-                        </div>
-
-                        @if (!drug.isActive) {
-                          <div class="inactive-notice">
-                            <i class="pi pi-exclamation-circle"></i>
-                            <span>Currently unavailable</span>
-                          </div>
-                        }
-                      </div>
-
-                      <!-- Card Footer -->
-                      <div class="card-footer">
-                        <p-button
-                          [label]="isSelected(drug) ? 'Remove from Order' : 'Add to Order'"
-                          [icon]="isSelected(drug) ? 'pi pi-times' : 'pi pi-plus'"
-                          [styleClass]="isSelected(drug) ? 'remove-button' : 'add-button'"
-                          [disabled]="!drug.isActive"
-                          (onClick)="selectDrug(drug)">
-                        </p-button>
-                      </div>
+                <!-- Right: Details -->
+                <div class="card-right">
+                  <div class="details-row">
+                    <div class="detail-group">
+                      <span class="detail-label">Brand:</span>
+                      <span class="detail-value">{{ drug.brandName }}</span>
+                    </div>
+                    <div class="detail-group">
+                      <span class="detail-label">Category:</span>
+                      <span class="detail-value">{{ drug.categoryName }}</span>
                     </div>
                   </div>
-                </swiper-slide>
-              }
-            </swiper-container>
-          </div>
 
-          <!-- Selection Summary -->
-          @if (selectedDrugs.length > 0) {
-            <div class="selection-summary">
-              <div class="summary-icon">
-                <i class="pi pi-shopping-cart"></i>
-              </div>
-              <div class="summary-text">
-                <strong>{{ selectedDrugs.length }}</strong>
-                {{ selectedDrugs.length === 1 ? 'medication' : 'medications' }} selected
+                  @if (drug.note) {
+                    <div class="note-section">
+                      <i class="pi pi-info-circle"></i>
+                      <span>{{ drug.note }}</span>
+                    </div>
+                  }
+
+                  <div class="type-section">
+                    <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">
+                      {{ drug.isGeneric ? 'Generic' : 'Brand Name' }}
+                    </span>
+                  </div>
+
+                  @if (!drug.isActive) {
+                    <div class="inactive-badge">
+                      <i class="pi pi-exclamation-circle"></i>
+                      Unavailable
+                    </div>
+                  }
+                </div>
+
+                <!-- Action Button -->
+                <div class="card-action">
+                  <button
+                    class="action-btn"
+                    [class.selected]="isSelected(drug)"
+                    [class.inactive]="!drug.isActive"
+                    [disabled]="!drug.isActive">
+                    <i [class]="isSelected(drug) ? 'pi pi-check' : 'pi pi-plus'"></i>
+                    <span>{{ isSelected(drug) ? 'Added' : 'Add' }}</span>
+                  </button>
+                </div>
               </div>
             </div>
           }
         </div>
+      </div>
+    }
 
-        <!-- Continue Button -->
-        <div class="actions">
+    <!-- Fixed Continue Button -->
+    @if (!isLoading && !errorMessage) {
+      <div class="fixed-footer">
+        <div class="footer-content">
+          @if (selectedDrugs.length > 0) {
+            <div class="footer-summary">
+              <i class="pi pi-shopping-cart"></i>
+              <span>{{ selectedDrugs.length }} selected</span>
+            </div>
+          }
           <p-button
             label="Continue to Checkout"
             icon="pi pi-arrow-right"
@@ -178,9 +156,6 @@
             [disabled]="selectedDrugs.length === 0"
             (onClick)="continueToCheckout()">
           </p-button>
-          @if (selectedDrugs.length === 0) {
-            <p class="action-hint">Select at least one medication to continue</p>
-          }
         </div>
       </div>
     }
