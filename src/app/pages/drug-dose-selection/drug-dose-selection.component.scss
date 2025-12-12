@@ -1,36 +1,86 @@
 @import "../../../styles/variables";
 
-// Modern Pharmacy-Themed Dose Selection Design
+// Modern Pharmacy-Themed Dose Selection Design - Redesigned 2025
 .dose-selection-container {
-  padding: $spacing-xl $spacing-2xl;
-  direction: ltr;
+  padding: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.03) 0%, rgba(255, 255, 255, 1) 100%);
 
+  // Enhanced Header Design
   .header {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-2xl;
-    padding-bottom: $spacing-lg;
-    border-bottom: 2px solid transparent;
-    border-image: linear-gradient(90deg, #2563EB 0%, #10B981 100%) 1;
+    padding: 2rem 3rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 50%, #10B981 100%);
+    border-radius: 0 0 32px 32px;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.2);
 
-    h1 {
-      margin: 0;
-      font-size: $font-size-2xl;
-      font-weight: $font-weight-bold;
-      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @media (max-width: $breakpoint-md) {
+      padding: 1.5rem 2rem;
+      border-radius: 0 0 24px 24px;
     }
 
-    .back-button {
-      font-size: $font-size-xl;
+    @media (max-width: $breakpoint-sm) {
+      padding: 1.25rem 1.25rem;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .header-content {
+      max-width: 800px;
+
+      .header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        color: $white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+
+        i {
+          font-size: 1rem;
+        }
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $white;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        line-height: 1.2;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 2rem;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 1.5rem;
+        }
+      }
+
+      .header-subtitle {
+        margin: 0;
+        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        line-height: 1.6;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 1rem;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9375rem;
+        }
+      }
     }
   }
 
+  // Loading State
   .loading-container {
     display: flex;
     flex-direction: column;
@@ -39,28 +89,56 @@
     min-height: 400px;
     gap: $spacing-lg;
     padding: $spacing-2xl;
+    margin: 0 3rem;
     background: $white;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 
-    ::ng-deep .custom-spinner {
-      .p-progress-spinner-circle {
-        stroke: url(#gradient);
-        animation: spin 1.5s linear infinite;
-      }
+    @media (max-width: $breakpoint-md) {
+      margin: 0 2rem;
+      padding: $spacing-xl;
+      border-radius: 20px;
     }
 
-    p {
-      color: $gray-700;
-      font-size: $font-size-base;
-      font-weight: $font-weight-medium;
-      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @media (max-width: $breakpoint-sm) {
+      margin: 0 1.25rem;
+      padding: $spacing-lg;
+      border-radius: 16px;
+    }
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+
+      ::ng-deep .custom-spinner {
+        .p-progress-spinner-circle {
+          stroke: url(#gradient);
+          animation: spin 1.5s linear infinite;
+        }
+      }
+
+      p {
+        color: $gray-700;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0;
+      }
+
+      .loading-subtext {
+        color: $gray-500;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+      }
     }
   }
 
+  // Error State
   .error-container {
     display: flex;
     flex-direction: column;
@@ -70,35 +148,66 @@
     gap: $spacing-lg;
     text-align: center;
     padding: $spacing-2xl;
+    margin: 0 3rem;
     background: $white;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.1);
     border: 2px solid rgba(239, 68, 68, 0.2);
 
-    i {
-      font-size: 4rem;
-      color: #EF4444;
-      animation: shake 0.5s ease;
+    @media (max-width: $breakpoint-md) {
+      margin: 0 2rem;
+      padding: $spacing-xl;
+      border-radius: 20px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      margin: 0 1.25rem;
+      padding: $spacing-lg;
+      border-radius: 16px;
+    }
+
+    .error-icon-wrapper {
+      width: 100px;
+      height: 100px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 3rem;
+        color: #EF4444;
+        animation: shake 0.5s ease;
+      }
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $gray-900;
     }
 
     p {
       color: $gray-700;
-      font-size: $font-size-lg;
+      font-size: $font-size-base;
       font-weight: $font-weight-medium;
       max-width: 400px;
+      margin: 0;
     }
 
     ::ng-deep .p-button {
       background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
       border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
+      border-radius: 12px;
+      padding: 0.875rem 2rem;
       font-weight: $font-weight-semibold;
       transition: all 0.3s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
       }
     }
   }
@@ -109,18 +218,36 @@
     75% { transform: translateX(10px); }
   }
 
+  // Dose Grid
   .dose-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: $spacing-xl;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    padding: 0 3rem 3rem;
+
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 0 2rem 2rem;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 0 1.25rem 2rem;
+    }
 
     .dose-card {
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       background: $white;
-      border: 2px solid transparent;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       overflow: hidden;
       position: relative;
 
@@ -131,7 +258,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        border-radius: 16px;
+        border-radius: 20px;
         padding: 2px;
         background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -142,8 +269,8 @@
       }
 
       &:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15), 0 8px 16px rgba(16, 185, 129, 0.1);
+        transform: translateY(-12px);
+        box-shadow: 0 16px 40px rgba(37, 99, 235, 0.2), 0 8px 20px rgba(16, 185, 129, 0.15);
 
         &::before {
           opacity: 1;
@@ -153,111 +280,190 @@
           transform: scale(1.05);
         }
 
-        .dose-footer .select-button {
-          background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-          transform: translateY(-2px);
+        .dose-footer {
+          ::ng-deep .select-button .p-button {
+            background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+          }
+        }
+
+        .card-badge {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
-      .dose-content {
+      .dose-card-inner {
         display: flex;
         flex-direction: column;
-        gap: $spacing-md;
         height: 100%;
-        padding: $spacing-lg;
+        padding: 1.5rem;
+        gap: 1rem;
+
+        .card-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          color: $white;
+          padding: 0.375rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+          opacity: 0;
+          transform: translateY(-10px);
+          transition: all 0.3s ease;
+          z-index: 2;
+
+          i {
+            font-size: 0.875rem;
+          }
+        }
 
         .drug-image-container {
           width: 100%;
-          height: 220px;
-          margin-bottom: $spacing-sm;
-          border-radius: 12px;
+          height: 240px;
+          border-radius: 16px;
           overflow: hidden;
-          background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+          background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
           display: flex;
           align-items: center;
           justify-content: center;
           transition: transform 0.3s ease;
+          position: relative;
 
-          img {
+          &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.05) 100%);
+          }
+
+          .drug-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
           }
         }
 
-        .dose-header {
+        .dose-info {
+          flex: 1;
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-bottom: $spacing-md;
-          border-bottom: 2px solid $gray-100;
+          flex-direction: column;
+          gap: 1rem;
 
-          h3 {
-            margin: 0;
-            font-size: $font-size-xl;
-            font-weight: $font-weight-bold;
-            color: $gray-900;
+          .dose-header {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid $gray-100;
 
-            &::before {
-              content: '💊';
-              font-size: 1.2em;
+            .dose-title {
+              display: flex;
+              align-items: center;
+              gap: 0.625rem;
+
+              i {
+                font-size: 1.5rem;
+                color: #2563EB;
+              }
+
+              h3 {
+                margin: 0;
+                font-size: 1.375rem;
+                font-weight: 700;
+                color: $gray-900;
+                line-height: 1.2;
+              }
+            }
+
+            .dose-price {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 0.25rem;
+
+              .price-label {
+                font-size: 0.75rem;
+                color: $gray-500;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              }
+
+              .price {
+                font-size: 1.5rem;
+                font-weight: 700;
+                background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              }
             }
           }
 
-          .price {
-            font-size: $font-size-lg;
-            font-weight: $font-weight-bold;
-            background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-          }
-        }
-
-        .dose-details {
-          flex: 1;
-
-          .quantity {
+          .dose-details {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
-            border-radius: 8px;
-            color: $gray-700;
-            font-size: $font-size-sm;
-            font-weight: $font-weight-medium;
+            flex-direction: column;
+            gap: 0.75rem;
 
-            i {
-              color: #2563EB;
-              font-size: 1rem;
+            .detail-item {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 0.875rem 1rem;
+              background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+              border-radius: 12px;
+              border-left: 3px solid #2563EB;
+
+              i {
+                color: #2563EB;
+                font-size: 1.125rem;
+                flex-shrink: 0;
+              }
+
+              span {
+                color: $gray-700;
+                font-size: 0.9375rem;
+                font-weight: 500;
+                line-height: 1.4;
+              }
             }
           }
         }
 
         .dose-footer {
-          display: flex;
-          justify-content: stretch;
-          padding-top: $spacing-sm;
+          margin-top: auto;
+          padding-top: 1rem;
 
-          ::ng-deep .p-button {
+          ::ng-deep .select-button {
             width: 100%;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(16, 185, 129, 0.9) 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 24px;
-            font-weight: $font-weight-semibold;
-            font-size: $font-size-base;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 
-            &:hover {
+            .p-button {
+              width: 100%;
               background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-              box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+              border: none;
+              border-radius: 12px;
+              padding: 1rem 1.5rem;
+              font-weight: 600;
+              font-size: 1rem;
+              transition: all 0.3s ease;
+              box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+
+              &:hover {
+                background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+                box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+              }
+
+              &:active {
+                transform: translateY(0);
+              }
             }
           }
         }
@@ -265,89 +471,88 @@
     }
   }
 
+  // No Doses State
   .no-doses {
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 400px;
-    gap: $spacing-lg;
+    gap: 1.5rem;
     text-align: center;
     padding: $spacing-2xl;
     background: $white;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 2px dashed $gray-300;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+    border: 2px dashed rgba(37, 99, 235, 0.3);
 
-    i {
-      font-size: 4rem;
-      background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @media (max-width: $breakpoint-md) {
+      padding: $spacing-xl;
+      border-radius: 20px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-lg;
+      border-radius: 16px;
+      min-height: 300px;
+    }
+
+    .no-doses-icon-wrapper {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: $breakpoint-sm) {
+        width: 80px;
+        height: 80px;
+      }
+
+      i {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 2.5rem;
+        }
+      }
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $gray-900;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 1.25rem;
+      }
     }
 
     p {
       color: $gray-600;
-      font-size: $font-size-lg;
-      font-weight: $font-weight-medium;
-    }
-  }
-}
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0;
+      max-width: 500px;
+      line-height: 1.6;
 
-// Responsive Design
-@media (max-width: $breakpoint-md) {
-  .dose-selection-container {
-    padding: $spacing-lg;
-
-    .header {
-      h1 {
-        font-size: $font-size-xl;
+      @media (max-width: $breakpoint-sm) {
+        font-size: 0.9375rem;
       }
     }
 
-    .dose-grid {
-      gap: $spacing-md;
-
-      .dose-card {
-        flex: 0 1 calc(50% - $spacing-md);
-        min-width: 200px;
-      }
-    }
-  }
-}
-
-@media (max-width: $breakpoint-sm) {
-  .dose-selection-container {
-    padding: $spacing-md;
-
-    .header {
-      h1 {
-        font-size: $font-size-lg;
-      }
-    }
-
-    .dose-grid {
-      gap: $spacing-sm;
-
-      .dose-card {
-        flex: 0 1 100%;
-        min-width: 100%;
-
-        .dose-content {
-          padding: $spacing-sm;
-
-          .dose-header {
-            h3 {
-              font-size: $font-size-base;
-            }
-
-            .price {
-              font-size: $font-size-sm;
-            }
-          }
-        }
-      }
+    .no-doses-help {
+      color: $gray-500;
+      font-size: 0.875rem;
+      margin-top: -0.5rem;
     }
   }
 }
