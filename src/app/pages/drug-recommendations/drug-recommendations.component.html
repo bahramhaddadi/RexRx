@@ -72,17 +72,25 @@
 
               <!-- Card Content -->
               <div class="card-content">
-                <!-- Left: Icon & Title -->
+                <!-- Left: Image & Title -->
                 <div class="card-left">
-                  <div class="drug-icon">
-                    <i class="pi pi-shopping-bag"></i>
+                  <div class="drug-image-wrapper">
+                    @if (drug.imageUrl) {
+                      <img [src]="drug.imageUrl" [alt]="drug.title" class="drug-image">
+                    } @else {
+                      <div class="drug-icon-placeholder">
+                        <i class="pi pi-shopping-bag"></i>
+                      </div>
+                    }
                   </div>
                   <div class="drug-info">
                     <h3 class="drug-title">{{ drug.title }}</h3>
-                    <span class="related-badge">
-                      <i class="pi pi-heart"></i>
-                      Related Drug
-                    </span>
+                    <div class="drug-subtitle">
+                      <span class="dose-badge">
+                        <i class="pi pi-tag"></i>
+                        {{ drug.dose }}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -99,18 +107,22 @@
                     </div>
                   </div>
 
+                  <div class="price-row">
+                    <div class="price-info">
+                      <span class="price-label">Price:</span>
+                      <span class="price-value">${{ drug.price }}</span>
+                    </div>
+                    <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">
+                      {{ drug.isGeneric ? 'Generic' : 'Brand Name' }}
+                    </span>
+                  </div>
+
                   @if (drug.note) {
                     <div class="note-section">
                       <i class="pi pi-info-circle"></i>
                       <span>{{ drug.note }}</span>
                     </div>
                   }
-
-                  <div class="type-section">
-                    <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">
-                      {{ drug.isGeneric ? 'Generic' : 'Brand Name' }}
-                    </span>
-                  </div>
 
                   @if (!drug.isActive) {
                     <div class="inactive-badge">
