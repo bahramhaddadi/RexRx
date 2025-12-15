@@ -26,28 +26,42 @@
     @if (!isLoading && !errorMessage) {
       <!-- Banner / Introduction Section -->
       <div class="intro-section">
-        <p-card class="info-card">
-          <div class="info-content">
-            <h2 class="info-title">Online, Shipped To You.</h2>
-            <ul class="features-list">
-              <li>Health Canada–Approved medication</li>
-              <li>Generic & Brand name available</li>
-              <li>100% online—no doctor visits</li>
-              <li>No doctor visit needed</li>
-            </ul>
-            <p-button
-              label="Help me choose"
-              icon="pi pi-question-circle"
-              (onClick)="onHelpMeChoose()"
-              styleClass="help-button">
-            </p-button>
+        <div class="info-card">
+          <div class="card-background-gradient"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-shopping-bag"></i>
+            </div>
+            <div class="card-text">
+              <h2 class="info-title">Online, Shipped To You.</h2>
+              <ul class="features-list">
+                <li><i class="pi pi-check-circle"></i><span>Health Canada–Approved medication</span></li>
+                <li><i class="pi pi-check-circle"></i><span>Generic & Brand name available</span></li>
+                <li><i class="pi pi-check-circle"></i><span>100% online—no doctor visits</span></li>
+                <li><i class="pi pi-check-circle"></i><span>Fast & discreet shipping</span></li>
+              </ul>
+            </div>
+            <div class="card-action">
+              <p-button
+                label="Help me choose"
+                icon="pi pi-question-circle"
+                (onClick)="onHelpMeChoose()"
+                styleClass="help-button">
+              </p-button>
+            </div>
           </div>
-        </p-card>
+        </div>
       </div>
 
       <!-- I Know What I Want Section -->
       <div class="selection-section">
-        <h2 class="section-title">I know what I want</h2>
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <i class="pi pi-list"></i>
+            <h2 class="section-title">I know what I want</h2>
+          </div>
+          <p class="section-subtitle">Select the medication that works best for you</p>
+        </div>
 
         <div class="drug-grid">
           @for (drug of filteredDrugs; track drug.eid) {
@@ -59,8 +73,11 @@
           <!-- Empty State -->
           @if (filteredDrugs.length === 0) {
             <div class="empty-state">
-              <i class="pi pi-inbox empty-icon"></i>
-              <p>No drugs found in this category.</p>
+              <div class="empty-icon-wrapper">
+                <i class="pi pi-inbox empty-icon"></i>
+              </div>
+              <h3>No medications found</h3>
+              <p>We couldn't find any medications in this category.</p>
             </div>
           }
         </div>

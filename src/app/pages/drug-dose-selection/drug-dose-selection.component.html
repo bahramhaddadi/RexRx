@@ -1,26 +1,39 @@
 <app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Products'">
   <div class="dose-selection-container">
-    <!-- Page Title -->
+    <!-- Page Header with Enhanced Design -->
     <div class="header">
-      <h1>{{ drugName }}</h1>
+      <div class="header-content">
+        <div class="header-badge">
+          <i class="pi pi-tag"></i>
+          <span>Select Dosage</span>
+        </div>
+        <h1>{{ drugName }}</h1>
+        <p class="header-subtitle">Choose the dosage and quantity that's right for you</p>
+      </div>
     </div>
 
   <!-- Loading Spinner -->
   @if (isLoading) {
     <div class="loading-container">
-      <p-progressSpinner
-        styleClass="custom-spinner"
-        strokeWidth="4"
-        animationDuration="1s">
-      </p-progressSpinner>
-      <p>Loading doses...</p>
+      <div class="loading-content">
+        <p-progressSpinner
+          styleClass="custom-spinner"
+          strokeWidth="4"
+          animationDuration="1s">
+        </p-progressSpinner>
+        <p>Loading available doses...</p>
+        <span class="loading-subtext">This will only take a moment</span>
+      </div>
     </div>
   }
 
   <!-- Error Message -->
   @if (errorMessage && !isLoading) {
     <div class="error-container">
-      <i class="pi pi-exclamation-triangle"></i>
+      <div class="error-icon-wrapper">
+        <i class="pi pi-exclamation-triangle"></i>
+      </div>
+      <h3>Oops! Something went wrong</h3>
       <p>{{ errorMessage }}</p>
       <p-button
         label="Try Again"
@@ -34,40 +47,57 @@
   @if (!isLoading && !errorMessage) {
     <div class="dose-grid">
       @for (dose of doses; track dose.id) {
-        <p-card
-          class="dose-card"
-          (click)="onDoseSelect(dose)">
-          <div class="dose-content">
-            <div class="drug-image-container">
-              <img [src]=dose.imageUrl [alt]=dose.dose class="drug-image">
+        <div class="dose-card" (click)="onDoseSelect(dose)">
+          <div class="dose-card-inner">
+            <div class="card-badge">
+              <i class="pi pi-star-fill"></i>
+              <span>Popular</span>
             </div>
 
-            <div class="dose-header">
-              <h3>{{ dose.dose }}</h3>
-              <span class="price">{{ dose.price | currency:'USD':'symbol':'1.2-2' }}</span>
+            <div class="drug-image-container">
+              <img [src]="dose.imageUrl" [alt]="dose.dose" class="drug-image">
             </div>
-            <div class="dose-details">
-              <p class="quantity">
-                <i class="pi pi-box"></i>
-                Quantity: {{ dose.quantityInPack }}
-              </p>
+
+            <div class="dose-info">
+              <div class="dose-header">
+                <div class="dose-title">
+                  <i class="pi pi-tablet"></i>
+                  <h3>{{ dose.dose }}</h3>
+                </div>
+                <div class="dose-price">
+                  <span class="price-label">Price</span>
+                  <span class="price">{{ dose.price | currency:'USD':'symbol':'1.2-2' }}</span>
+                </div>
+              </div>
+
+              <div class="dose-details">
+                <div class="detail-item">
+                  <i class="pi pi-box"></i>
+                  <span>{{ dose.quantityInPack }} {{ dose.quantityInPack === 1 ? 'tablet' : 'tablets' }} per pack</span>
+                </div>
+              </div>
             </div>
+
             <div class="dose-footer">
               <p-button
-                label="Select"
-                icon="pi pi-check"
-                styleClass="p-button-sm">
+                label="Select This Dose"
+                icon="pi pi-shopping-cart"
+                styleClass="select-button">
               </p-button>
             </div>
           </div>
-        </p-card>
+        </div>
       }
 
       <!-- No Doses Available -->
       @if (doses.length === 0) {
         <div class="no-doses">
-          <i class="pi pi-info-circle"></i>
-          <p>No doses available for this drug</p>
+          <div class="no-doses-icon-wrapper">
+            <i class="pi pi-info-circle"></i>
+          </div>
+          <h3>No doses available</h3>
+          <p>We couldn't find any available doses for this medication at the moment.</p>
+          <p class="no-doses-help">Please try again later or contact support for assistance.</p>
         </div>
       }
     </div>

@@ -1,75 +1,175 @@
-<app-page-layout>
-  <div class="recommendations-container">
-    <!-- Loading -->
-    <div *ngIf="isLoading" class="loading-container">
-      <p-progressSpinner></p-progressSpinner>
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Questions'">
+  <div class="recommendations-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-badge">
+          <i class="pi pi-star"></i>
+          <span>Personalized For You</span>
+        </div>
+        <h1>Recommended dose and brand</h1>
+        <p class="header-subtitle">Based on your health profile, we've selected the best options for you</p>
+      </div>
     </div>
 
-    <!-- Error -->
-    <p-message *ngIf="!isLoading && errorMessage" severity="error" [text]="errorMessage"></p-message>
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="loading-container">
+        <div class="loading-content">
+          <p-progressSpinner strokeWidth="4" animationDuration="1s"></p-progressSpinner>
+          <p>Finding the best recommendations for you...</p>
+          <span class="loading-subtext">This will only take a moment</span>
+        </div>
+      </div>
+    }
 
-    <!-- Content based on API -->
-    <div *ngIf="!isLoading && !errorMessage" class="centered">
-      <h2 class="title">Recommended dose and brand</h2>
+    <!-- Error State -->
+    @if (errorMessage && !isLoading) {
+      <div class="error-container">
+        <div class="error-icon-wrapper">
+          <i class="pi pi-exclamation-triangle"></i>
+        </div>
+        <h3>Oops! Something went wrong</h3>
+        <p>{{ errorMessage }}</p>
+        <p-button
+          label="Try Again"
+          icon="pi pi-refresh"
+          (onClick)="loadRecommendedDrugs()">
+        </p-button>
+      </div>
+    }
 
-      <div class="swiper-container">
-        <swiper-container
-          slides-per-view="1"
-          space-between="20"
-          navigation="true"
-          pagination="true"
-          pagination-clickable="true"
-          grab-cursor="true"
-          breakpoints='{"640": {"slidesPerView": 1}, "768": {"slidesPerView": 2}, "1024": {"slidesPerView": 3}}'
-        >
-          <swiper-slide *ngFor="let drug of recommendedDrugs">
-            <p-card class="drug-card">
-              <ng-template pTemplate="header">
-                <div class="card-header">
-                  <h3 class="drug-title">{{ drug.title }}</h3>
-                  <div class="badges">
-                    <span class="status-badge related">Related Drug</span>
-                    <span *ngIf="isSelected(drug)" class="status-badge added">Added to Order</span>
-                    <span *ngIf="!drug.isActive" class="status-badge inactive">Inactive</span>
+    <!-- Recommendations Content -->
+    @if (!isLoading && !errorMessage) {
+      <div class="recommendations-content">
+        <!-- Selection Summary (Top) -->
+        @if (selectedDrugs.length > 0) {
+          <div class="selection-summary top">
+            <div class="summary-icon">
+              <i class="pi pi-shopping-cart"></i>
+            </div>
+            <div class="summary-text">
+              <strong>{{ selectedDrugs.length }}</strong>
+              {{ selectedDrugs.length === 1 ? 'medication' : 'medications' }} selected
+            </div>
+          </div>
+        }
+
+        <!-- Drugs Grid -->
+        <div class="drugs-grid">
+          @for (drug of recommendedDrugs; track drug.id) {
+            <div class="drug-card"
+                 [class.selected]="isSelected(drug)"
+                 [class.inactive]="!drug.isActive"
+                 (click)="selectDrug(drug)">
+
+              <!-- Selection Indicator -->
+              @if (isSelected(drug)) {
+                <div class="selection-indicator">
+                  <i class="pi pi-check-circle"></i>
+                </div>
+              }
+
+              <!-- Card Content -->
+              <div class="card-content">
+                <!-- Left: Image & Title -->
+                <div class="card-left">
+                  <div class="drug-image-wrapper">
+                    @if (drug.imageUrl) {
+                      <img [src]="drug.imageUrl" [alt]="drug.title" class="drug-image">
+                    } @else {
+                      <div class="drug-icon-placeholder">
+                        <i class="pi pi-shopping-bag"></i>
+                      </div>
+                    }
+                  </div>
+                  <div class="drug-info">
+                    <h3 class="drug-title">{{ drug.title }}</h3>
+                    <div class="drug-subtitle">
+                      <span class="dose-badge">
+                        <i class="pi pi-tag"></i>
+                        {{ drug.dose }}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </ng-template>
-              <div class="drug-details">
-                <div class="detail-row">
-                  <span class="label">Brand:</span>
-                  <span class="value">{{ drug.brandName }}</span>
+
+                <!-- Right: Details -->
+                <div class="card-right">
+                  <div class="details-row">
+                    <div class="detail-group">
+                      <span class="detail-label">Brand:</span>
+                      <span class="detail-value">{{ drug.brandName }}</span>
+                    </div>
+                    <div class="detail-group">
+                      <span class="detail-label">Category:</span>
+                      <span class="detail-value">{{ drug.categoryName }}</span>
+                    </div>
+                  </div>
+
+                  <div class="price-row">
+                    <div class="price-info">
+                      <span class="price-label">Price:</span>
+                      <span class="price-value">${{ drug.price }}</span>
+                    </div>
+<!--                    <span class="type-badge" [class.generic]="drug.isGeneric" [class.brand]="!drug.isGeneric">-->
+<!--                      {{ drug.isGeneric ? 'Generic' : drug.brandName }}-->
+<!--                    </span>-->
+                  </div>
+
+                  @if (drug.note) {
+                    <div class="note-section">
+                      <i class="pi pi-info-circle"></i>
+                      <span>{{ drug.note }}</span>
+                    </div>
+                  }
+
+                  @if (!drug.isActive) {
+                    <div class="inactive-badge">
+                      <i class="pi pi-exclamation-circle"></i>
+                      Unavailable
+                    </div>
+                  }
                 </div>
-                <div class="detail-row">
-                  <span class="label">Category:</span>
-                  <span class="value">{{ drug.categoryName }}</span>
-                </div>
-                <div *ngIf="drug.note" class="detail-row">
-                  <span class="label">Note:</span>
-                  <span class="value">{{ drug.note }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="label">Type:</span>
-                  <span class="value">{{ drug.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+
+                <!-- Action Button -->
+                <div class="card-action">
+                  <button
+                    class="action-btn"
+                    [class.selected]="isSelected(drug)"
+                    [class.inactive]="!drug.isActive"
+                    [disabled]="!drug.isActive">
+                    <i [class]="isSelected(drug) ? 'pi pi-check' : 'pi pi-plus'"></i>
+                    <span>{{ isSelected(drug) ? 'Added' : 'Add' }}</span>
+                  </button>
                 </div>
               </div>
-              <ng-template pTemplate="footer">
-                <button
-                  pButton
-                  type="button"
-                  [label]="isSelected(drug) ? 'Remove from Order' : 'Add to Order'"
-                  [class]="isSelected(drug) ? 'p-button-danger' : 'p-button-success'"
-                  [icon]="isSelected(drug) ? 'pi pi-times' : 'pi pi-plus'"
-                  (click)="selectDrug(drug)"
-                ></button>
-              </ng-template>
-            </p-card>
-          </swiper-slide>
-        </swiper-container>
+            </div>
+          }
+        </div>
       </div>
+    }
 
-      <div class="actions">
-        <button pButton type="button" label="Continue" (click)="continueToCheckout()"></button>
+    <!-- Fixed Continue Button -->
+    @if (!isLoading && !errorMessage) {
+      <div class="fixed-footer">
+        <div class="footer-content">
+          @if (selectedDrugs.length > 0) {
+            <div class="footer-summary">
+              <i class="pi pi-shopping-cart"></i>
+              <span>{{ selectedDrugs.length }} selected</span>
+            </div>
+          }
+          <p-button
+            label="Continue to Checkout"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            styleClass="continue-button"
+            [disabled]="selectedDrugs.length === 0"
+            (onClick)="continueToCheckout()">
+          </p-button>
+        </div>
       </div>
-    </div>
+    }
   </div>
 </app-page-layout>
