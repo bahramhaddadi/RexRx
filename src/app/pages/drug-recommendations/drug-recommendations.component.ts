@@ -102,7 +102,7 @@ export class DrugRecommendationsComponent implements OnInit {
    * Toggle drug selection
    */
   selectDrug(drug: RelatedDrug): void {
-    const index = this.selectedDrugs.findIndex(d => d.id === drug.id);
+    const index = this.selectedDrugs.findIndex(d => d.doseId === drug.doseId);
 
     if (index > -1) {
       // Remove if already selected
@@ -117,7 +117,7 @@ export class DrugRecommendationsComponent implements OnInit {
    * Check if drug is already selected
    */
   isSelected(drug: RelatedDrug): boolean {
-    return this.selectedDrugs.some(d => d.id === drug.id);
+    return this.selectedDrugs.some(d => d.doseId === drug.doseId);
   }
 
   /**
@@ -131,7 +131,7 @@ export class DrugRecommendationsComponent implements OnInit {
 
     // Convert selected drugs to cart items
     const items: CartItem[] = this.selectedDrugs.map(drug => ({
-      itemDosageId: parseInt(drug.id, 10),
+      itemDosageId: this.selectedDrugs[0].doseId,
       quantity: 1,
       questionnaireAnswers: this.questionnaireAnswers || []
     }));
