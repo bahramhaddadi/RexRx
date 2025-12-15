@@ -43,21 +43,20 @@
     @if (!isLoading && !errorMessage) {
       <div class="recommendations-content">
         <!-- Selection Summary (Top) -->
-        @if (selectedDrugs.length > 0) {
+        @if (selectedDrug) {
           <div class="selection-summary top">
             <div class="summary-icon">
               <i class="pi pi-shopping-cart"></i>
             </div>
             <div class="summary-text">
-              <strong>{{ selectedDrugs.length }}</strong>
-              {{ selectedDrugs.length === 1 ? 'medication' : 'medications' }} selected
+              <strong>1</strong> medication selected
             </div>
           </div>
         }
 
         <!-- Drugs Grid -->
         <div class="drugs-grid">
-          @for (drug of recommendedDrugs; track drug.id) {
+          @for (drug of recommendedDrugs; track drug.doseId) {
             <div class="drug-card"
                  [class.selected]="isSelected(drug)"
                  [class.inactive]="!drug.isActive"
@@ -154,10 +153,10 @@
     @if (!isLoading && !errorMessage) {
       <div class="fixed-footer">
         <div class="footer-content">
-          @if (selectedDrugs.length > 0) {
+          @if (selectedDrug) {
             <div class="footer-summary">
               <i class="pi pi-shopping-cart"></i>
-              <span>{{ selectedDrugs.length }} selected</span>
+              <span>1 selected</span>
             </div>
           }
           <p-button
@@ -165,7 +164,7 @@
             icon="pi pi-arrow-right"
             iconPos="right"
             styleClass="continue-button"
-            [disabled]="selectedDrugs.length === 0"
+            [disabled]="!selectedDrug"
             (onClick)="continueToCheckout()">
           </p-button>
         </div>
