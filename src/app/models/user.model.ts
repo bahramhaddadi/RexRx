@@ -192,7 +192,7 @@ export interface GetOrdersRequest {
 export interface GetOrdersResponse {
   body: {
     list: Order[];
-    totalCount: number;
+    totalRecords: number;
     pageNumber: number;
     pageSize: number;
   };

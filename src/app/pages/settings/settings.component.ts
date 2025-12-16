@@ -413,7 +413,7 @@ export class SettingsComponent implements OnInit {
       next: (response) => {
         if (response.errorCode === 0 && response.body) {
           this.orders = response.body.list || [];
-          this.ordersTotalRecords = response.body.totalCount || 0;
+          this.ordersTotalRecords = response.body.totalRecords || 0;
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load orders.';
