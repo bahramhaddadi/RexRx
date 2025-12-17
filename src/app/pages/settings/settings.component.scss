@@ -385,6 +385,55 @@
       color: var(--purple-700);
       border: 1px solid var(--purple-200);
     }
+
+    &.status-5 { //rejected by doctor
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-6 { //Waiting for pharmacist review
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-7 { //Under pharmacist's review
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-8 { //Rejected by pharmacist
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-9 { //Waiting for shipment
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-10 { //Shipped
+      background: var(--purple-50);
+      color: var(--purple-700);
+      border: 1px solid var(--purple-200);
+    }
+
+    &.status-11 { //Delivered
+      background: var(--green-50);
+      color: var(--green-700);
+      border: 1px solid var(--green-200);
+    }
+
+    &.status-12 { //Cancelled
+      background: var(--red-50);
+      color: var(--red-700);
+      border: 1px solid var(--red-200);
+    }
+
   }
 
   .tracking-link {

@@ -164,11 +164,16 @@ export interface Order {
   id: string;
   orderDate: string;
   orderStatus: number;
-  orderStatusName: string;
+  statusName: string;
+  drugs: string;
+  shippingStatusURL: string;
+  doctorAction: string;
+  pharmacistAction: string;
+  shippingAddress: string | null;
+  total: number;
+
   trackingNumber: string | null;
   items: OrderItem[];
-  totalAmount: number;
-  shippingAddress: string | null;
 }
 
 /**
@@ -186,8 +191,8 @@ export interface GetOrdersRequest {
  */
 export interface GetOrdersResponse {
   body: {
-    orders: Order[];
-    totalCount: number;
+    list: Order[];
+    totalRecords: number;
     pageNumber: number;
     pageSize: number;
   };

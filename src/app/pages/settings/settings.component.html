@@ -282,35 +282,38 @@
                   <th>Drugs</th>
                   <th>Date</th>
                   <th>Status</th>
+                  <th>Total</th>
                   <th>Delivery</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-order>
                 <tr>
-                  <td>
+                  <!-- <td>
                     <div class="order-items">
                       <div *ngFor="let item of order.items" class="order-item">
                         {{ item.quantity }} x {{ item.itemName }}
                         <span *ngIf="item.dose" class="item-dose">({{ item.dose }})</span>
                       </div>
                     </div>
-                  </td>
+                  </td> -->
+                  <td>{{ order.drugs }}</td>
                   <td>{{ formatOrderDate(order.orderDate) }}</td>
                   <td>
                     <span class="order-status" [ngClass]="'status-' + order.orderStatus">
-                      {{ order.orderStatusName }}
+                      {{ order.statusName }}
                     </span>
                   </td>
+                  <td>${{ order.total }}</td>
                   <td>
                     <a
-                      *ngIf="order.trackingNumber"
-                      [href]="'https://track.example.com/' + order.trackingNumber"
+                      *ngIf="order.shippingStatusURL"
+                      [href]="order.shippingStatusURL"
                       target="_blank"
                       class="tracking-link"
                     >
-                      {{ order.trackingNumber }}
+                      Track
                     </a>
-                    <span *ngIf="!order.trackingNumber">-</span>
+                    <span *ngIf="!order.shippingStatusURL"></span>
                   </td>
                 </tr>
               </ng-template>
