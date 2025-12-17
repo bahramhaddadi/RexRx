@@ -381,17 +381,82 @@
             <h3>Order Summary</h3>
           </div>
 
-          <div class="summary-item main-item">
-            <div class="item-info">
-              <div class="item-icon">
-                <i class="pi pi-box"></i>
+          <!-- Cart Items -->
+          @if (cartItems.length > 0) {
+            @for (item of cartItems; track item.itemDosageId) {
+              <div class="summary-item" [class.main-item]="isMainItem(item)">
+                <div class="item-info">
+                  <div class="item-icon">
+                    <i class="pi pi-box"></i>
+                  </div>
+                  <div class="item-details">
+                    <h4>{{ getCartItemName(item) }}</h4>
+                    <span class="item-qty">Qty: {{ item.quantity }}</span>
+                  </div>
+                </div>
+                @if (!isMainItem(item)) {
+                  <button
+                    type="button"
+                    class="remove-item-btn"
+                    (click)="removeItemFromCart(item)"
+                    title="Remove item">
+                    <i class="pi pi-times"></i>
+                  </button>
+                }
               </div>
-              <div class="item-details">
-                <h4>{{ drugName || 'Your Medication' }}</h4>
-                <span class="item-qty">Qty: 1</span>
+            }
+          } @else {
+            <div class="summary-item main-item">
+              <div class="item-info">
+                <div class="item-icon">
+                  <i class="pi pi-box"></i>
+                </div>
+                <div class="item-details">
+                  <h4>{{ drugName || 'Your Medication' }}</h4>
+                  <span class="item-qty">Qty: 1</span>
+                </div>
               </div>
             </div>
-          </div>
+          }
+
+          <div class="summary-divider"></div>
+
+          <!-- Related Items Section -->
+          @if (relatedItems.length > 0) {
+            <div class="related-items-section">
+              <div class="related-header">
+                <i class="pi pi-plus-circle"></i>
+                <h4>Add Related Items</h4>
+              </div>
+              @if (isLoadingRelated) {
+                <div class="loading-related">
+                  <p-progressSpinner strokeWidth="4" [style]="{width: '30px', height: '30px'}"></p-progressSpinner>
+                  <span>Loading related items...</span>
+                </div>
+              } @else {
+                @for (item of relatedItems; track item.doseId) {
+                  <div class="related-item">
+                    <div class="related-info">
+                      <h5>{{ item.title || item.brandName }}</h5>
+                      <span class="related-dose">{{ item.dose }}</span>
+                      @if (item.price) {
+                        <span class="related-price">${{ item.price.toFixed(2) }}</span>
+                      }
+                    </div>
+                    <button
+                      type="button"
+                      class="add-item-btn"
+                      (click)="addItemToCart(item)"
+                      title="Add to cart">
+                      <i class="pi pi-plus"></i>
+                      <span>Add</span>
+                    </button>
+                  </div>
+                }
+              }
+            </div>
+            <div class="summary-divider"></div>
+          }
 
           <div class="summary-divider"></div>
 

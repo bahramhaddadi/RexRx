@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { UserService } from '../../services/user.service';
-import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody, RelatedDrug } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -68,6 +68,10 @@ export class CheckoutComponent implements OnInit {
   successMessage: string = '';
   cartId: string = ''; // Stores the cart ID from SaveCart API
 
+  // Related items for upsell
+  relatedItems: RelatedDrug[] = [];
+  isLoadingRelated: boolean = false;
+
   // Dropdown options
   sexOptions = [
     { label: 'Male', value: 'Male' },
@@ -106,6 +110,11 @@ export class CheckoutComponent implements OnInit {
 
     // Fetch user profile and pre-fill form fields
     this.loadUserProfile();
+
+    // Load related items for the main drug
+    if (this.doseId) {
+      this.loadRelatedItems();
+    }
   }
 
   /**
@@ -143,6 +152,101 @@ export class CheckoutComponent implements OnInit {
         // Don't show error to user, just log it - form can still be filled manually
       }
     });
+  }
+
+  /**
+   * Loads related items for upsell
+   */
+  loadRelatedItems(): void {
+    if (!this.doseId) return;
+
+    this.isLoadingRelated = true;
+    this.drugService.getRelatedItems(this.doseId).subscribe({
+      next: (res) => {
+        if (res.errorCode === 0) {
+          this.relatedItems = (res.body || []).filter(item => {
+            // Filter out items already in cart
+            return !this.cartItems.some(cartItem => cartItem.itemDosageId === item.doseId);
+          });
+        } else {
+          console.warn('Failed to load related products:', res.errorMessage);
+        }
+        this.isLoadingRelated = false;
+      },
+      error: (err) => {
+        console.error('Error loading related products:', err);
+        this.isLoadingRelated = false;
+      }
+    });
+  }
+
+  /**
+   * Adds an item to the cart
+   */
+  addItemToCart(item: RelatedDrug): void {
+    // Check if item is already in cart
+    const existingItem = this.cartItems.find(cartItem => cartItem.itemDosageId === item.doseId);
+
+    if (existingItem) {
+      this.errorMessage = 'Item is already in your cart';
+      setTimeout(() => this.errorMessage = '', 3000);
+      return;
+    }
+
+    // Add item to cart
+    this.cartItems.push({
+      itemDosageId: item.doseId,
+      quantity: 1,
+      questionnaireAnswers: []
+    });
+
+    // Remove from related items list
+    this.relatedItems = this.relatedItems.filter(relatedItem => relatedItem.doseId !== item.doseId);
+
+    console.log('Item added to cart:', item);
+    console.log('Updated cart items:', this.cartItems);
+  }
+
+  /**
+   * Removes an item from the cart
+   */
+  removeItemFromCart(item: CartItem): void {
+    // Prevent removing the main item (first item)
+    if (this.cartItems.length > 0 && this.cartItems[0].itemDosageId === item.itemDosageId) {
+      this.errorMessage = 'Cannot remove the main item from cart';
+      setTimeout(() => this.errorMessage = '', 3000);
+      return;
+    }
+
+    // Remove item from cart
+    this.cartItems = this.cartItems.filter(cartItem => cartItem.itemDosageId !== item.itemDosageId);
+
+    // Optionally, reload related items to show the removed item again
+    if (this.doseId) {
+      this.loadRelatedItems();
+    }
+
+    console.log('Item removed from cart:', item);
+    console.log('Updated cart items:', this.cartItems);
+  }
+
+  /**
+   * Gets display name for cart item
+   */
+  getCartItemName(item: CartItem): string {
+    // If it's the main drug, use drugName
+    if (this.doseId && item.itemDosageId === this.doseId) {
+      return this.drugName || 'Main Medication';
+    }
+    // For related items, we might need to fetch the name
+    return `Related Item (ID: ${item.itemDosageId})`;
+  }
+
+  /**
+   * Checks if cart item is the main item
+   */
+  isMainItem(item: CartItem): boolean {
+    return this.cartItems.length > 0 && this.cartItems[0].itemDosageId === item.itemDosageId;
   }
 
   /**
