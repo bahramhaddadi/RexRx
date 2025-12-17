@@ -35,7 +35,7 @@ export class DrugRecommendationsComponent implements OnInit {
 
   doseId?: number;
   recommendedDrugs: RelatedDrug[] = [];
-  selectedDrugs: RelatedDrug[] = [];
+  selectedDrug?: RelatedDrug; // Changed to single selection
   questionnaireAnswers: QuestionnaireAnswer[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -99,42 +99,51 @@ export class DrugRecommendationsComponent implements OnInit {
   }
 
   /**
-   * Toggle drug selection
+   * Select drug (single selection) and update query params with doseId
    */
   selectDrug(drug: RelatedDrug): void {
-    const index = this.selectedDrugs.findIndex(d => d.id === drug.id);
+    if (!drug.isActive) {
+      return;
+    }
 
-    if (index > -1) {
-      // Remove if already selected
-      this.selectedDrugs.splice(index, 1);
+    // If clicking the same drug, deselect it
+    if (this.selectedDrug?.doseId === drug.doseId) {
+      this.selectedDrug = undefined;
     } else {
-      // Add to selection
-      this.selectedDrugs.push({ ...drug, selected: true });
+      // Select the new drug and update query params with its doseId
+      this.selectedDrug = { ...drug, selected: true };
+
+      // Update query params to replace doseId
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { doseId: drug.doseId },
+        queryParamsHandling: 'merge'
+      });
     }
   }
 
   /**
-   * Check if drug is already selected
+   * Check if drug is already selected (using doseId)
    */
   isSelected(drug: RelatedDrug): boolean {
-    return this.selectedDrugs.some(d => d.id === drug.id);
+    return this.selectedDrug?.doseId === drug.doseId;
   }
 
   /**
    * Continue to checkout after placeholder flow
    */
   continueToCheckout(): void {
-    if (this.selectedDrugs.length === 0) {
-      this.errorMessage = 'Please select at least one drug to continue';
+    if (!this.selectedDrug) {
+      this.errorMessage = 'Please select a drug to continue';
       return;
     }
 
-    // Convert selected drugs to cart items
-    const items: CartItem[] = this.selectedDrugs.map(drug => ({
-      itemDosageId: parseInt(drug.id, 10),
+    // Convert selected drug to cart item using doseId
+    const items: CartItem[] = [{
+      itemDosageId: this.selectedDrug.doseId,
       quantity: 1,
       questionnaireAnswers: this.questionnaireAnswers || []
-    }));
+    }];
 
     // Save cart before navigating to checkout
     this.isLoading = true;
