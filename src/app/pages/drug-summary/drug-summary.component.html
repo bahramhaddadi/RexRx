@@ -78,6 +78,7 @@
                  (click)="r.isActive && toggleRelated(r)">
 
               <div class="card-selection">
+                <div class="detail"><h4 class="card-title">${{ r.price | number:'1.2-2' }}</h4></div>
                 <div class="checkbox" [class.checked]="isSelected(r)">
                   <i class="pi pi-check" *ngIf="isSelected(r)"></i>
                 </div>
@@ -85,19 +86,19 @@
 
               <div class="card-content">
                 <div class="card-icon">
-                  <i class="pi pi-box"></i>
+                  <img [src]="r.imageUrl" [alt]="r.title" class="drug-image">
                 </div>
 
                 <div class="card-info">
                   <h4 class="card-title">{{ r.title }}</h4>
                   <div class="card-badges">
-                    <span class="badge info">{{ r.isGeneric ? 'Generic' : 'Brand Name' }}</span>
+                    <span class="badge info">{{ r.isGeneric ? 'Generic' : r.brandName }}</span>
                     <span class="badge success" *ngIf="isSelected(r)">Added</span>
                   </div>
 
                   <div class="card-details">
-                    <div class="detail"><span class="label">Brand:</span> {{ r.brandName }}</div>
-                    <div class="detail"><span class="label">Category:</span> {{ r.categoryName }}</div>
+                    <div class="detail"><span class="label">Qty in pack:</span> {{ r.qtyInPack }}</div>
+                    <div class="detail"><span class="label">Dose:</span> {{ r.dose }}</div>
                     <div class="detail" *ngIf="r.note"><span class="label">Note:</span> {{ r.note }}</div>
                   </div>
                 </div>
