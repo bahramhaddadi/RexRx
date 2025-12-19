@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { CartItem, QuestionnaireAnswer, RelatedDrug, SaveCartBody } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, RelatedDrug, SaveCartBody, SaveCartResponse } from '../../models/drug.model';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -157,15 +157,15 @@ export class DrugSummaryComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         if (response.errorCode === 0 && response.body) {
-          const cartId = response.body;
-          console.log('Cart saved successfully before checkout, cartId:', cartId);
+          const savedCart: SaveCartResponse = response.body;
+          console.log('Cart saved successfully before checkout:', savedCart);
 
-          // Navigate to checkout with cartId
+          // Navigate to checkout with full cart response
           this.router.navigate(['/checkout'], {
             state: {
               drugName: this.drugName,
-              cartId: cartId,
-              cartItems: items
+              cartId: savedCart.id,
+              savedCartResponse: savedCart
             }
           });
         } else {

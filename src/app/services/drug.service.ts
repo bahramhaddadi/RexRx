@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -188,16 +188,16 @@ export class DrugService {
   }
 
   /**
-   * Saves the shopping cart and returns a cartId
+   * Saves the shopping cart and returns cart details
    * @param cartData The cart data with items and questionnaire answers
-   * @returns Observable of API response containing cartId
+   * @returns Observable of API response containing SaveCartResponse with cart details
    */
-  SaveCart(cartData: SaveCartBody): Observable<ApiResponse<string>> {
+  SaveCart(cartData: SaveCartBody): Observable<ApiResponse<SaveCartResponse>> {
     const request: SaveCartRequest = {
       body: cartData
     };
 
-    return this.apiService.post<ApiResponse<string>>(
+    return this.apiService.post<ApiResponse<SaveCartResponse>>(
       '/Pharma/Shopping/SaveCart',
       request
     );

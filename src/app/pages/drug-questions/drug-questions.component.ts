@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion, UserQuestionsToGetNextQuestion, UserAnswerToGetNextQuestion, CartItem, SaveCartBody } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion, UserQuestionsToGetNextQuestion, UserAnswerToGetNextQuestion, CartItem, SaveCartBody, SaveCartResponse } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -416,15 +416,15 @@ export class DrugQuestionsComponent implements OnInit {
       next: (response) => {
         this.isLoading = false;
         if (response.errorCode === 0 && response.body) {
-          const cartId = response.body;
-          console.log('Cart saved successfully, cartId:', cartId);
+          const savedCart: SaveCartResponse = response.body;
+          console.log('Cart saved successfully:', savedCart);
 
-          // Navigate to checkout with cartId
+          // Navigate to checkout with full cart response
           this.router.navigate(['/checkout'], {
             state: {
               drugName: this.drugName,
-              cartId: cartId,
-              cartItems: items,
+              cartId: savedCart.id,
+              savedCartResponse: savedCart,
               doseId: this.doseId,
               questionnaireAnswers: this.questionnaireAnswers
             }

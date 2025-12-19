@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { UserService } from '../../services/user.service';
-import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody, RelatedDrug } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody, RelatedDrug, SaveCartResponse, SavedCartItem } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -68,6 +68,11 @@ export class CheckoutComponent implements OnInit {
   successMessage: string = '';
   cartId: string = ''; // Stores the cart ID from SaveCart API
 
+  // Cart response data
+  savedCartResponse?: SaveCartResponse;
+  grandTotal: number = 0;
+  discount: number = 0;
+
   // Related items for upsell
   relatedItems: RelatedDrug[] = [];
   isLoadingRelated: boolean = false;
@@ -89,10 +94,31 @@ export class CheckoutComponent implements OnInit {
     this.questionnaireAnswers = state?.['questionnaireAnswers'] || [];
     this.cartItems = state?.['cartItems'] || [];
     this.cartId = state?.['cartId'] || ''; // Get cartId from navigation state
+    this.savedCartResponse = state?.['savedCartResponse']; // Get full cart response
+
+    // If we have savedCartResponse, use its data
+    if (this.savedCartResponse) {
+      this.cartId = this.savedCartResponse.id;
+      this.grandTotal = this.savedCartResponse.grandTotal;
+      this.discount = this.savedCartResponse.discount;
+
+      // Map SavedCartItem[] to CartItem[] for display
+      this.cartItems = this.savedCartResponse.items.map(item => ({
+        itemDosageId: item.itemDosageId,
+        quantity: item.quantity,
+        questionnaireAnswers: item.questionnaireAnswers
+      }));
+
+      // Get doseId from first item
+      if (this.savedCartResponse.items.length > 0) {
+        this.doseId = this.savedCartResponse.items[0].itemDosageId;
+        this.drugName = this.savedCartResponse.items[0].drugName;
+      }
+    }
 
     // If cartItems are provided (from /drug-summary), prefer them.
     // For backward-compatibility, set doseId from the first item if present.
-    if (this.cartItems && this.cartItems.length > 0) {
+    if (this.cartItems && this.cartItems.length > 0 && !this.savedCartResponse) {
       this.doseId = this.cartItems[0]?.itemDosageId ?? this.doseId;
     }
 
@@ -234,12 +260,49 @@ export class CheckoutComponent implements OnInit {
    * Gets display name for cart item
    */
   getCartItemName(item: CartItem): string {
-    // If it's the main drug, use drugName
+    // If we have savedCartResponse, look up the drug name
+    if (this.savedCartResponse) {
+      const savedItem = this.savedCartResponse.items.find(
+        si => si.itemDosageId === item.itemDosageId
+      );
+      if (savedItem) {
+        return savedItem.drugName;
+      }
+    }
+
+    // Fallback: If it's the main drug, use drugName
     if (this.doseId && item.itemDosageId === this.doseId) {
       return this.drugName || 'Main Medication';
     }
-    // For related items, we might need to fetch the name
+
+    // Last resort: show item ID
     return `Related Item (ID: ${item.itemDosageId})`;
+  }
+
+  /**
+   * Gets unit price for cart item
+   */
+  getCartItemPrice(item: CartItem): number | null {
+    if (this.savedCartResponse) {
+      const savedItem = this.savedCartResponse.items.find(
+        si => si.itemDosageId === item.itemDosageId
+      );
+      return savedItem?.unitPrice ?? null;
+    }
+    return null;
+  }
+
+  /**
+   * Gets total price for cart item
+   */
+  getCartItemTotal(item: CartItem): number | null {
+    if (this.savedCartResponse) {
+      const savedItem = this.savedCartResponse.items.find(
+        si => si.itemDosageId === item.itemDosageId
+      );
+      return savedItem?.total ?? null;
+    }
+    return null;
   }
 
   /**
