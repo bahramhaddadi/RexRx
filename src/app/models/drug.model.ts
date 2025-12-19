@@ -165,6 +165,7 @@ export interface RelatedDrug {
   imageUrl: string;
   dose: string;
   doseId: number;
+  qtyInPack: number;
   price: number;
   questionId: number;
   itemNameAndDose: string;
