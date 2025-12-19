@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
-import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion, UserQuestionsToGetNextQuestion, UserAnswerToGetNextQuestion } from '../../models/drug.model';
+import { Question, QuestionChoice, QuestionWithAnswer, QuestionChoiceAnswer, QuestionType, QuestionnaireAnswer, UserQuestion, UserQuestionsToGetNextQuestion, UserAnswerToGetNextQuestion, CartItem, SaveCartBody, SaveCartResponse } from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -365,22 +365,96 @@ export class DrugQuestionsComponent implements OnInit {
         }
       });
     } else {
-      // Non-placeholder flow: show summary + related items page before checkout
+      // Non-placeholder flow: Call SaveCart immediately and go to checkout
       if (this.doseId) {
-        this.router.navigate(['/drug-summary'], {
-          queryParams: {
-            doseId: this.doseId,
-            name: this.drugName
-          },
-          // Pass questionnaire answers via navigation state so /drug-summary can build cart items
-          state: {
-            questionnaireAnswers: this.questionnaireAnswers
-          }
-        });
+        this.saveCartAndCheckout();
       } else {
         this.router.navigate(['/checkout']);
       }
     }
+  }
+
+  /**
+   * Saves cart with main item and navigates to checkout
+   */
+  saveCartAndCheckout(): void {
+    if (!this.doseId) {
+      console.error('Cannot save cart: doseId is missing');
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    // Build cart with main item
+    const items: CartItem[] = [{
+      itemDosageId: this.doseId,
+      quantity: 1,
+      questionnaireAnswers: this.questionnaireAnswers || []
+    }];
+
+    const cartData: SaveCartBody = {
+      isPatientSameAsUser: true,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      sex: '',
+      phone: '',
+      weight: '',
+      birthDate: '1900-01-01',
+      healthCardNumber: '',
+      allergies: '',
+      medications: '',
+      surgeries: '',
+      otherMedicalConditions: '',
+      orderDate: this.formatDate(new Date()),
+      promoCode: '',
+      items: items
+    };
+
+    this.drugService.SaveCart(cartData).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.errorCode === 0 && response.body) {
+          const savedCart: SaveCartResponse = response.body;
+          console.log('Cart saved successfully:', savedCart);
+
+          // Navigate to checkout with full cart response
+          this.router.navigate(['/checkout'], {
+            state: {
+              drugName: this.drugName,
+              cartId: savedCart.id,
+              savedCartResponse: savedCart,
+              doseId: this.doseId,
+              questionnaireAnswers: this.questionnaireAnswers
+            }
+          });
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to save cart';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to save cart. Please try again.';
+        console.error('Error saving cart:', error);
+      }
+    });
+  }
+
+  /**
+   * Formats a Date object to the required string format with time
+   */
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
   }
 
   /**

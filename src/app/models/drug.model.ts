@@ -263,6 +263,42 @@ export interface SaveCartRequest {
   body: SaveCartBody;
 }
 
+// SaveCart Response Models (updated based on new API response)
+export interface SavedCartItem {
+  id: number;
+  itemDosageId: number;
+  drugName: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+  questionnaireAnswers: QuestionnaireAnswer[];
+}
+
+export interface SaveCartResponse {
+  id: string; // cart ID
+  userId: string;
+  isPatientSameAsUser: boolean;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  sex: string;
+  phone: string;
+  weight: string;
+  height: string | null;
+  birthDate: string;
+  healthCardNumber: string;
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherMedicalConditions: string;
+  dateTime: string;
+  promoCode: string;
+  discount: number;
+  grandTotal: number;
+  items: SavedCartItem[];
+  drugs: string; // Summary string like "1 x Tadalafil (10mg)\r\n"
+}
+
 export interface PayAndSaveCartAsOrderBody {
   id: string; // cartId from SaveCart response
   isPatientSameAsUser: boolean;

@@ -391,7 +391,12 @@
                   </div>
                   <div class="item-details">
                     <h4>{{ getCartItemName(item) }}</h4>
-                    <span class="item-qty">Qty: {{ item.quantity }}</span>
+                    <div class="item-meta">
+                      <span class="item-qty">Qty: {{ item.quantity }}</span>
+                      @if (getCartItemPrice(item) !== null) {
+                        <span class="item-price">${{ getCartItemPrice(item)!.toFixed(2) }}</span>
+                      }
+                    </div>
                   </div>
                 </div>
                 @if (!isMainItem(item)) {
@@ -462,8 +467,19 @@
 
           <div class="summary-row">
             <span class="row-label">Subtotal</span>
-            <span class="row-value">Calculated at payment</span>
+            @if (grandTotal > 0) {
+              <span class="row-value">${{ grandTotal.toFixed(2) }}</span>
+            } @else {
+              <span class="row-value">Calculated at payment</span>
+            }
           </div>
+
+          @if (discount > 0) {
+            <div class="summary-row">
+              <span class="row-label">Discount</span>
+              <span class="row-value discount">-${{ discount.toFixed(2) }}</span>
+            </div>
+          }
 
           <div class="summary-row">
             <span class="row-label">Shipping</span>
@@ -474,7 +490,11 @@
 
           <div class="summary-total">
             <span class="total-label">Total</span>
-            <span class="total-value">At checkout</span>
+            @if (grandTotal > 0) {
+              <span class="total-value">${{ (grandTotal - discount).toFixed(2) }}</span>
+            } @else {
+              <span class="total-value">At checkout</span>
+            }
           </div>
 
           <!-- Desktop Submit Button -->

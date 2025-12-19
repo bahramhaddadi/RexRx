@@ -713,6 +713,24 @@
         color: #10B981;
         font-weight: 600;
       }
+
+      &.discount {
+        color: #DC2626;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .item-price {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #2563EB;
     }
   }
 
