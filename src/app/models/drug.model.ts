@@ -342,6 +342,7 @@ export interface AddItemToCartBody {
   cartId: string;
   itemDosageId: number;
   quantity: number;
+  answers: QuestionnaireAnswer[];
 }
 
 export interface AddItemToCartRequest {
@@ -351,8 +352,10 @@ export interface AddItemToCartRequest {
 // Remove Item from Cart (for related items)
 export interface RemoveItemFromCartBody {
   cartId: string;
+  orderDetailId: number;
   itemDosageId: number;
   quantity: number;
+  answers: QuestionnaireAnswer[];
 }
 
 export interface RemoveItemFromCartRequest {
