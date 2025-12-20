@@ -219,18 +219,51 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    // Add item to cart
-    this.cartItems.push({
+    // Validate cartId exists
+    if (!this.cartId) {
+      this.errorMessage = 'Cart not initialized. Please refresh the page and try again.';
+      return;
+    }
+
+    this.isLoadingRelated = true;
+    this.errorMessage = '';
+
+    // Call API to add item to cart
+    this.drugService.AddItemToCart({
+      cartId: this.cartId,
       itemDosageId: item.doseId,
-      quantity: 1,
-      questionnaireAnswers: []
+      quantity: 1
+    }).subscribe({
+      next: (response) => {
+        this.isLoadingRelated = false;
+        if (response.errorCode === 0 && response.body) {
+          // Update cart response with new data
+          this.savedCartResponse = response.body;
+          this.grandTotal = response.body.grandTotal;
+          this.discount = response.body.discount;
+
+          // Update cart items
+          this.cartItems = response.body.items.map(item => ({
+            itemDosageId: item.itemDosageId,
+            quantity: item.quantity,
+            questionnaireAnswers: item.questionnaireAnswers
+          }));
+
+          // Remove from related items list
+          this.relatedItems = this.relatedItems.filter(relatedItem => relatedItem.doseId !== item.doseId);
+
+          console.log('Item added to cart successfully:', item);
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to add item to cart';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.isLoadingRelated = false;
+        this.errorMessage = 'Failed to add item to cart. Please try again.';
+        console.error('Error adding item to cart:', error);
+      }
     });
-
-    // Remove from related items list
-    this.relatedItems = this.relatedItems.filter(relatedItem => relatedItem.doseId !== item.doseId);
-
-    console.log('Item added to cart:', item);
-    console.log('Updated cart items:', this.cartItems);
   }
 
   /**
@@ -244,16 +277,53 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    // Remove item from cart
-    this.cartItems = this.cartItems.filter(cartItem => cartItem.itemDosageId !== item.itemDosageId);
-
-    // Optionally, reload related items to show the removed item again
-    if (this.doseId) {
-      this.loadRelatedItems();
+    // Validate cartId exists
+    if (!this.cartId) {
+      this.errorMessage = 'Cart not initialized. Please refresh the page and try again.';
+      return;
     }
 
-    console.log('Item removed from cart:', item);
-    console.log('Updated cart items:', this.cartItems);
+    this.isLoadingRelated = true;
+    this.errorMessage = '';
+
+    // Call API to remove item from cart
+    this.drugService.RemoveItemFromCart({
+      cartId: this.cartId,
+      itemDosageId: item.itemDosageId,
+      quantity: item.quantity
+    }).subscribe({
+      next: (response) => {
+        this.isLoadingRelated = false;
+        if (response.errorCode === 0 && response.body) {
+          // Update cart response with new data
+          this.savedCartResponse = response.body;
+          this.grandTotal = response.body.grandTotal;
+          this.discount = response.body.discount;
+
+          // Update cart items
+          this.cartItems = response.body.items.map(item => ({
+            itemDosageId: item.itemDosageId,
+            quantity: item.quantity,
+            questionnaireAnswers: item.questionnaireAnswers
+          }));
+
+          // Reload related items to show the removed item again
+          if (this.doseId) {
+            this.loadRelatedItems();
+          }
+
+          console.log('Item removed from cart successfully:', item);
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to remove item from cart';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.isLoadingRelated = false;
+        this.errorMessage = 'Failed to remove item from cart. Please try again.';
+        console.error('Error removing item from cart:', error);
+      }
+    });
   }
 
   /**
