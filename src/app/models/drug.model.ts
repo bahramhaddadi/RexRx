@@ -336,3 +336,25 @@ export interface SetOrderShippingAddressBody {
 export interface SetOrderShippingAddressRequest {
   body: SetOrderShippingAddressBody;
 }
+
+// Add Item to Cart (for related items)
+export interface AddItemToCartBody {
+  cartId: string;
+  itemDosageId: number;
+  quantity: number;
+}
+
+export interface AddItemToCartRequest {
+  body: AddItemToCartBody;
+}
+
+// Remove Item from Cart (for related items)
+export interface RemoveItemFromCartBody {
+  cartId: string;
+  itemDosageId: number;
+  quantity: number;
+}
+
+export interface RemoveItemFromCartRequest {
+  body: RemoveItemFromCartBody;
+}

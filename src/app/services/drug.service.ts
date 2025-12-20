@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -231,6 +231,38 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<any>>(
       '/Pharma/Shopping/SetOrderShippingAddress',
+      request
+    );
+  }
+
+  /**
+   * Adds an item to the cart (for related items)
+   * @param cartData The cart data including cartId, itemDosageId, and quantity
+   * @returns Observable of API response containing updated SaveCartResponse with cart details
+   */
+  AddItemToCart(cartData: AddItemToCartBody): Observable<ApiResponse<SaveCartResponse>> {
+    const request: AddItemToCartRequest = {
+      body: cartData
+    };
+
+    return this.apiService.post<ApiResponse<SaveCartResponse>>(
+      '/Pharma/Shopping/AddItemToCart',
+      request
+    );
+  }
+
+  /**
+   * Removes an item from the cart (for related items)
+   * @param cartData The cart data including cartId, itemDosageId, and quantity
+   * @returns Observable of API response containing updated SaveCartResponse with cart details
+   */
+  RemoveItemFromCart(cartData: RemoveItemFromCartBody): Observable<ApiResponse<SaveCartResponse>> {
+    const request: RemoveItemFromCartRequest = {
+      body: cartData
+    };
+
+    return this.apiService.post<ApiResponse<SaveCartResponse>>(
+      '/Pharma/Shopping/RemoveItemFromCart',
       request
     );
   }
