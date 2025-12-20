@@ -232,7 +232,8 @@ export class CheckoutComponent implements OnInit {
     this.drugService.AddItemToCart({
       cartId: this.cartId,
       itemDosageId: item.doseId,
-      quantity: 1
+      quantity: 1,
+      answers: [] // Related items typically don't have questionnaire answers
     }).subscribe({
       next: (response) => {
         this.isLoadingRelated = false;
@@ -286,11 +287,24 @@ export class CheckoutComponent implements OnInit {
     this.isLoadingRelated = true;
     this.errorMessage = '';
 
+    // Find the orderDetailId from savedCartResponse
+    const savedItem = this.savedCartResponse?.items.find(
+      si => si.itemDosageId === item.itemDosageId
+    );
+
+    if (!savedItem) {
+      this.errorMessage = 'Item not found in cart';
+      this.isLoadingRelated = false;
+      return;
+    }
+
     // Call API to remove item from cart
     this.drugService.RemoveItemFromCart({
       cartId: this.cartId,
+      orderDetailId: savedItem.id,
       itemDosageId: item.itemDosageId,
-      quantity: item.quantity
+      quantity: item.quantity,
+      answers: item.questionnaireAnswers || []
     }).subscribe({
       next: (response) => {
         this.isLoadingRelated = false;
