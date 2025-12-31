@@ -382,9 +382,84 @@
           <p class="placeholder-text">This section is coming soon.</p>
         </section>
 
+        <!-- Medical History Section -->
         <section *ngIf="selectedSection === 'medical-history'" class="settings-section">
-          <h2>Medical history</h2>
-          <p class="placeholder-text">This section is coming soon.</p>
+          <h2>Tell us about your medical history</h2>
+          <p class="section-description">
+            List any of the following that apply to you.
+          </p>
+
+          <form class="medical-history-form">
+            <div class="form-field-full">
+              <label for="allergies">Allergies</label>
+              <textarea
+                pInputTextarea
+                id="allergies"
+                [(ngModel)]="medicalHistoryForm.allergies"
+                name="allergies"
+                placeholder="Type here"
+                rows="3"
+                [autoResize]="true"
+              ></textarea>
+            </div>
+
+            <div class="form-field-full">
+              <label for="medications">Medications, vitamins, herbals, or supplements</label>
+              <textarea
+                pInputTextarea
+                id="medications"
+                [(ngModel)]="medicalHistoryForm.medications"
+                name="medications"
+                placeholder="Type here"
+                rows="3"
+                [autoResize]="true"
+              ></textarea>
+            </div>
+
+            <div class="form-field-full">
+              <label for="surgeries">Surgeries or hospitalizations</label>
+              <textarea
+                pInputTextarea
+                id="surgeries"
+                [(ngModel)]="medicalHistoryForm.surgeries"
+                name="surgeries"
+                placeholder="Type here"
+                rows="3"
+                [autoResize]="true"
+              ></textarea>
+            </div>
+
+            <div class="form-field-full">
+              <label for="otherConditions">Any other medical conditions that we should know about</label>
+              <textarea
+                pInputTextarea
+                id="otherConditions"
+                [(ngModel)]="medicalHistoryForm.otherConditions"
+                name="otherConditions"
+                placeholder="Type here"
+                rows="3"
+                [autoResize]="true"
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelMedicalHistory()"
+                [disabled]="isSavingMedicalHistory"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Save"
+                (click)="saveMedicalHistory()"
+                [loading]="isSavingMedicalHistory"
+              ></button>
+            </div>
+          </form>
         </section>
 
         <section *ngIf="selectedSection === 'orders'" class="settings-section">

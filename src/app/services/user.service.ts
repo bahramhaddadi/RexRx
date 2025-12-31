@@ -14,7 +14,9 @@ import {
   GetUserAddressesResponse,
   GetOrdersRequest,
   GetOrdersResponse,
-  UploadImageResponse
+  UploadImageResponse,
+  UpdateMedicalHistoryRequest,
+  UpdateMedicalHistoryResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -149,6 +151,18 @@ export class UserService {
   downloadGovernmentIdImage(userId: string, type: string): Observable<Blob> {
     return this.apiService.getBlob(
       `/Pharma/User/DownloadImage?id=${userId}-${type}`
+    );
+  }
+
+  /**
+   * Updates the user's medical history
+   * @param data The medical history data to update
+   * @returns Observable of update response
+   */
+  updateMedicalHistory(data: UpdateMedicalHistoryRequest): Observable<UpdateMedicalHistoryResponse> {
+    return this.apiService.post<UpdateMedicalHistoryResponse>(
+      '/Pharma/User/UpdateMedicalHistory',
+      data
     );
   }
 }

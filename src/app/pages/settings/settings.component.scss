@@ -761,3 +761,93 @@
     background: var(--primary-700);
   }
 }
+
+// Medical History Section Styling
+.medical-history-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .form-field-full {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    label {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      color: var(--text-color);
+      margin-bottom: $spacing-xs;
+    }
+
+    textarea {
+      width: 100%;
+      padding: $spacing-md;
+      border: 2px solid var(--surface-border);
+      border-radius: $border-radius-md;
+      font-size: $font-size-base;
+      font-family: $font-family-base;
+      color: var(--text-color);
+      background: var(--surface-card);
+      transition: all $transition-base;
+      resize: vertical;
+      min-height: 100px;
+
+      &::placeholder {
+        color: var(--text-color-secondary);
+        opacity: 0.6;
+      }
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing-sm;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}
+
+// PrimeNG Textarea Override
+::ng-deep {
+  .p-inputtextarea {
+    width: 100%;
+    padding: $spacing-md;
+    border: 2px solid var(--surface-border);
+    border-radius: $border-radius-md;
+    font-size: $font-size-base;
+    font-family: $font-family-base;
+    color: var(--text-color);
+    background: var(--surface-card);
+    transition: all $transition-base;
+    resize: vertical;
+
+    &::placeholder {
+      color: var(--text-color-secondary);
+      opacity: 0.6;
+    }
+
+    &:enabled:hover {
+      border-color: var(--primary-color);
+    }
+
+    &:enabled:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-sm;
+      font-size: $font-size-sm;
+    }
+  }
+}

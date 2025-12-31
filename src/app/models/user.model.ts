@@ -234,3 +234,22 @@ export interface UploadImageResponse {
   errorCode: number;
   errorMessage: string | null;
 }
+
+/**
+ * Medical history request model
+ */
+export interface UpdateMedicalHistoryRequest {
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherConditions: string;
+}
+
+/**
+ * Update medical history response
+ */
+export interface UpdateMedicalHistoryResponse {
+  errorCode: number;
+  errorMessage: string | null;
+  body: string;
+}

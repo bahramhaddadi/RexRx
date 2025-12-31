@@ -18,7 +18,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 // Local imports
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { UserService } from '../../services/user.service';
-import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order } from '../../models/user.model';
+import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order, UpdateMedicalHistoryRequest } from '../../models/user.model';
 
 interface MenuItem {
   label: string;
@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit {
     { label: 'Shipping address', value: 'shipping-address', icon: 'pi pi-map-marker' },
     { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card' },
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
-    { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit', disabled: true },
+    { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit' },
     { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag' },
     { label: 'Prescriptions', value: 'prescriptions', icon: 'pi pi-file', disabled: true }
   ];
@@ -75,6 +75,7 @@ export class SettingsComponent implements OnInit {
   isUploadingHealthCardBack = false;
   isUploadingDrivingLicenseFront = false;
   isUploadingDrivingLicenseBack = false;
+  isSavingMedicalHistory = false;
 
   // Personal Info
   userProfile: UserProfile | null = null;
@@ -148,6 +149,14 @@ export class SettingsComponent implements OnInit {
   drivingLicenseFrontUrl: string | null = null;
   drivingLicenseBackUrl: string | null = null;
 
+  // Medical History
+  medicalHistoryForm: UpdateMedicalHistoryRequest = {
+    allergies: '',
+    medications: '',
+    surgeries: '',
+    otherConditions: ''
+  };
+
   // Error handling
   errorMessage = '';
   successMessage = '';
@@ -176,6 +185,8 @@ export class SettingsComponent implements OnInit {
             gender: response.body.gender || '',
             phone: response.body.phone || ''
           };
+          // Load medical history data
+          this.loadMedicalHistory();
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load user profile.';
@@ -664,5 +675,58 @@ export class SettingsComponent implements OnInit {
     if (input) {
       input.click();
     }
+  }
+
+  /**
+   * Loads medical history from user profile
+   */
+  loadMedicalHistory(): void {
+    if (this.userProfile) {
+      this.medicalHistoryForm = {
+        allergies: this.userProfile.allergies || '',
+        medications: this.userProfile.medications || '',
+        surgeries: this.userProfile.surgeries || '',
+        otherConditions: this.userProfile.otherConditions || ''
+      };
+    }
+  }
+
+  /**
+   * Saves medical history
+   */
+  saveMedicalHistory(): void {
+    this.isSavingMedicalHistory = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.userService.updateMedicalHistory(this.medicalHistoryForm).subscribe({
+      next: (response) => {
+        this.isSavingMedicalHistory = false;
+        if (response.errorCode === 0) {
+          this.successMessage = 'Medical history updated successfully!';
+          this.loadUserProfile(); // Reload to get fresh data
+
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to update medical history.';
+        }
+      },
+      error: (error) => {
+        console.error('Error updating medical history:', error);
+        this.errorMessage = 'Failed to update medical history. Please try again.';
+        this.isSavingMedicalHistory = false;
+      }
+    });
+  }
+
+  /**
+   * Cancels medical history editing and resets form
+   */
+  cancelMedicalHistory(): void {
+    this.loadMedicalHistory();
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 }
