@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
@@ -35,6 +36,7 @@ interface MenuItem {
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputTextareaModule,
     CalendarModule,
     DropdownModule,
     TableModule,
