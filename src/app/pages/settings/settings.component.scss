@@ -562,6 +562,16 @@
     position: relative;
     overflow: hidden;
 
+    @media (max-width: $breakpoint-md) {
+      min-height: 200px;
+      padding: $spacing-md;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      min-height: 150px;
+      padding: $spacing-sm;
+    }
+
     &:hover {
       border-color: var(--primary-color);
       background: var(--primary-50);
@@ -580,22 +590,35 @@
       justify-content: center;
       text-align: center;
       color: var(--text-color-secondary);
+      padding: $spacing-sm;
 
       i {
         font-size: 3rem;
         margin-bottom: $spacing-md;
         opacity: 0.5;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 2rem;
+          margin-bottom: $spacing-sm;
+        }
       }
 
       .placeholder-id {
-        font-size: $font-size-sm;
+        font-size: $font-size-xs;
         font-family: monospace;
         color: var(--text-color-secondary);
         background: var(--surface-100);
         padding: $spacing-xs $spacing-sm;
         border-radius: $border-radius-sm;
         margin: 0;
-        word-break: break-all;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.625rem;
+          padding: 4px 6px;
+        }
       }
     }
 
