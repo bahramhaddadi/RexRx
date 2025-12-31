@@ -199,3 +199,38 @@ export interface GetOrdersResponse {
   errorCode: number;
   errorMessage: string | null;
 }
+
+/**
+ * Government ID document type
+ */
+export enum GovernmentIdType {
+  HEALTH_CARD = 'HC',
+  DRIVING_LICENSE = 'DL'
+}
+
+/**
+ * Government ID document side
+ */
+export enum GovernmentIdSide {
+  FRONT = 'F',
+  BACK = 'B'
+}
+
+/**
+ * Government ID upload status
+ */
+export interface GovernmentIdStatus {
+  healthCardFront: string | null;
+  healthCardBack: string | null;
+  drivingLicenseFront: string | null;
+  drivingLicenseBack: string | null;
+}
+
+/**
+ * Upload image response
+ */
+export interface UploadImageResponse {
+  id1: string;
+  errorCode: number;
+  errorMessage: string | null;
+}

@@ -13,7 +13,8 @@ import {
   AutocompleteAddressResponse,
   GetUserAddressesResponse,
   GetOrdersRequest,
-  GetOrdersResponse
+  GetOrdersResponse,
+  UploadImageResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -120,6 +121,34 @@ export class UserService {
     return this.apiService.post<GetOrdersResponse>(
       '/Pharma/User/GetOrders',
       { body: request }
+    );
+  }
+
+  /**
+   * Uploads a government ID image (health card or driving license)
+   * @param file The image file to upload
+   * @param type The type suffix (e.g., 'HC-F' for health card front, 'DL-B' for driving license back)
+   * @returns Observable of upload response
+   */
+  uploadGovernmentIdImage(file: File, type: string): Observable<UploadImageResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.apiService.postFormData<UploadImageResponse>(
+      `/Pharma/User/UploadImage?type=${type}`,
+      formData
+    );
+  }
+
+  /**
+   * Downloads a government ID image
+   * @param userId The user ID
+   * @param type The type suffix (e.g., 'HC-F' for health card front)
+   * @returns Observable of blob data
+   */
+  downloadGovernmentIdImage(userId: string, type: string): Observable<Blob> {
+    return this.apiService.getBlob(
+      `/Pharma/User/DownloadImage?id=${userId}-${type}`
     );
   }
 }

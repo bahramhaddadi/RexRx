@@ -213,10 +213,168 @@
           </p-table>
         </section>
 
-        <!-- Placeholder sections for other menu items -->
+        <!-- Government issued ID Section -->
         <section *ngIf="selectedSection === 'government-id'" class="settings-section">
           <h2>Government issued ID</h2>
-          <p class="placeholder-text">This section is coming soon.</p>
+          <p class="section-description">
+            Upload clear photos of your government-issued identification documents. Make sure all text is readable and the entire document is visible.
+          </p>
+
+          <!-- Health Card -->
+          <div class="id-document-card">
+            <h3 class="document-title">Health card</h3>
+            <div class="document-uploads">
+              <!-- Front -->
+              <div class="upload-container">
+                <label class="upload-label">Front</label>
+                <div class="upload-area" [class.has-file]="healthCardFrontFile || healthCardFrontUrl">
+                  <div *ngIf="!healthCardFrontFile && !healthCardFrontUrl && !isUploadingHealthCardFront" class="upload-placeholder">
+                    <i class="pi pi-image"></i>
+                    <p class="placeholder-id">bad0f2c2-826a-4d7d-93d2-e5d08d0a9473-HC-F</p>
+                  </div>
+                  <div *ngIf="isUploadingHealthCardFront" class="upload-loading">
+                    <p-progressSpinner [style]="{ width: '50px', height: '50px' }" />
+                  </div>
+                  <div *ngIf="(healthCardFrontFile || healthCardFrontUrl) && !isUploadingHealthCardFront" class="upload-preview">
+                    <img *ngIf="healthCardFrontUrl" [src]="healthCardFrontUrl" alt="Health card front" />
+                    <p *ngIf="healthCardFrontFile && !healthCardFrontUrl" class="file-name">
+                      <i class="pi pi-file"></i>
+                      {{ healthCardFrontFile.name }}
+                    </p>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="healthCardFrontInput"
+                  accept="image/*"
+                  (change)="onFileChange($event, 'HC-F')"
+                  style="display: none"
+                />
+                <button
+                  pButton
+                  type="button"
+                  label="Upload"
+                  class="upload-button"
+                  (click)="triggerFileInput('healthCardFrontInput')"
+                  [disabled]="isUploadingHealthCardFront"
+                ></button>
+              </div>
+
+              <!-- Back -->
+              <div class="upload-container">
+                <label class="upload-label">Back</label>
+                <div class="upload-area" [class.has-file]="healthCardBackFile || healthCardBackUrl">
+                  <div *ngIf="!healthCardBackFile && !healthCardBackUrl && !isUploadingHealthCardBack" class="upload-placeholder">
+                    <i class="pi pi-image"></i>
+                    <p class="placeholder-id">bad0f2c2-826a-4d7d-93d2-e5d08d0a9473-HC-B</p>
+                  </div>
+                  <div *ngIf="isUploadingHealthCardBack" class="upload-loading">
+                    <p-progressSpinner [style]="{ width: '50px', height: '50px' }" />
+                  </div>
+                  <div *ngIf="(healthCardBackFile || healthCardBackUrl) && !isUploadingHealthCardBack" class="upload-preview">
+                    <img *ngIf="healthCardBackUrl" [src]="healthCardBackUrl" alt="Health card back" />
+                    <p *ngIf="healthCardBackFile && !healthCardBackUrl" class="file-name">
+                      <i class="pi pi-file"></i>
+                      {{ healthCardBackFile.name }}
+                    </p>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="healthCardBackInput"
+                  accept="image/*"
+                  (change)="onFileChange($event, 'HC-B')"
+                  style="display: none"
+                />
+                <button
+                  pButton
+                  type="button"
+                  label="Upload"
+                  class="upload-button"
+                  (click)="triggerFileInput('healthCardBackInput')"
+                  [disabled]="isUploadingHealthCardBack"
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driving License -->
+          <div class="id-document-card">
+            <h3 class="document-title">Driving licence</h3>
+            <div class="document-uploads">
+              <!-- Front -->
+              <div class="upload-container">
+                <label class="upload-label">Front</label>
+                <div class="upload-area" [class.has-file]="drivingLicenseFrontFile || drivingLicenseFrontUrl">
+                  <div *ngIf="!drivingLicenseFrontFile && !drivingLicenseFrontUrl && !isUploadingDrivingLicenseFront" class="upload-placeholder">
+                    <i class="pi pi-image"></i>
+                    <p class="placeholder-id">bad0f2c2-826a-4d7d-93d2-e5d08d0a9473-DL-F</p>
+                  </div>
+                  <div *ngIf="isUploadingDrivingLicenseFront" class="upload-loading">
+                    <p-progressSpinner [style]="{ width: '50px', height: '50px' }" />
+                  </div>
+                  <div *ngIf="(drivingLicenseFrontFile || drivingLicenseFrontUrl) && !isUploadingDrivingLicenseFront" class="upload-preview">
+                    <img *ngIf="drivingLicenseFrontUrl" [src]="drivingLicenseFrontUrl" alt="Driving license front" />
+                    <p *ngIf="drivingLicenseFrontFile && !drivingLicenseFrontUrl" class="file-name">
+                      <i class="pi pi-file"></i>
+                      {{ drivingLicenseFrontFile.name }}
+                    </p>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="drivingLicenseFrontInput"
+                  accept="image/*"
+                  (change)="onFileChange($event, 'DL-F')"
+                  style="display: none"
+                />
+                <button
+                  pButton
+                  type="button"
+                  label="Upload"
+                  class="upload-button"
+                  (click)="triggerFileInput('drivingLicenseFrontInput')"
+                  [disabled]="isUploadingDrivingLicenseFront"
+                ></button>
+              </div>
+
+              <!-- Back -->
+              <div class="upload-container">
+                <label class="upload-label">Back</label>
+                <div class="upload-area" [class.has-file]="drivingLicenseBackFile || drivingLicenseBackUrl">
+                  <div *ngIf="!drivingLicenseBackFile && !drivingLicenseBackUrl && !isUploadingDrivingLicenseBack" class="upload-placeholder">
+                    <i class="pi pi-image"></i>
+                    <p class="placeholder-id">bad0f2c2-826a-4d7d-93d2-e5d08d0a9473-DL-B</p>
+                  </div>
+                  <div *ngIf="isUploadingDrivingLicenseBack" class="upload-loading">
+                    <p-progressSpinner [style]="{ width: '50px', height: '50px' }" />
+                  </div>
+                  <div *ngIf="(drivingLicenseBackFile || drivingLicenseBackUrl) && !isUploadingDrivingLicenseBack" class="upload-preview">
+                    <img *ngIf="drivingLicenseBackUrl" [src]="drivingLicenseBackUrl" alt="Driving license back" />
+                    <p *ngIf="drivingLicenseBackFile && !drivingLicenseBackUrl" class="file-name">
+                      <i class="pi pi-file"></i>
+                      {{ drivingLicenseBackFile.name }}
+                    </p>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="drivingLicenseBackInput"
+                  accept="image/*"
+                  (change)="onFileChange($event, 'DL-B')"
+                  style="display: none"
+                />
+                <button
+                  pButton
+                  type="button"
+                  label="Upload"
+                  class="upload-button"
+                  (click)="triggerFileInput('drivingLicenseBackInput')"
+                  [disabled]="isUploadingDrivingLicenseBack"
+                ></button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section *ngIf="selectedSection === 'family-doctor'" class="settings-section">

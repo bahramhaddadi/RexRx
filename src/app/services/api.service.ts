@@ -60,6 +60,25 @@ export class ApiService {
   }
 
   /**
+   * POST request with FormData (for file uploads)
+   * @param endpoint - API endpoint (will be appended to base URL)
+   * @param formData - FormData object containing file and other data
+   * @returns Observable with response data
+   */
+  postFormData<T>(endpoint: string, formData: FormData): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}${endpoint}`, formData);
+  }
+
+  /**
+   * GET request for binary data (blob)
+   * @param endpoint - API endpoint (will be appended to base URL)
+   * @returns Observable with blob data
+   */
+  getBlob(endpoint: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}${endpoint}`, { responseType: 'blob' });
+  }
+
+  /**
    * Get the full URL for a given endpoint
    * @param endpoint - API endpoint
    * @returns Full URL

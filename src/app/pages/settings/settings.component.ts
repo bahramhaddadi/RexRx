@@ -13,6 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
+import { FileUploadModule } from 'primeng/fileupload';
 
 // Local imports
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
@@ -41,6 +42,7 @@ interface MenuItem {
     CheckboxModule,
     ProgressSpinnerModule,
     PaginatorModule,
+    FileUploadModule,
     PageLayoutComponent
   ],
   templateUrl: './settings.component.html',
@@ -55,7 +57,7 @@ export class SettingsComponent implements OnInit {
   menuItems: MenuItem[] = [
     { label: 'Personal info', value: 'personal-info', icon: 'pi pi-user' },
     { label: 'Shipping address', value: 'shipping-address', icon: 'pi pi-map-marker' },
-    { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card', disabled: true },
+    { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card' },
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
     { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit', disabled: true },
     { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag' },
@@ -68,6 +70,11 @@ export class SettingsComponent implements OnInit {
   isSavingProfile = false;
   isSavingAddress = false;
   isLoadingOrders = false;
+  isLoadingGovernmentIds = false;
+  isUploadingHealthCardFront = false;
+  isUploadingHealthCardBack = false;
+  isUploadingDrivingLicenseFront = false;
+  isUploadingDrivingLicenseBack = false;
 
   // Personal Info
   userProfile: UserProfile | null = null;
@@ -130,6 +137,16 @@ export class SettingsComponent implements OnInit {
   ordersTotalRecords = 0;
   ordersPageNumber = 0;
   ordersPageSize = 10;
+
+  // Government IDs
+  healthCardFrontFile: File | null = null;
+  healthCardBackFile: File | null = null;
+  drivingLicenseFrontFile: File | null = null;
+  drivingLicenseBackFile: File | null = null;
+  healthCardFrontUrl: string | null = null;
+  healthCardBackUrl: string | null = null;
+  drivingLicenseFrontUrl: string | null = null;
+  drivingLicenseBackUrl: string | null = null;
 
   // Error handling
   errorMessage = '';
@@ -480,5 +497,172 @@ export class SettingsComponent implements OnInit {
     return order.items.map(item =>
       `${item.quantity} x ${item.itemName}${item.dose ? ' (' + item.dose + ')' : ''}`
     ).join('\n');
+  }
+
+  /**
+   * Handles file selection for government ID upload
+   */
+  onFileSelect(event: any, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    const file = event.files[0];
+    if (!file) return;
+
+    // Store the file based on type
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontFile = file;
+        break;
+      case 'HC-B':
+        this.healthCardBackFile = file;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontFile = file;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackFile = file;
+        break;
+    }
+
+    // Upload immediately
+    this.uploadGovernmentId(file, type);
+  }
+
+  /**
+   * Handles direct file input change
+   */
+  onFileChange(event: Event, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+
+    // Store the file based on type
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontFile = file;
+        break;
+      case 'HC-B':
+        this.healthCardBackFile = file;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontFile = file;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackFile = file;
+        break;
+    }
+
+    // Upload immediately
+    this.uploadGovernmentId(file, type);
+  }
+
+  /**
+   * Uploads government ID image
+   */
+  uploadGovernmentId(file: File, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    // Set loading state
+    switch (type) {
+      case 'HC-F':
+        this.isUploadingHealthCardFront = true;
+        break;
+      case 'HC-B':
+        this.isUploadingHealthCardBack = true;
+        break;
+      case 'DL-F':
+        this.isUploadingDrivingLicenseFront = true;
+        break;
+      case 'DL-B':
+        this.isUploadingDrivingLicenseBack = true;
+        break;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.userService.uploadGovernmentIdImage(file, type).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0) {
+          this.successMessage = `${this.getDocumentName(type)} uploaded successfully!`;
+
+          // Create preview URL
+          const url = URL.createObjectURL(file);
+          this.setPreviewUrl(type, url);
+
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        } else {
+          this.errorMessage = response.errorMessage || 'Upload failed. Please try again.';
+        }
+        this.setLoadingState(type, false);
+      },
+      error: (error) => {
+        console.error('Error uploading government ID:', error);
+        this.errorMessage = 'Upload failed. Please try again.';
+        this.setLoadingState(type, false);
+      }
+    });
+  }
+
+  /**
+   * Sets preview URL for uploaded image
+   */
+  private setPreviewUrl(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B', url: string): void {
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontUrl = url;
+        break;
+      case 'HC-B':
+        this.healthCardBackUrl = url;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontUrl = url;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackUrl = url;
+        break;
+    }
+  }
+
+  /**
+   * Sets loading state for a specific upload
+   */
+  private setLoadingState(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B', loading: boolean): void {
+    switch (type) {
+      case 'HC-F':
+        this.isUploadingHealthCardFront = loading;
+        break;
+      case 'HC-B':
+        this.isUploadingHealthCardBack = loading;
+        break;
+      case 'DL-F':
+        this.isUploadingDrivingLicenseFront = loading;
+        break;
+      case 'DL-B':
+        this.isUploadingDrivingLicenseBack = loading;
+        break;
+    }
+  }
+
+  /**
+   * Gets human-readable document name
+   */
+  private getDocumentName(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): string {
+    const names: { [key: string]: string } = {
+      'HC-F': 'Health card (Front)',
+      'HC-B': 'Health card (Back)',
+      'DL-F': 'Driving license (Front)',
+      'DL-B': 'Driving license (Back)'
+    };
+    return names[type] || 'Document';
+  }
+
+  /**
+   * Triggers file input click
+   */
+  triggerFileInput(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
   }
 }
