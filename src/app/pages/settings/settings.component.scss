@@ -25,6 +25,7 @@
 
   @media (max-width: $breakpoint-md) {
     flex-direction: column;
+    gap: $spacing-md;
   }
 }
 
@@ -40,6 +41,10 @@
 
   @media (max-width: $breakpoint-md) {
     width: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
 }
 
@@ -47,6 +52,20 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: $spacing-sm;
+    padding: $spacing-sm 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari
+    }
+  }
 
   .menu-item {
     display: flex;
@@ -63,9 +82,28 @@
     text-align: left;
     width: 100%;
 
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: $spacing-xs;
+      padding: $spacing-sm $spacing-md;
+      min-width: fit-content;
+      white-space: nowrap;
+      background: var(--surface-card);
+      border: 1px solid var(--surface-border);
+      font-size: $font-size-sm;
+
+      span {
+        font-size: $font-size-xs;
+      }
+    }
+
     i {
       font-size: $font-size-lg;
       color: var(--text-color-secondary);
+
+      @media (max-width: $breakpoint-md) {
+        font-size: $font-size-base;
+      }
     }
 
     &:hover:not(.disabled) {
@@ -77,8 +115,18 @@
       color: var(--primary-color);
       font-weight: $font-weight-semibold;
 
+      @media (max-width: $breakpoint-md) {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
       i {
         color: var(--primary-color);
+
+        @media (max-width: $breakpoint-md) {
+          color: white;
+        }
       }
     }
 
@@ -86,6 +134,10 @@
       opacity: 0.5;
       cursor: not-allowed;
       text-decoration: line-through;
+
+      @media (max-width: $breakpoint-md) {
+        display: none; // Hide disabled items on mobile to save space
+      }
     }
   }
 }
@@ -98,6 +150,14 @@
   border-radius: $border-radius-md;
   padding: $spacing-xl;
   min-width: 0;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
 }
 
 .settings-section {
@@ -511,6 +571,14 @@
   padding: $spacing-xl;
   margin-bottom: $spacing-xl;
   transition: all $transition-base;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
 
   &:hover {
     box-shadow: $shadow-sm;
