@@ -592,7 +592,7 @@ export class SettingsComponent implements OnInit {
 
     this.userService.uploadGovernmentIdImage(file, type).subscribe({
       next: (response) => {
-        if (response.errorCode === 0) {
+        if (response.result === 'Upload completed') {
           this.successMessage = `${this.getDocumentName(type)} uploaded successfully!`;
 
           // Create preview URL
@@ -603,7 +603,7 @@ export class SettingsComponent implements OnInit {
             this.successMessage = '';
           }, 3000);
         } else {
-          this.errorMessage = response.errorMessage || 'Upload failed. Please try again.';
+          this.errorMessage = 'Upload failed. Please try again.';
         }
         this.setLoadingState(type, false);
       },

@@ -145,13 +145,12 @@ export class UserService {
 
   /**
    * Downloads a government ID image
-   * @param userId The user ID
-   * @param type The type suffix (e.g., 'HC-F' for health card front)
+   * @param type The type suffix (e.g., 'HC-F' for health card front, 'DL-B' for driving license back)
    * @returns Observable of blob data
    */
-  downloadGovernmentIdImage(userId: string, type: string): Observable<Blob> {
+  downloadGovernmentIdImage(type: string): Observable<Blob> {
     return this.apiService.getBlob(
-      `/Pharma/User/DownloadImage?id=${userId}-${type}`
+      `/Pharma/User/DownloadImage?type=${type}`
     );
   }
 

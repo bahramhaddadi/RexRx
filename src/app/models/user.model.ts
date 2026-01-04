@@ -230,9 +230,7 @@ export interface GovernmentIdStatus {
  * Upload image response
  */
 export interface UploadImageResponse {
-  id1: string;
-  errorCode: number;
-  errorMessage: string | null;
+  result: string;
 }
 
 /**
