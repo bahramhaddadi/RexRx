@@ -246,6 +246,25 @@ export interface UpdateMedicalHistoryRequest {
 }
 
 /**
+ * Medical history data model
+ */
+export interface MedicalHistoryData {
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherConditions: string;
+}
+
+/**
+ * Get medical history response
+ */
+export interface GetMedicalHistoryResponse {
+  errorCode: number;
+  errorMessage: string | null;
+  body: MedicalHistoryData;
+}
+
+/**
  * Update medical history response
  */
 export interface UpdateMedicalHistoryResponse {

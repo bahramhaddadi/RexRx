@@ -166,6 +166,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserProfile();
     this.loadUserAddresses();
+    this.loadMedicalHistory();
   }
 
   /**
@@ -187,8 +188,6 @@ export class SettingsComponent implements OnInit {
             gender: response.body.gender || '',
             phone: response.body.phone || ''
           };
-          // Load medical history data
-          this.loadMedicalHistory();
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load user profile.';
@@ -680,17 +679,31 @@ export class SettingsComponent implements OnInit {
   }
 
   /**
-   * Loads medical history from user profile
+   * Loads medical history from API
    */
   loadMedicalHistory(): void {
-    if (this.userProfile) {
-      this.medicalHistoryForm = {
-        allergies: this.userProfile.allergies || '',
-        medications: this.userProfile.medications || '',
-        surgeries: this.userProfile.surgeries || '',
-        otherConditions: this.userProfile.otherConditions || ''
-      };
-    }
+    this.userService.getMedicalHistory().subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.medicalHistoryForm = {
+            allergies: response.body.allergies || '',
+            medications: response.body.medications || '',
+            surgeries: response.body.surgeries || '',
+            otherConditions: response.body.otherConditions || ''
+          };
+        }
+      },
+      error: (error) => {
+        console.error('Error loading medical history:', error);
+        // Initialize with empty values if loading fails
+        this.medicalHistoryForm = {
+          allergies: '',
+          medications: '',
+          surgeries: '',
+          otherConditions: ''
+        };
+      }
+    });
   }
 
   /**
@@ -706,7 +719,7 @@ export class SettingsComponent implements OnInit {
         this.isSavingMedicalHistory = false;
         if (response.errorCode === 0) {
           this.successMessage = 'Medical history updated successfully!';
-          this.loadUserProfile(); // Reload to get fresh data
+          this.loadMedicalHistory(); // Reload to get fresh data
 
           setTimeout(() => {
             this.successMessage = '';
