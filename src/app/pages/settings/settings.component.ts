@@ -79,6 +79,14 @@ export class SettingsComponent implements OnInit {
   isUploadingDrivingLicenseBack = false;
   isSavingMedicalHistory = false;
 
+  // Section loading tracking flags
+  private sectionsLoaded = {
+    'personal-info': false,
+    'shipping-address': false,
+    'medical-history': false,
+    'orders': false
+  };
+
   // Personal Info
   userProfile: UserProfile | null = null;
   personalInfoForm: UpdatePersonalInfoRequest = {
@@ -164,9 +172,8 @@ export class SettingsComponent implements OnInit {
   successMessage = '';
 
   ngOnInit(): void {
+    // Only load personal-info data on init since it's the default section
     this.loadUserProfile();
-    this.loadUserAddresses();
-    this.loadMedicalHistory();
   }
 
   /**
@@ -188,6 +195,7 @@ export class SettingsComponent implements OnInit {
             gender: response.body.gender || '',
             phone: response.body.phone || ''
           };
+          this.sectionsLoaded['personal-info'] = true;
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load user profile.';
@@ -212,6 +220,7 @@ export class SettingsComponent implements OnInit {
     this.userService.getUserAddresses().subscribe({
       next: (response) => {
         this.addresses = response.body || [];
+        this.sectionsLoaded['shipping-address'] = true;
         this.isLoadingAddresses = false;
       },
       error: (error) => {
@@ -419,9 +428,22 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = '';
       this.successMessage = '';
 
-      // Load orders when navigating to orders section
-      if (sectionValue === 'orders' && this.orders.length === 0) {
-        this.loadOrders();
+      // Lazy load section data only on first visit
+      if (!this.sectionsLoaded[sectionValue as keyof typeof this.sectionsLoaded]) {
+        switch (sectionValue) {
+          case 'personal-info':
+            this.loadUserProfile();
+            break;
+          case 'shipping-address':
+            this.loadUserAddresses();
+            break;
+          case 'medical-history':
+            this.loadMedicalHistory();
+            break;
+          case 'orders':
+            this.loadOrders();
+            break;
+        }
       }
     }
   }
@@ -443,6 +465,7 @@ export class SettingsComponent implements OnInit {
         if (response.errorCode === 0 && response.body) {
           this.orders = response.body.list || [];
           this.ordersTotalRecords = response.body.totalRecords || 0;
+          this.sectionsLoaded['orders'] = true;
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load orders.';
@@ -691,6 +714,7 @@ export class SettingsComponent implements OnInit {
             surgeries: response.body.surgeries || '',
             otherConditions: response.body.otherConditions || ''
           };
+          this.sectionsLoaded['medical-history'] = true;
         }
       },
       error: (error) => {
