@@ -83,6 +83,7 @@ export class SettingsComponent implements OnInit {
   private sectionsLoaded = {
     'personal-info': false,
     'shipping-address': false,
+    'government-id': false,
     'medical-history': false,
     'orders': false
   };
@@ -437,6 +438,9 @@ export class SettingsComponent implements OnInit {
           case 'shipping-address':
             this.loadUserAddresses();
             break;
+          case 'government-id':
+            this.loadGovernmentIds();
+            break;
           case 'medical-history':
             this.loadMedicalHistory();
             break;
@@ -588,6 +592,30 @@ export class SettingsComponent implements OnInit {
 
     // Upload immediately
     this.uploadGovernmentId(file, type);
+  }
+
+  /**
+   * Loads existing government ID images
+   */
+  loadGovernmentIds(): void {
+    const types: ('HC-F' | 'HC-B' | 'DL-F' | 'DL-B')[] = ['HC-F', 'HC-B', 'DL-F', 'DL-B'];
+
+    types.forEach(type => {
+      this.userService.downloadGovernmentIdImage(type).subscribe({
+        next: (blob) => {
+          // Create blob URL and set as preview
+          const url = URL.createObjectURL(blob);
+          this.setPreviewUrl(type, url);
+        },
+        error: (error) => {
+          // Silently fail - image doesn't exist yet
+          console.log(`No existing image for ${type}`);
+        }
+      });
+    });
+
+    // Mark section as loaded
+    this.sectionsLoaded['government-id'] = true;
   }
 
   /**
