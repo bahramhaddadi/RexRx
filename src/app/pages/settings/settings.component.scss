@@ -25,6 +25,7 @@
 
   @media (max-width: $breakpoint-md) {
     flex-direction: column;
+    gap: $spacing-md;
   }
 }
 
@@ -40,6 +41,10 @@
 
   @media (max-width: $breakpoint-md) {
     width: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
 }
 
@@ -47,6 +52,20 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: $spacing-sm;
+    padding: $spacing-sm 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari
+    }
+  }
 
   .menu-item {
     display: flex;
@@ -63,9 +82,28 @@
     text-align: left;
     width: 100%;
 
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: $spacing-xs;
+      padding: $spacing-sm $spacing-md;
+      min-width: fit-content;
+      white-space: nowrap;
+      background: var(--surface-card);
+      border: 1px solid var(--surface-border);
+      font-size: $font-size-sm;
+
+      span {
+        font-size: $font-size-xs;
+      }
+    }
+
     i {
       font-size: $font-size-lg;
       color: var(--text-color-secondary);
+
+      @media (max-width: $breakpoint-md) {
+        font-size: $font-size-base;
+      }
     }
 
     &:hover:not(.disabled) {
@@ -77,8 +115,18 @@
       color: var(--primary-color);
       font-weight: $font-weight-semibold;
 
+      @media (max-width: $breakpoint-md) {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
       i {
         color: var(--primary-color);
+
+        @media (max-width: $breakpoint-md) {
+          color: white;
+        }
       }
     }
 
@@ -86,6 +134,10 @@
       opacity: 0.5;
       cursor: not-allowed;
       text-decoration: line-through;
+
+      @media (max-width: $breakpoint-md) {
+        display: none; // Hide disabled items on mobile to save space
+      }
     }
   }
 }
@@ -98,6 +150,14 @@
   border-radius: $border-radius-md;
   padding: $spacing-xl;
   min-width: 0;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
 }
 
 .settings-section {
@@ -492,6 +552,283 @@
       .p-datatable-tbody > tr > td {
         padding: $spacing-sm;
       }
+    }
+  }
+}
+
+// Government ID Section Styling
+.section-description {
+  color: var(--text-color-secondary);
+  font-size: $font-size-base;
+  margin-bottom: $spacing-xl;
+  line-height: $line-height-relaxed;
+}
+
+.id-document-card {
+  background: var(--surface-50);
+  border: 1px solid var(--surface-border);
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  transition: all $transition-base;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-lg;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-md;
+  }
+
+  &:hover {
+    box-shadow: $shadow-sm;
+  }
+
+  .document-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: var(--text-color);
+    margin: 0 0 $spacing-lg 0;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+  }
+
+  .document-uploads {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-xl;
+    margin-top: $spacing-lg;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+  }
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .upload-label {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: var(--text-color);
+  }
+
+  .upload-area {
+    background: var(--surface-card);
+    border: 2px dashed var(--surface-border);
+    border-radius: $border-radius-md;
+    padding: $spacing-xl;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all $transition-base;
+    position: relative;
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-md) {
+      min-height: 200px;
+      padding: $spacing-md;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      min-height: 150px;
+      padding: $spacing-sm;
+    }
+
+    &:hover {
+      border-color: var(--primary-color);
+      background: var(--primary-50);
+    }
+
+    &.has-file {
+      border-style: solid;
+      border-color: var(--green-500);
+      background: var(--green-50);
+    }
+
+    .upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text-color-secondary);
+      padding: $spacing-sm;
+
+      i {
+        font-size: 3rem;
+        opacity: 0.5;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    .upload-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-preview {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        max-width: 100%;
+        max-height: 220px;
+        object-fit: contain;
+        border-radius: $border-radius-sm;
+        box-shadow: $shadow-sm;
+      }
+
+      .file-name {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        color: var(--text-color);
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+        margin: 0;
+
+        i {
+          font-size: $font-size-lg;
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .upload-button {
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-md;
+    transition: all $transition-base;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Additional PrimeNG Button Styling for Upload
+::ng-deep .upload-button {
+  background: var(--primary-color);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background: var(--primary-600);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--primary-700);
+  }
+}
+
+// Medical History Section Styling
+.medical-history-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+
+  .form-field-full {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    label {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      color: var(--text-color);
+      margin-bottom: $spacing-xs;
+    }
+
+    textarea {
+      width: 100%;
+      padding: $spacing-md;
+      border: 2px solid var(--surface-border);
+      border-radius: $border-radius-md;
+      font-size: $font-size-base;
+      font-family: $font-family-base;
+      color: var(--text-color);
+      background: var(--surface-card);
+      transition: all $transition-base;
+      resize: vertical;
+      min-height: 100px;
+
+      &::placeholder {
+        color: var(--text-color-secondary);
+        opacity: 0.6;
+      }
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        padding: $spacing-sm;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}
+
+// PrimeNG Textarea Override
+::ng-deep {
+  .p-inputtextarea {
+    width: 100%;
+    padding: $spacing-md;
+    border: 2px solid var(--surface-border);
+    border-radius: $border-radius-md;
+    font-size: $font-size-base;
+    font-family: $font-family-base;
+    color: var(--text-color);
+    background: var(--surface-card);
+    transition: all $transition-base;
+    resize: vertical;
+
+    &::placeholder {
+      color: var(--text-color-secondary);
+      opacity: 0.6;
+    }
+
+    &:enabled:hover {
+      border-color: var(--primary-color);
+    }
+
+    &:enabled:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: $spacing-sm;
+      font-size: $font-size-sm;
     }
   }
 }

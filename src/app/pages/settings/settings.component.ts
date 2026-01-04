@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
@@ -13,11 +14,12 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
+import { FileUploadModule } from 'primeng/fileupload';
 
 // Local imports
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { UserService } from '../../services/user.service';
-import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order } from '../../models/user.model';
+import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order, UpdateMedicalHistoryRequest } from '../../models/user.model';
 
 interface MenuItem {
   label: string;
@@ -34,6 +36,7 @@ interface MenuItem {
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputTextareaModule,
     CalendarModule,
     DropdownModule,
     TableModule,
@@ -41,6 +44,7 @@ interface MenuItem {
     CheckboxModule,
     ProgressSpinnerModule,
     PaginatorModule,
+    FileUploadModule,
     PageLayoutComponent
   ],
   templateUrl: './settings.component.html',
@@ -55,9 +59,9 @@ export class SettingsComponent implements OnInit {
   menuItems: MenuItem[] = [
     { label: 'Personal info', value: 'personal-info', icon: 'pi pi-user' },
     { label: 'Shipping address', value: 'shipping-address', icon: 'pi pi-map-marker' },
-    { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card', disabled: true },
+    { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card' },
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
-    { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit', disabled: true },
+    { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit' },
     { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag' },
     { label: 'Prescriptions', value: 'prescriptions', icon: 'pi pi-file', disabled: true }
   ];
@@ -68,6 +72,21 @@ export class SettingsComponent implements OnInit {
   isSavingProfile = false;
   isSavingAddress = false;
   isLoadingOrders = false;
+  isLoadingGovernmentIds = false;
+  isUploadingHealthCardFront = false;
+  isUploadingHealthCardBack = false;
+  isUploadingDrivingLicenseFront = false;
+  isUploadingDrivingLicenseBack = false;
+  isSavingMedicalHistory = false;
+
+  // Section loading tracking flags
+  private sectionsLoaded = {
+    'personal-info': false,
+    'shipping-address': false,
+    'government-id': false,
+    'medical-history': false,
+    'orders': false
+  };
 
   // Personal Info
   userProfile: UserProfile | null = null;
@@ -131,13 +150,31 @@ export class SettingsComponent implements OnInit {
   ordersPageNumber = 0;
   ordersPageSize = 10;
 
+  // Government IDs
+  healthCardFrontFile: File | null = null;
+  healthCardBackFile: File | null = null;
+  drivingLicenseFrontFile: File | null = null;
+  drivingLicenseBackFile: File | null = null;
+  healthCardFrontUrl: string | null = null;
+  healthCardBackUrl: string | null = null;
+  drivingLicenseFrontUrl: string | null = null;
+  drivingLicenseBackUrl: string | null = null;
+
+  // Medical History
+  medicalHistoryForm: UpdateMedicalHistoryRequest = {
+    allergies: '',
+    medications: '',
+    surgeries: '',
+    otherConditions: ''
+  };
+
   // Error handling
   errorMessage = '';
   successMessage = '';
 
   ngOnInit(): void {
+    // Only load personal-info data on init since it's the default section
     this.loadUserProfile();
-    this.loadUserAddresses();
   }
 
   /**
@@ -159,6 +196,7 @@ export class SettingsComponent implements OnInit {
             gender: response.body.gender || '',
             phone: response.body.phone || ''
           };
+          this.sectionsLoaded['personal-info'] = true;
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load user profile.';
@@ -183,6 +221,7 @@ export class SettingsComponent implements OnInit {
     this.userService.getUserAddresses().subscribe({
       next: (response) => {
         this.addresses = response.body || [];
+        this.sectionsLoaded['shipping-address'] = true;
         this.isLoadingAddresses = false;
       },
       error: (error) => {
@@ -390,9 +429,25 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = '';
       this.successMessage = '';
 
-      // Load orders when navigating to orders section
-      if (sectionValue === 'orders' && this.orders.length === 0) {
-        this.loadOrders();
+      // Lazy load section data only on first visit
+      if (!this.sectionsLoaded[sectionValue as keyof typeof this.sectionsLoaded]) {
+        switch (sectionValue) {
+          case 'personal-info':
+            this.loadUserProfile();
+            break;
+          case 'shipping-address':
+            this.loadUserAddresses();
+            break;
+          case 'government-id':
+            this.loadGovernmentIds();
+            break;
+          case 'medical-history':
+            this.loadMedicalHistory();
+            break;
+          case 'orders':
+            this.loadOrders();
+            break;
+        }
       }
     }
   }
@@ -414,6 +469,7 @@ export class SettingsComponent implements OnInit {
         if (response.errorCode === 0 && response.body) {
           this.orders = response.body.list || [];
           this.ordersTotalRecords = response.body.totalRecords || 0;
+          this.sectionsLoaded['orders'] = true;
         } else {
           console.error('API Error:', response.errorMessage);
           this.errorMessage = response.errorMessage || 'Failed to load orders.';
@@ -480,5 +536,264 @@ export class SettingsComponent implements OnInit {
     return order.items.map(item =>
       `${item.quantity} x ${item.itemName}${item.dose ? ' (' + item.dose + ')' : ''}`
     ).join('\n');
+  }
+
+  /**
+   * Handles file selection for government ID upload
+   */
+  onFileSelect(event: any, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    const file = event.files[0];
+    if (!file) return;
+
+    // Store the file based on type
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontFile = file;
+        break;
+      case 'HC-B':
+        this.healthCardBackFile = file;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontFile = file;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackFile = file;
+        break;
+    }
+
+    // Upload immediately
+    this.uploadGovernmentId(file, type);
+  }
+
+  /**
+   * Handles direct file input change
+   */
+  onFileChange(event: Event, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+
+    // Store the file based on type
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontFile = file;
+        break;
+      case 'HC-B':
+        this.healthCardBackFile = file;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontFile = file;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackFile = file;
+        break;
+    }
+
+    // Upload immediately
+    this.uploadGovernmentId(file, type);
+  }
+
+  /**
+   * Loads existing government ID images
+   */
+  loadGovernmentIds(): void {
+    const types: ('HC-F' | 'HC-B' | 'DL-F' | 'DL-B')[] = ['HC-F', 'HC-B', 'DL-F', 'DL-B'];
+
+    types.forEach(type => {
+      this.userService.downloadGovernmentIdImage(type).subscribe({
+        next: (blob) => {
+          // Create blob URL and set as preview
+          const url = URL.createObjectURL(blob);
+          this.setPreviewUrl(type, url);
+        },
+        error: (error) => {
+          // Silently fail - image doesn't exist yet
+          console.log(`No existing image for ${type}`);
+        }
+      });
+    });
+
+    // Mark section as loaded
+    this.sectionsLoaded['government-id'] = true;
+  }
+
+  /**
+   * Uploads government ID image
+   */
+  uploadGovernmentId(file: File, type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): void {
+    // Set loading state
+    switch (type) {
+      case 'HC-F':
+        this.isUploadingHealthCardFront = true;
+        break;
+      case 'HC-B':
+        this.isUploadingHealthCardBack = true;
+        break;
+      case 'DL-F':
+        this.isUploadingDrivingLicenseFront = true;
+        break;
+      case 'DL-B':
+        this.isUploadingDrivingLicenseBack = true;
+        break;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.userService.uploadGovernmentIdImage(file, type).subscribe({
+      next: (response) => {
+        if (response.result === 'Upload completed') {
+          this.successMessage = `${this.getDocumentName(type)} uploaded successfully!`;
+
+          // Create preview URL
+          const url = URL.createObjectURL(file);
+          this.setPreviewUrl(type, url);
+
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        } else {
+          this.errorMessage = 'Upload failed. Please try again.';
+        }
+        this.setLoadingState(type, false);
+      },
+      error: (error) => {
+        console.error('Error uploading government ID:', error);
+        this.errorMessage = 'Upload failed. Please try again.';
+        this.setLoadingState(type, false);
+      }
+    });
+  }
+
+  /**
+   * Sets preview URL for uploaded image
+   */
+  private setPreviewUrl(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B', url: string): void {
+    switch (type) {
+      case 'HC-F':
+        this.healthCardFrontUrl = url;
+        break;
+      case 'HC-B':
+        this.healthCardBackUrl = url;
+        break;
+      case 'DL-F':
+        this.drivingLicenseFrontUrl = url;
+        break;
+      case 'DL-B':
+        this.drivingLicenseBackUrl = url;
+        break;
+    }
+  }
+
+  /**
+   * Sets loading state for a specific upload
+   */
+  private setLoadingState(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B', loading: boolean): void {
+    switch (type) {
+      case 'HC-F':
+        this.isUploadingHealthCardFront = loading;
+        break;
+      case 'HC-B':
+        this.isUploadingHealthCardBack = loading;
+        break;
+      case 'DL-F':
+        this.isUploadingDrivingLicenseFront = loading;
+        break;
+      case 'DL-B':
+        this.isUploadingDrivingLicenseBack = loading;
+        break;
+    }
+  }
+
+  /**
+   * Gets human-readable document name
+   */
+  private getDocumentName(type: 'HC-F' | 'HC-B' | 'DL-F' | 'DL-B'): string {
+    const names: { [key: string]: string } = {
+      'HC-F': 'Health card (Front)',
+      'HC-B': 'Health card (Back)',
+      'DL-F': 'Driving license (Front)',
+      'DL-B': 'Driving license (Back)'
+    };
+    return names[type] || 'Document';
+  }
+
+  /**
+   * Triggers file input click
+   */
+  triggerFileInput(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    if (input) {
+      input.click();
+    }
+  }
+
+  /**
+   * Loads medical history from API
+   */
+  loadMedicalHistory(): void {
+    this.userService.getMedicalHistory().subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.medicalHistoryForm = {
+            allergies: response.body.allergies || '',
+            medications: response.body.medications || '',
+            surgeries: response.body.surgeries || '',
+            otherConditions: response.body.otherConditions || ''
+          };
+          this.sectionsLoaded['medical-history'] = true;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading medical history:', error);
+        // Initialize with empty values if loading fails
+        this.medicalHistoryForm = {
+          allergies: '',
+          medications: '',
+          surgeries: '',
+          otherConditions: ''
+        };
+      }
+    });
+  }
+
+  /**
+   * Saves medical history
+   */
+  saveMedicalHistory(): void {
+    this.isSavingMedicalHistory = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.userService.updateMedicalHistory(this.medicalHistoryForm).subscribe({
+      next: (response) => {
+        this.isSavingMedicalHistory = false;
+        if (response.errorCode === 0) {
+          this.successMessage = 'Medical history updated successfully!';
+          this.loadMedicalHistory(); // Reload to get fresh data
+
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to update medical history.';
+        }
+      },
+      error: (error) => {
+        console.error('Error updating medical history:', error);
+        this.errorMessage = 'Failed to update medical history. Please try again.';
+        this.isSavingMedicalHistory = false;
+      }
+    });
+  }
+
+  /**
+   * Cancels medical history editing and resets form
+   */
+  cancelMedicalHistory(): void {
+    this.loadMedicalHistory();
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 }

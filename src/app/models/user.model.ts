@@ -199,3 +199,74 @@ export interface GetOrdersResponse {
   errorCode: number;
   errorMessage: string | null;
 }
+
+/**
+ * Government ID document type
+ */
+export enum GovernmentIdType {
+  HEALTH_CARD = 'HC',
+  DRIVING_LICENSE = 'DL'
+}
+
+/**
+ * Government ID document side
+ */
+export enum GovernmentIdSide {
+  FRONT = 'F',
+  BACK = 'B'
+}
+
+/**
+ * Government ID upload status
+ */
+export interface GovernmentIdStatus {
+  healthCardFront: string | null;
+  healthCardBack: string | null;
+  drivingLicenseFront: string | null;
+  drivingLicenseBack: string | null;
+}
+
+/**
+ * Upload image response
+ */
+export interface UploadImageResponse {
+  result: string;
+}
+
+/**
+ * Medical history request model
+ */
+export interface UpdateMedicalHistoryRequest {
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherConditions: string;
+}
+
+/**
+ * Medical history data model
+ */
+export interface MedicalHistoryData {
+  allergies: string;
+  medications: string;
+  surgeries: string;
+  otherConditions: string;
+}
+
+/**
+ * Get medical history response
+ */
+export interface GetMedicalHistoryResponse {
+  errorCode: number;
+  errorMessage: string | null;
+  body: MedicalHistoryData;
+}
+
+/**
+ * Update medical history response
+ */
+export interface UpdateMedicalHistoryResponse {
+  errorCode: number;
+  errorMessage: string | null;
+  body: string;
+}
