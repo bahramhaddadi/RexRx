@@ -102,8 +102,8 @@ export class SignInComponent implements OnInit {
           this.router.navigate(['/']);
         } else {
           // Authentication failed with error
-          this.errorMessage = response.exceptionMessage || 'Authentication failed';
           this.refreshCaptcha();
+          this.errorMessage = response.exceptionMessage || 'Authentication failed';
         }
         this.isLoading = false;
       },
