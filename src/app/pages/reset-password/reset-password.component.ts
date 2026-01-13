@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 import { CaptchaResponse } from '../../models/auth.model';
 
 @Component({
-  selector: 'app-sign-in',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,10 +23,10 @@ import { CaptchaResponse } from '../../models/auth.model';
     MessageModule,
     PageLayoutComponent
   ],
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
-export class SignInComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
   private readonly captchaService = inject(CaptchaService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -77,50 +77,39 @@ export class SignInComponent implements OnInit {
   /**
    * Handle sign in
    */
-  onSignIn(): void {
+  onResetPassword(): void {
     // Clear previous error
     this.errorMessage = '';
 
     // Validate inputs
-    if (!this.email || !this.password || !this.captchaCode) {
+    if (!this.email || !this.captchaCode) {
       this.errorMessage = 'Please fill in all fields';
       return;
     }
 
     this.isLoading = true;
 
-    this.authService.authenticate({
+    this.authService.resetPassword({
       email: this.email,
-      password: this.password,
       refId: this.captchaRefId,
       captchaCode: this.captchaCode
     }).subscribe({
       next: (response) => {
-        if (response.exceptionCode === 0) {
-          // Success - navigate to home or dashboard
-          console.log('Authentication successful:', response);
-          this.router.navigate(['/']);
+        if (response.errorCode === 0) {
+          // Success - navigate to home or password reset request page
+          this.router.navigate(['/reset-password-request']);
         } else {
           // Authentication failed with error
           this.refreshCaptcha();
-          this.errorMessage = response.exceptionMessage || 'Authentication failed';
+          this.errorMessage = response.body || 'Reset password failed';
         }
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Authentication error:', error);
-        this.errorMessage = error.error?.exceptionMessage || 'Authentication failed. Please try again.';
+        this.errorMessage = error.error?.exceptionMessage || 'Reset password failed. Please try again.';
         this.refreshCaptcha();
         this.isLoading = false;
       }
     });
-  }
-
-  onForgotPassword(): void {
-    this.router.navigate(['/reset-password']);
-  }
-
-  onSignUp(): void {
-    this.router.navigate(['/sign-up']);
   }
 }

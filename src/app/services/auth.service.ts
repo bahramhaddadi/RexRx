@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { AuthRequest, AuthResponse, SignUpRequest, SignUpResponse } from '../models/auth.model';
+import { AuthRequest, AuthResponse, ResetPasswordRequest, ResetPasswordResponse, SignUpRequest, SignUpResponse } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ export class AuthService {
   private readonly apiService = inject(ApiService);
   private readonly AUTH_ENDPOINT = '/Pharma/Security/Authenticate';
   private readonly SIGNUP_ENDPOINT = '/Pharma/Security/Signup';
+  private readonly RESET_PASSWORD_ENDPOINT = '/Pharma/Security/RequestUserResetPassword';
   private readonly SESSION_STORAGE_KEY = 'pharma_session';
 
   // Modern Angular 17: Use signal instead of BehaviorSubject
@@ -51,6 +52,16 @@ export class AuthService {
     );
   }
 
+  resetPassword(resetData: ResetPasswordRequest): Observable<ResetPasswordResponse> {
+    // API expects an array: [email, refId, captchaCode]
+    const requestBody = [
+      resetData.email,
+      resetData.refId,
+      resetData.captchaCode
+    ];
+    return this.apiService.post<ResetPasswordResponse>(this.RESET_PASSWORD_ENDPOINT, requestBody);
+  }
+  
   /**
    * Set the current session
    * @param session - Session data
