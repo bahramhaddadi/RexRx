@@ -19,7 +19,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 // Local imports
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { UserService } from '../../services/user.service';
-import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order, UpdateMedicalHistoryRequest } from '../../models/user.model';
+import { UserProfile, UpdatePersonalInfoRequest, UserAddress, CreateUserAddressRequest, UpdateUserAddressRequest, Order, UpdateMedicalHistoryRequest, ChangePasswordRequest } from '../../models/user.model';
 
 interface MenuItem {
   label: string;
@@ -58,6 +58,7 @@ export class SettingsComponent implements OnInit {
   selectedSection: string = 'personal-info';
   menuItems: MenuItem[] = [
     { label: 'Personal info', value: 'personal-info', icon: 'pi pi-user' },
+    { label: 'Change password', value: 'change-password', icon: 'pi pi-key' },
     { label: 'Shipping address', value: 'shipping-address', icon: 'pi pi-map-marker' },
     { label: 'Government issued ID', value: 'government-id', icon: 'pi pi-id-card' },
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
@@ -68,8 +69,10 @@ export class SettingsComponent implements OnInit {
 
   // Loading states
   isLoadingProfile = false;
+  isLoadingChangePassword = false;
   isLoadingAddresses = false;
   isSavingProfile = false;
+  isSavingPassword = false;
   isSavingAddress = false;
   isLoadingOrders = false;
   isLoadingGovernmentIds = false;
@@ -82,6 +85,7 @@ export class SettingsComponent implements OnInit {
   // Section loading tracking flags
   private sectionsLoaded = {
     'personal-info': false,
+    'change-password': false,
     'shipping-address': false,
     'government-id': false,
     'medical-history': false,
@@ -98,6 +102,14 @@ export class SettingsComponent implements OnInit {
     gender: '',
     phone: ''
   };
+
+  // change password
+  changePasswordForm: ChangePasswordRequest = {
+    currentPassword: '',
+    newPassword: '',
+    retypeNewPassword: ''
+  };
+
   genderOptions = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
@@ -212,6 +224,16 @@ export class SettingsComponent implements OnInit {
   }
 
   /**
+   * Loads user profile data
+   */
+  
+  loadChangePassword(): void {
+    this.isLoadingChangePassword = false;
+    this.errorMessage = '';
+    this.sectionsLoaded['change-password'] = true;
+  }
+
+  /**
    * Loads user shipping addresses
    */
   loadUserAddresses(): void {
@@ -260,6 +282,44 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  saveNewPassword(): void {
+    this.isSavingProfile = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if(this.changePasswordForm.newPassword != this.changePasswordForm.retypeNewPassword) {
+      this.errorMessage = 'New password and confirmation password must match.';
+      return;
+    }
+    this.userService.updateUserPassword(this.changePasswordForm.currentPassword, this.changePasswordForm.newPassword).subscribe({
+      next: (response) => {
+        this.isSavingProfile = false;
+        if(response.errorCode == 0) {
+          this.successMessage = 'Your password updated successfully!';
+          // Clear success message after 3 seconds
+          setTimeout(() => {
+            this.changePasswordForm = {
+              currentPassword : '',
+              newPassword : '',
+              retypeNewPassword : ''
+            };
+            this.successMessage = '';
+          }, 3000);
+        }
+        else if (response.errorCode == 999) {
+          this.errorMessage = 'invalid current password';
+        }
+        else {
+          this.errorMessage = response.errorMessage || '';
+        }
+      },
+      error: (error) => {
+        console.error('Error updating password:', error);
+        this.errorMessage = 'Failed to update your password. Please try again.';
+        this.isSavingProfile = false;
+      }
+    });
+  }
   /**
    * Cancels personal info editing and resets form
    */
@@ -278,6 +338,20 @@ export class SettingsComponent implements OnInit {
     this.successMessage = '';
   }
 
+  cancelChangePassword(): void {
+    // this.changePasswordForm = {
+    //   currentPassword = '',
+    //   newPassword = '',
+    //   retypeNewPassword = ''
+    // };
+    this.changePasswordForm = {
+      currentPassword : '',
+      newPassword : '',
+      retypeNewPassword : ''
+    };
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
   /**
    * Opens dialog to add new address
    */
@@ -434,6 +508,9 @@ export class SettingsComponent implements OnInit {
         switch (sectionValue) {
           case 'personal-info':
             this.loadUserProfile();
+            break;
+          case 'change-password':
+            this.loadChangePassword();
             break;
           case 'shipping-address':
             this.loadUserAddresses();

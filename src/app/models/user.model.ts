@@ -52,6 +52,15 @@ export interface UpdatePersonalInfoRequest {
 }
 
 /**
+ * Change user password
+ */
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  retypeNewPassword: string;
+}
+
+/**
  * User address model
  */
 export interface UserAddress {
@@ -102,6 +111,12 @@ export interface ApiResponse {
   exceptionCode: number;
   exceptionMessage: string | null;
   success?: boolean;
+}
+
+export interface UpdateUserPasswordResponse {
+  body: string;
+  errorCode: number;
+  errorMessage: string | null;
 }
 
 /**

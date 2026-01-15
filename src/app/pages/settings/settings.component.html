@@ -137,6 +137,80 @@
           </form>
         </section>
 
+        <!-- Update user password Section -->
+        <section *ngIf="selectedSection === 'change-password'" class="settings-section">
+          <h2>Change Password</h2>
+
+          <form class="change-password-form">
+            <div class="form-row">
+              <div class="form-field">
+              <label for="currentPassword">Current Password</label>
+              <input
+                  type="password"
+                  pInputText
+                  id="currentPassword"
+                  [(ngModel)]="changePasswordForm.currentPassword"
+                  name="currentPassword"
+                  placeholder="Current Password"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row" style="padding-top: 20pt;">
+              <div class="form-field">
+                <label for="newPassword">New Password</label>
+                <input
+                    type="password"
+                    pInputText
+                    id="newPassword"
+                    [(ngModel)]="changePasswordForm.newPassword"
+                    name="newPassword"
+                    placeholder="New Password"
+                    required
+                  />
+              </div>
+            </div>
+
+            <div class="form-row" style="padding-top: 20pt;">
+              <div class="form-field">
+                <label for="retypeNewPassword">Retype New Password</label>
+                <input
+                    type="password"
+                    pInputText
+                    id="retyprNewPassword"
+                    [(ngModel)]="changePasswordForm.retypeNewPassword"
+                    name="retyprNewPassword"
+                    placeholder="Retype New Password"
+                    required
+                  />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                pButton
+                type="button"
+                label="Cancel"
+                class="p-button-secondary"
+                (click)="cancelChangePassword()"
+                [disabled]="isSavingPassword"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Save"
+                (click)="saveNewPassword()"
+                [loading]="isSavingPassword"
+              ></button>
+            </div>
+
+          </form>
+
+          
+        </section>
+
+
         <!-- Shipping Address Section -->
         <section *ngIf="selectedSection === 'shipping-address'" class="settings-section">
           <div class="section-header">
