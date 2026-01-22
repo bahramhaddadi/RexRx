@@ -190,7 +190,7 @@ export class SignUpComponent implements OnInit {
           // Redirect to sign-in page (the page that routes to sign-up)
           setTimeout(() => {
             this.router.navigate(['/login']);
-          }, 2000);
+          }, 3000);
         } else {
           // Sign up failed - show error message
           this.errorMessage = response.errorMessage || 'Sign up failed. Please try again.';

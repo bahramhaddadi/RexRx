@@ -441,6 +441,10 @@
               } @else {
                 @for (item of relatedItems; track item.doseId) {
                   <div class="related-item">
+                    <div>
+                      <img src="{{ item.imageUrl }}" class="img-fluid related-img"/>
+                    </div>
+
                     <div class="related-info">
                       <h5>{{ item.title || item.brandName }}</h5>
                       <span class="related-dose">{{ item.dose }}</span>
