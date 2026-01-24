@@ -23,11 +23,6 @@ export class HeaderComponent {
 
   menuItems: MenuItem[] = [
     {
-      label: 'Profile',
-      icon: 'pi pi-user',
-      command: () => this.router.navigate(['/profile'])
-    },
-    {
       label: 'Settings',
       icon: 'pi pi-cog',
       command: () => this.router.navigate(['/settings'])

@@ -171,6 +171,36 @@
   margin-bottom: $spacing-lg;
 }
 
+.header-logo {
+  width: 56px;
+  height: 56px;
+  border-color: linear-gradient(90deg, #0452fa 0%, #9adcff 100%);;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto $spacing-sm;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+  position: relative;
+  cursor: pointer;
+
+  i {
+    font-size: 28px;
+    color: $white;
+  }
+
+  .logo-plus {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 18px;
+    background: #10B981;
+    border-radius: 50%;
+    padding: 2px;
+    border: 2px solid $white;
+  }
+}
+
 .signin-title {
   font-size: 28px;
   font-weight: 700;

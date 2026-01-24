@@ -123,4 +123,8 @@ export class SignInComponent implements OnInit {
   onSignUp(): void {
     this.router.navigate(['/sign-up']);
   }
+
+  navigateToHome() {
+    this.router.navigate(['/']);
+  }
 }
