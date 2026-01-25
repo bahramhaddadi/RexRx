@@ -17,7 +17,8 @@ import {
   UploadImageResponse,
   UpdateMedicalHistoryRequest,
   UpdateMedicalHistoryResponse,
-  GetMedicalHistoryResponse
+  GetMedicalHistoryResponse,
+  UpdateUserPasswordResponse
 } from '../models/user.model';
 
 @Injectable({
@@ -81,6 +82,20 @@ export class UserService {
     return this.apiService.post<ApiResponse>(
       '/Pharma/User/UpdateUserAddress',
       address
+    );
+  }
+
+    /**
+   * Updates user password
+   * @param currentPassword 
+   * @param newPAsswordPassword 
+   * @returns Observable of API response
+   */
+  updateUserPassword(currentPassword: string, newPassword: string): Observable<UpdateUserPasswordResponse> {
+    const request = [currentPassword, newPassword];
+    return this.apiService.post<UpdateUserPasswordResponse>(
+      '/Pharma/User/UpdatePassword',
+      request
     );
   }
 

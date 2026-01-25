@@ -14,6 +14,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/sign-up/sign-up.component').then(mod => mod.SignUpComponent),
     canActivate: [guestGuard]
   },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/reset-password/reset-password.component').then(mod => mod.ResetPasswordComponent),
+    canActivate: [guestGuard]
+  },
+  {
+    path: 'reset-password-request',
+    loadComponent: () => import('./pages/reset-password-request/reset-password-request.component').then(mod => mod.ResetPasswordRequestComponent),
+    canActivate: [guestGuard]
+  },
+
 
   // Public route (accessible to everyone)
   {

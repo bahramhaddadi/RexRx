@@ -41,17 +41,25 @@
                 <li><i class="pi pi-check-circle"></i><span>Fast & discreet shipping</span></li>
               </ul>
             </div>
-            <div class="card-action">
-              <p-button
-                label="Help me choose"
-                icon="pi pi-question-circle"
-                (onClick)="onHelpMeChoose()"
-                styleClass="help-button">
-              </p-button>
-            </div>
           </div>
         </div>
       </div>
+
+      <!-- I Need help -->
+       <div class="selection-section">
+        <div class="section-header">
+          <div class="section-title-wrapper" style="padding-bottom: 2rem;">
+            <i class="pi pi-list"></i>
+            <h2 class="section-title">I am not sure, I need help</h2>
+          </div>
+          <p-button
+            label="Help me choose"
+            icon="pi pi-question-circle"
+            (onClick)="onHelpMeChoose()"
+            styleClass="help-button">
+          </p-button>
+        </div>
+        </div>
 
       <!-- I Know What I Want Section -->
       <div class="selection-section">
@@ -60,7 +68,7 @@
             <i class="pi pi-list"></i>
             <h2 class="section-title">I know what I want</h2>
           </div>
-          <p class="section-subtitle">Select the medication that works best for you</p>
+          <p class="section-subtitle">Select the medication that works best for you from list below.</p>
         </div>
 
         <div class="drug-grid">

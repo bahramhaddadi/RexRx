@@ -17,6 +17,12 @@ export interface AuthRequest {
   captchaCode: string;
 }
 
+export interface ResetPasswordRequest {
+  email: string;
+  refId: string;
+  captchaCode: string;
+}
+
 /**
  * Authentication response model
  */
@@ -29,6 +35,12 @@ export interface AuthResponse {
   userID: number;
   exceptionCode: number;
   exceptionMessage: string | null;
+}
+
+export interface ResetPasswordResponse {
+  errorCode: number;
+  errorMessage: string | null;
+  body: string;
 }
 
 /**
