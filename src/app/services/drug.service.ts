@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetQuestionByIdRequest, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -167,6 +167,22 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<UserQuestion>>(
       '/Pharma/Drug/GetNextQuestionV2',
+      request
+    );
+  }
+
+    /**
+   * Fetches the question based on question id to use it for previous quetsion
+   * @param questionId The current question with selected answers
+   * @returns Observable of API response containing the next question
+   */
+  getQuestion(questionId: number): Observable<ApiResponse<UserQuestion>> {
+    const request: GetQuestionByIdRequest = {
+      body: questionId
+    };
+
+    return this.apiService.post<ApiResponse<UserQuestion>>(
+      '/Pharma/Drug/GetQuestion',
       request
     );
   }

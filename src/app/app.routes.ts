@@ -37,11 +37,13 @@ export const routes: Routes = [
   {
     path: 'drugs',
     loadComponent: () => import('./pages/drug-list/drug-list.component').then(mod => mod.DrugListComponent),
+    // pathMatch: 'full'
     canActivate: [authGuard]
   },
   {
     path: 'drug-doses',
     loadComponent: () => import('./pages/drug-dose-selection/drug-dose-selection.component').then(mod => mod.DrugDoseSelectionComponent),
+    // pathMatch: 'full'
     canActivate: [authGuard]
   },
   {

@@ -159,6 +159,10 @@ export class DrugQuestionsComponent implements OnInit {
     }
   }
 
+
+  isFirstQuestion(): boolean {
+    return (this.questionnaireAnswers.length == 0);
+  }
   /**
    * Builds the question with answers object for API submission
    */
@@ -273,6 +277,68 @@ export class DrugQuestionsComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  loadQuestion(questionId: number, answers: QuestionnaireAnswer[]): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.drugService.getQuestion(questionId).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+
+        if (response.errorCode === 0 && response.body) {
+          // Check if the body contains a valid question (not just an empty object with null values)
+          const isValidQuestion = response.body.id > 0 || response.body.title !== null;
+
+          if (isValidQuestion) {
+            // Check if this is the LastQuestion
+            if (response.body.questionTypeID === QuestionType.LastQuestion) {
+              // LastQuestion received - centralize completion flow
+              console.log('LastQuestion received, handling completion flow');
+              this.handleQuestionsComplete();
+            } else {
+              // Load next question
+              this.currentQuestion = {
+                ...response.body,
+                selectedChoiceIds: answers.map(i => i.choiceId),
+                textAnswers: {}, //answers.map(i => ({key: i.choiceId, value: i.extraText})),
+                extraTextAnswers: {},
+                noneSelected: false
+              };
+            }
+          } else {
+            // Body exists but contains no valid question data - navigate based on placeholder flag
+            this.handleQuestionsComplete();
+          }
+        } else if (response.errorCode === 0 && !response.body) {
+          // No more questions - navigate based on placeholder flag
+          this.handleQuestionsComplete();
+        } else {
+          this.errorMessage = response.errorMessage || 'Failed to load next question';
+          console.error('API Error:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load next question. Please try again later.';
+        console.error('Error loading next question:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onPreviousQuestion(): void {
+    let questionId = this.questionnaireAnswers[this.questionnaireAnswers.length-1].questionId;
+    //load question and select already answered 
+    if(this.questionnaireAnswers.length == 0) {
+      this.loadFirstQuestion();      
+    } else {
+      let questionId = this.questionnaireAnswers[this.questionnaireAnswers.length-1].questionId;
+      this.loadQuestion(questionId, this.questionnaireAnswers);
+    }
+    while(this.questionnaireAnswers.length && this.questionnaireAnswers[this.questionnaireAnswers.length-1].questionId == questionId) {
+      this.questionnaireAnswers.pop();
+    }
   }
 
   /**

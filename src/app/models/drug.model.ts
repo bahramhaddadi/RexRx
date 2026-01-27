@@ -202,7 +202,11 @@ export interface QuestionChoiceAnswer {
 }
 
 export interface GetNextQuestionRequest {
-  body: UserQuestionsToGetNextQuestion
+  body: UserQuestionsToGetNextQuestion;
+}
+
+export interface GetQuestionByIdRequest {
+  body: number;
 }
 
 export interface QuestionnaireAnswer {
