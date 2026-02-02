@@ -28,6 +28,7 @@ export interface DrugDose {
   dose: string;
   quantityInPack: number;
   price: number;
+  hst: number;
   imageUrl: string;
   state: number;
   id: number;
@@ -167,6 +168,7 @@ export interface RelatedDrug {
   doseId: number;
   qtyInPack: number;
   price: number;
+  hst: number;
   questionId: number;
   itemNameAndDose: string;
 }
@@ -274,6 +276,7 @@ export interface SavedCartItem {
   drugName: string;
   quantity: number;
   unitPrice: number;
+  hst: number;
   total: number;
   questionnaireAnswers: QuestionnaireAnswer[];
 }
@@ -297,7 +300,9 @@ export interface SaveCartResponse {
   otherMedicalConditions: string;
   dateTime: string;
   promoCode: string;
+  hst: number;
   discount: number;
+  dispensingFee: number
   grandTotal: number;
   items: SavedCartItem[];
   drugs: string; // Summary string like "1 x Tadalafil (10mg)\r\n"
@@ -365,3 +370,8 @@ export interface RemoveItemFromCartBody {
 export interface RemoveItemFromCartRequest {
   body: RemoveItemFromCartBody;
 }
+
+export interface GetShoppingCart {
+  body: string; // CartId
+}
+
