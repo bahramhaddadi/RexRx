@@ -1,0 +1,36 @@
+<app-page-layout [showHeader]="true" [showBackButton]="false">
+  <div class="resume-cart-container">
+    <div class="status-card-wrapper">
+      <!-- Loading State -->
+      <p-card *ngIf="isLoading" class="status-card loading-card">
+        <div class="status-content">
+          <p-progressSpinner
+            [style]="{ width: '60px', height: '60px' }"
+            strokeWidth="4">
+          </p-progressSpinner>
+          <h1 class="status-title">Loading Your Cart</h1>
+          <p class="status-message">
+            Please wait while we retrieve your shopping cart...
+          </p>
+        </div>
+      </p-card>
+
+      <!-- Error State -->
+      <p-card *ngIf="!isLoading && errorMessage" class="status-card error-card">
+        <div class="status-content">
+          <div class="status-icon error-icon">
+            <i class="pi pi-exclamation-circle"></i>
+          </div>
+          <h1 class="status-title">Unable to Load Cart</h1>
+          <p class="status-message">{{ errorMessage }}</p>
+          <p-button
+            label="Go to Home"
+            icon="pi pi-home"
+            (onClick)="goToHome()"
+            styleClass="home-button">
+          </p-button>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</app-page-layout>
