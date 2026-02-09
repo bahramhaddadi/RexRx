@@ -361,3 +361,8 @@ export interface RemoveItemFromCartBody {
 export interface RemoveItemFromCartRequest {
   body: RemoveItemFromCartBody;
 }
+
+// Load Cart (for abandoned checkout resume)
+export interface LoadCartRequest {
+  body: string; // cartId
+}
