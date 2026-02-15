@@ -170,6 +170,28 @@
       </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="section-header centered">
+        <h2><i class="pi pi-question-circle"></i> Frequently Asked Questions</h2>
+        <p>Find answers to common questions about our services</p>
+      </div>
+
+      <div class="faq-list">
+        @for (item of faqItems; track item.question; let i = $index) {
+          <div class="faq-item" [class.open]="item.open">
+            <button class="faq-question" (click)="toggleFaq(i)">
+              <span>{{ item.question }}</span>
+              <i class="pi" [class.pi-plus]="!item.open" [class.pi-minus]="item.open"></i>
+            </button>
+            <div class="faq-answer">
+              <p>{{ item.answer }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="cta-content">

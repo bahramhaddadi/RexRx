@@ -14,6 +14,12 @@ interface Category {
   image?: string;
 }
 
+interface FaqItem {
+  question: string;
+  answer: string;
+  open: boolean;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -33,6 +39,24 @@ export class HomeComponent implements OnInit {
   categories: Category[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
+
+  faqItems: FaqItem[] = [
+    { question: 'What is an online pharmacy?', answer: 'An online pharmacy allows you to order prescription and non-prescription medications digitally, with safe and discreet delivery to your home.', open: false },
+    { question: 'How does online healthcare work?', answer: 'You can consult licensed healthcare providers online through secure forms or virtual visits. Prescriptions, if needed, are sent directly to the pharmacy for fulfillment.', open: false },
+    { question: 'Is online healthcare safe and secure?', answer: 'Yes. All medical information is protected using secure, encrypted systems and follows healthcare privacy regulations.', open: false },
+    { question: 'Who provides the medical care?', answer: 'Care is provided by licensed physicians, nurse practitioners, and pharmacists who are authorized to practice in your region.', open: false },
+    { question: 'Can I use online services instead of visiting a clinic?', answer: 'Online healthcare is suitable for many common conditions and medication management. Some cases may still require in-person care.', open: false },
+    { question: 'How are prescriptions handled?', answer: 'Once approved by a healthcare provider, prescriptions are reviewed by a licensed pharmacist and dispensed according to regulatory standards.', open: false },
+    { question: 'How long does delivery take?', answer: 'Most orders are processed within 1\u20132 business days. Delivery times vary based on location and shipping method.', open: false },
+    { question: 'Is a prescription required for all medications?', answer: 'Some medications require a valid prescription, while others are available over the counter.', open: false },
+    { question: 'Can I speak with a pharmacist?', answer: 'Yes. Pharmacists are available to answer questions about medications, dosing, and usage through secure messaging or phone support.', open: false },
+    { question: 'Do you accept insurance?', answer: 'Insurance coverage varies. You can check eligibility during checkout or contact support for assistance.', open: false },
+    { question: 'Are my medical records shared?', answer: 'Your information is only shared with authorized healthcare professionals involved in your care.', open: false },
+    { question: 'What if my order is delayed or incorrect?', answer: 'Customer support is available to quickly resolve delivery issues, replacements, or refunds.', open: false },
+    { question: 'Can I refill my prescription online?', answer: 'Yes. Eligible prescriptions can be refilled online, often with reminders to help you stay on track.', open: false },
+    { question: 'What conditions can be treated online?', answer: 'Online healthcare commonly supports general wellness, medication renewals, preventive care, and select chronic conditions.', open: false },
+    { question: 'How do I get started?', answer: 'Create an account, complete a health questionnaire, and request care or medication through the platform.', open: false },
+  ];
 
   responsiveOptions = [
     {
@@ -114,6 +138,10 @@ export class HomeComponent implements OnInit {
 
   onCartClick() {
     console.log('Cart clicked');
+  }
+
+  toggleFaq(index: number) {
+    this.faqItems[index].open = !this.faqItems[index].open;
   }
 
   scrollToCategories() {

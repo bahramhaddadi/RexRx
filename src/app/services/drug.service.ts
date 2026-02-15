@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetQuestionByIdRequest, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody, GetShoppingCart } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody, LoadCartRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -290,6 +291,15 @@ export class DrugService {
    */
   GetShoppingCart(cartId: string): Observable<ApiResponse<SaveCartResponse>> {
     const request: GetShoppingCart = {
+       body: cartId
+    }
+    
+   * Loads an existing shopping cart by ID (for abandoned checkout resume)
+   * @param cartId The cart ID to load
+   * @returns Observable of API response containing SaveCartResponse with cart details
+   */
+  LoadCart(cartId: string): Observable<ApiResponse<SaveCartResponse>> {
+    const request: LoadCartRequest = {
       body: cartId
     };
 

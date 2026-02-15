@@ -62,6 +62,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'ResumeShoppingCart',
+    loadComponent: () => import('./pages/resume-shopping-cart/resume-shopping-cart.component').then(mod => mod.ResumeShoppingCartComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'checkout',
     loadComponent: () => import('./pages/checkout/checkout.component').then(mod => mod.CheckoutComponent),
     canActivate: [authGuard]

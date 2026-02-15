@@ -375,3 +375,7 @@ export interface GetShoppingCart {
   body: string; // CartId
 }
 
+// Load Cart (for abandoned checkout resume)
+export interface LoadCartRequest {
+  body: string; // cartId
+}
