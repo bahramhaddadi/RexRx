@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { DrugService } from '../../services/drug.service';
 import { UserService } from '../../services/user.service';
-import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody, RelatedDrug, SaveCartResponse, SavedCartItem } from '../../models/drug.model';
+import { CartItem, QuestionnaireAnswer, SaveCartBody, PayAndSaveCartAsOrderBody, RelatedDrug, SaveCartResponse, SavedCartItem , GetShoppingCart} from '../../models/drug.model';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
@@ -72,6 +72,8 @@ export class CheckoutComponent implements OnInit {
   savedCartResponse?: SaveCartResponse;
   grandTotal: number = 0;
   discount: number = 0;
+  hst: number = 0;
+  dispensingFee: number = 0;
 
   // Related items for upsell
   relatedItems: RelatedDrug[] = [];
@@ -95,26 +97,7 @@ export class CheckoutComponent implements OnInit {
     this.cartItems = state?.['cartItems'] || [];
     this.cartId = state?.['cartId'] || ''; // Get cartId from navigation state
     this.savedCartResponse = state?.['savedCartResponse']; // Get full cart response
-
-    // If we have savedCartResponse, use its data
-    if (this.savedCartResponse) {
-      this.cartId = this.savedCartResponse.id;
-      this.grandTotal = this.savedCartResponse.grandTotal;
-      this.discount = this.savedCartResponse.discount;
-
-      // Map SavedCartItem[] to CartItem[] for display
-      this.cartItems = this.savedCartResponse.items.map(item => ({
-        itemDosageId: item.itemDosageId,
-        quantity: item.quantity,
-        questionnaireAnswers: item.questionnaireAnswers
-      }));
-
-      // Get doseId from first item
-      if (this.savedCartResponse.items.length > 0) {
-        this.doseId = this.savedCartResponse.items[0].itemDosageId;
-        this.drugName = this.savedCartResponse.items[0].drugName;
-      }
-    }
+    this.loadShoppingCart(this.savedCartResponse?.id || "");
 
     // If cartItems are provided (from /drug-summary), prefer them.
     // For backward-compatibility, set doseId from the first item if present.
@@ -181,6 +164,47 @@ export class CheckoutComponent implements OnInit {
   }
 
   /**
+   * Loads shopping cart in case user adds or remove related item and hit the refesh button on browser
+   */  
+  loadShoppingCart(cartId: string): void {
+    this.drugService.GetShoppingCart(cartId).subscribe({
+      next: (response) => {
+        if (response.errorCode === 0 && response.body) {
+          this.savedCartResponse = response.body;
+          this.cartId = this.savedCartResponse.id;
+          this.grandTotal = this.savedCartResponse.grandTotal;
+          this.hst = this.savedCartResponse.hst;
+          this.dispensingFee = this.savedCartResponse.dispensingFee;
+          this.discount = this.savedCartResponse.discount;
+
+          // Map SavedCartItem[] to CartItem[] for display
+          this.cartItems = this.savedCartResponse.items.map(item => ({
+            itemDosageId: item.itemDosageId,
+            quantity: item.quantity,
+            hst: item.hst,
+            questionnaireAnswers: item.questionnaireAnswers
+          }));
+
+          // Get doseId from first item
+          if (this.savedCartResponse.items.length > 0) {
+            this.doseId = this.savedCartResponse.items[0].itemDosageId;
+            this.drugName = this.savedCartResponse.items[0].drugName;
+          }
+          console.log('shopping cart loaded');
+        } else {
+          //in this case we need to termonate
+          console.warn('Failed to load shopping cart:', response.errorMessage);
+        }
+      },
+      error: (error) => {
+        // Show error to user, and termonate the shopping process
+        console.error('Error loading shipping cart:', error);
+        // Show error to user, and termonate the shopping process
+      }
+    });
+  }
+
+  /**
    * Loads related items for upsell
    */
   loadRelatedItems(): void {
@@ -241,7 +265,9 @@ export class CheckoutComponent implements OnInit {
           // Update cart response with new data
           this.savedCartResponse = response.body;
           this.grandTotal = response.body.grandTotal;
+          this.hst = response.body.hst;
           this.discount = response.body.discount;
+          this.dispensingFee = response.body.dispensingFee;
 
           // Update cart items
           this.cartItems = response.body.items.map(item => ({
@@ -312,6 +338,7 @@ export class CheckoutComponent implements OnInit {
           // Update cart response with new data
           this.savedCartResponse = response.body;
           this.grandTotal = response.body.grandTotal;
+          this.hst = response.body.hst;
           this.discount = response.body.discount;
 
           // Update cart items
@@ -374,6 +401,16 @@ export class CheckoutComponent implements OnInit {
       return savedItem?.unitPrice ?? null;
     }
     return null;
+  }
+
+  getCartItemHST(item: CartItem): number {
+    if (this.savedCartResponse) {
+      const savedItem = this.savedCartResponse.items.find(
+        si => si.itemDosageId === item.itemDosageId
+      );
+      return savedItem?.hst ?? 0;
+    }
+    return 0;
   }
 
   /**

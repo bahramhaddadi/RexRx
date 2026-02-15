@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody, LoadCartRequest } from '../models/drug.model';
+import { Drug, GetDrugListRequest, DrugDose, GetItemDoseListRequest, Question, GetQuestionsRequest, QuestionChoice, GetChoicesRequest, PlaceholderItem, GetPlaceHolderItemRequest, GetDrugsByCategoryRequest, RelatedDrug, GetRecommendedDrugsRequest, GetFirstQuestionRequest, GetNextQuestionRequest, QuestionWithAnswer, SaveCartV2Request, SaveCartV2Body, SaveCartRequest, SaveCartBody, SaveCartResponse, PayAndSaveCartAsOrderRequest, PayAndSaveCartAsOrderBody, GetQuestionByIdRequest, GetRelatedItemsRequest, UserQuestion, UserQuestionsToGetNextQuestion, QuestionnaireAnswer, SetOrderShippingAddressRequest, SetOrderShippingAddressBody, AddItemToCartRequest, AddItemToCartBody, RemoveItemFromCartRequest, RemoveItemFromCartBody, GetShoppingCart, LoadCartRequest } from '../models/drug.model';
 import { ApiResponse } from '../models/drug-category.model';
 
 @Injectable({
@@ -171,6 +171,22 @@ export class DrugService {
     );
   }
 
+    /**
+   * Fetches the question based on question id to use it for previous quetsion
+   * @param questionId The current question with selected answers
+   * @returns Observable of API response containing the next question
+   */
+  getQuestion(questionId: number): Observable<ApiResponse<UserQuestion>> {
+    const request: GetQuestionByIdRequest = {
+      body: questionId
+    };
+
+    return this.apiService.post<ApiResponse<UserQuestion>>(
+      '/Pharma/Drug/GetQuestion',
+      request
+    );
+  }
+
   /**
    * Saves the shopping cart with patient information and questionnaire answers
    * @param cartData The cart data with patient info and questionnaire answers
@@ -263,6 +279,22 @@ export class DrugService {
 
     return this.apiService.post<ApiResponse<SaveCartResponse>>(
       '/Pharma/Shopping/RemoveItemFromCart',
+      request
+    );
+  }
+
+  /**
+   * Adds an item to the cart (for related items)
+   * @param cartData The cart data including cartId, itemDosageId, and quantity
+   * @returns Observable of API response containing updated SaveCartResponse with cart details
+   */
+  GetShoppingCart(cartId: string): Observable<ApiResponse<SaveCartResponse>> {
+    const request: GetShoppingCart = {
+      body: cartId
+    };
+
+    return this.apiService.post<ApiResponse<SaveCartResponse>>(
+      '/Pharma/Shopping/GetShoppingCart',
       request
     );
   }

@@ -186,6 +186,7 @@ export class SignUpComponent implements OnInit {
 
         // Check for success (errorCode === 0)
         if (response.errorCode === 0) {
+          window.alert('Account created successfully! Please check your email ro verify your acount.');
           this.successMessage = 'Account created successfully! Check your Email. Redirecting to sign-in...';
           // Redirect to sign-in page (the page that routes to sign-up)
           setTimeout(() => {

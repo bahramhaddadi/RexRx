@@ -85,6 +85,15 @@
               <div class="question-badge">
                 <i class="pi pi-question-circle"></i>
                 <span>Health Question</span>
+                <button pButton
+                      type="button"
+                      class="next-button"
+                      icon="pi pi-arrow-left"
+                      label="previous question"
+                      iconPos="left"
+                      [disabled]="isFirstQuestion()"
+                      (click)="onPreviousQuestion()">
+              </button>
               </div>
               <h2>{{ currentQuestion.title }}</h2>
               @if (currentQuestion.note) {
