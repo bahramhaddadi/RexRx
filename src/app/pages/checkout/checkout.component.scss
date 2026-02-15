@@ -737,6 +737,12 @@
       font-weight: 600;
       color: #2563EB;
     }
+    .item-hst {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #2563EB;
+      margin-top: 0.125rem;
+    }
   }
 
   .summary-total {
@@ -991,6 +997,13 @@
       .related-price {
         font-size: 0.85rem;
         font-weight: 600;
+        color: #2563EB;
+        margin-top: 0.125rem;
+      }
+
+      .related-hst {
+        font-size: 0.65rem;
+        font-weight: 500;
         color: #2563EB;
         margin-top: 0.125rem;
       }

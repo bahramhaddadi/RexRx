@@ -304,7 +304,7 @@ export class ShippingAddressComponent implements OnInit, OnDestroy {
           this.isSubmitting = false;
           if (response.errorCode === 0) {
             this.successMessage = 'Shipping address saved successfully!';
-
+            window.alert('Your order is complete. Our team will contact you shortly.');
             // Navigate to home after 1.5 seconds
             setTimeout(() => {
               this.router.navigate(['/']);

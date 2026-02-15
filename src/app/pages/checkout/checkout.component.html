@@ -396,6 +396,8 @@
                       @if (getCartItemPrice(item) !== null) {
                         <span class="item-price">${{ getCartItemPrice(item)!.toFixed(2) }}</span>
                       }
+                      @if (getCartItemHST(item) > 0) { 
+                        <span class="item-hst">+ HST: ${{ getCartItemHST(item).toFixed(2) }} </span> }
                     </div>
                   </div>
                 </div>
@@ -449,7 +451,9 @@
                       <h5>{{ item.title || item.brandName }}</h5>
                       <span class="related-dose">{{ item.dose }}</span>
                       @if (item.price) {
-                        <span class="related-price">${{ item.price.toFixed(2) }}</span>
+                        <span class="related-price">${{ item.price.toFixed(2)}} 
+                          @if(item.hst>0) { <span class="related-hst"> + HST: ${{ item.hst.toFixed(2) }} </span> }
+                        </span>
                       }
                     </div>
                     <button
@@ -472,11 +476,23 @@
           <div class="summary-row">
             <span class="row-label">Subtotal</span>
             @if (grandTotal > 0) {
-              <span class="row-value">${{ grandTotal.toFixed(2) }}</span>
+              <span class="row-value">${{ (grandTotal-dispensingFee-hst).toFixed(2) }}</span>
             } @else {
               <span class="row-value">Calculated at payment</span>
             }
           </div>
+
+          <div class="summary-row">
+            <span class="row-label">Dispencing fee</span>
+            <span class="row-value">${{ dispensingFee.toFixed(2) }}</span>
+          </div>
+
+          @if (hst > 0) {
+            <div class="summary-row">
+              <span class="row-label">HST</span>
+              <span class="row-value">${{ hst.toFixed(2) }}</span>
+            </div>
+          }
 
           @if (discount > 0) {
             <div class="summary-row">

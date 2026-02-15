@@ -67,6 +67,9 @@
                 <div class="dose-price">
                   <span class="price-label">Price</span>
                   <span class="price">{{ dose.price | currency:'USD':'symbol':'1.2-2' }}</span>
+                  @if(dose.hst>0) {
+                    <span class="hst">HST: {{ dose.hst | currency:'USD':'symbol':'1.2-2' }}</span>
+                  }
                 </div>
               </div>
 
