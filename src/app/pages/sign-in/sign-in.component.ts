@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
@@ -30,18 +30,21 @@ export class SignInComponent implements OnInit {
   private readonly captchaService = inject(CaptchaService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   email: string = '';
   password: string = '';
   captchaCode: string = '';
   captchaImageUrl: string = '';
   captchaRefId: string = '';
+  returnUrl: string = '/';
 
   isLoading: boolean = false;
   errorMessage: string = '';
   captchaLoading: boolean = false;
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.loadCaptcha();
   }
 
@@ -97,9 +100,9 @@ export class SignInComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response.exceptionCode === 0) {
-          // Success - navigate to home or dashboard
+          // Success - navigate to returnUrl or home
           console.log('Authentication successful:', response);
-          this.router.navigate(['/']);
+          this.router.navigateByUrl(this.returnUrl);
         } else {
           // Authentication failed with error
           this.refreshCaptcha();
