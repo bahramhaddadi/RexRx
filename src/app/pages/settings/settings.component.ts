@@ -64,6 +64,7 @@ export class SettingsComponent implements OnInit {
     { label: 'Family doctor', value: 'family-doctor', icon: 'pi pi-heart', disabled: true },
     { label: 'Medical history', value: 'medical-history', icon: 'pi pi-file-edit' },
     { label: 'Orders', value: 'orders', icon: 'pi pi-shopping-bag' },
+    { label: 'Support Chat', value: 'support-chat', icon: 'pi pi-comments' },
     { label: 'Prescriptions', value: 'prescriptions', icon: 'pi pi-file', disabled: true }
   ];
 
@@ -498,6 +499,10 @@ export class SettingsComponent implements OnInit {
    * Navigates to a different section
    */
   navigateToSection(sectionValue: string): void {
+    if (sectionValue === 'support-chat') {
+      this.router.navigate(['/support-chat']);
+      return;
+    }
     if (!this.menuItems.find(item => item.value === sectionValue)?.disabled) {
       this.selectedSection = sectionValue;
       this.errorMessage = '';
@@ -590,6 +595,13 @@ export class SettingsComponent implements OnInit {
     if (event.key === 'Enter') {
       this.searchOrders();
     }
+  }
+
+  /**
+   * Navigates to the support chat page for a given order
+   */
+  openSupportChat(orderId: string): void {
+    this.router.navigate(['/support-chat'], { queryParams: { orderId } });
   }
 
   /**

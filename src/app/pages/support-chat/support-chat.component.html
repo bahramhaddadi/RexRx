@@ -1,0 +1,140 @@
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonRoute]="'/settings'" backgroundColor="var(--surface-50)">
+  <div class="chat-page">
+
+    <!-- Chat Panel -->
+    <div class="chat-panel">
+
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-avatar">
+          <p-avatar icon="pi pi-headphones" shape="circle" size="large" styleClass="support-avatar" />
+          <span class="online-badge"></span>
+        </div>
+        <div class="chat-header-info">
+          <h2 class="chat-header-title">{{ chatHeaderTitle }}</h2>
+          <span class="chat-header-subtitle">
+            <span class="status-dot"></span>
+            Support Team · Usually responds in minutes
+          </span>
+        </div>
+        <div class="chat-header-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-refresh"
+            class="p-button-text p-button-rounded p-button-secondary"
+            (click)="loadMessages()"
+            pTooltip="Refresh"
+            tooltipPosition="bottom"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="messages-area" #messagesContainer>
+
+        <!-- Loading Skeleton -->
+        <div *ngIf="isLoadingMessages" class="skeleton-list">
+          <div *ngFor="let i of skeletonRows" class="skeleton-row" [class.skeleton-right]="i % 2 === 0">
+            <p-skeleton shape="circle" size="2.5rem" />
+            <div class="skeleton-bubble">
+              <p-skeleton width="180px" height="14px" styleClass="mb-1" />
+              <p-skeleton width="120px" height="12px" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoadingMessages && messages.length === 0 && !errorMessage" class="empty-state">
+          <div class="empty-icon">
+            <i class="pi pi-comments"></i>
+          </div>
+          <h3>Start a conversation</h3>
+          <p>Our support team is here to help you with any questions about your order or medications.</p>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="errorMessage && !isSending" class="error-banner">
+          <i class="pi pi-exclamation-circle"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Date-grouped Messages -->
+        <ng-container *ngIf="!isLoadingMessages">
+          <ng-container *ngFor="let group of getDateGroups()">
+            <!-- Date Separator -->
+            <div class="date-separator">
+              <span>{{ group.date }}</span>
+            </div>
+
+            <!-- Messages in Group -->
+            <div
+              *ngFor="let msg of group.messages"
+              class="message-row"
+              [class.message-row--user]="msg.senderType === 'user'"
+              [class.message-row--support]="msg.senderType === 'support'"
+            >
+              <!-- Support Avatar -->
+              <div *ngIf="msg.senderType === 'support'" class="message-avatar">
+                <p-avatar icon="pi pi-headphones" shape="circle" size="normal" styleClass="support-avatar-sm" />
+              </div>
+
+              <!-- Bubble -->
+              <div class="message-bubble">
+                <span *ngIf="msg.senderType === 'support'" class="message-sender">{{ msg.senderName }}</span>
+                <p class="message-text">{{ msg.message }}</p>
+                <div class="message-meta">
+                  <span class="message-time">{{ formatTime(msg.createdAt) }}</span>
+                  <i
+                    *ngIf="msg.senderType === 'user'"
+                    class="pi message-read-icon"
+                    [class.pi-check-circle]="msg.isRead"
+                    [class.pi-check]="!msg.isRead"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <!-- Sending Indicator -->
+        <div *ngIf="isSending" class="message-row message-row--user">
+          <div class="message-bubble message-bubble--sending">
+            <span class="sending-dots">
+              <span></span><span></span><span></span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <textarea
+            pInputTextarea
+            [(ngModel)]="messageInput"
+            placeholder="Type a message…"
+            class="message-input"
+            rows="1"
+            [autoResize]="true"
+            (keydown)="onKeyDown($event)"
+            [disabled]="isSending"
+          ></textarea>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-send"
+            class="send-button"
+            [disabled]="!messageInput.trim() || isSending"
+            (click)="sendMessage()"
+            pTooltip="Send (Enter)"
+            tooltipPosition="top"
+          ></button>
+        </div>
+        <p class="input-hint">Press <kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> for new line</p>
+      </div>
+
+    </div>
+  </div>
+</app-page-layout>
