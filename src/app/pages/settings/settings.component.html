@@ -583,6 +583,7 @@
                   <th>Status</th>
                   <th>Total</th>
                   <th>Delivery</th>
+                  <th>Support</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-order>
@@ -613,6 +614,16 @@
                       Track
                     </a>
                     <span *ngIf="!order.shippingStatusURL"></span>
+                  </td>
+                  <td>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-comments"
+                      label="Chat"
+                      class="p-button-text p-button-sm chat-order-button"
+                      (click)="openSupportChat(order.id)"
+                    ></button>
                   </td>
                 </tr>
               </ng-template>

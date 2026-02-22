@@ -86,6 +86,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/settings/settings.component').then(mod => mod.SettingsComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'support-chat',
+    loadComponent: () => import('./pages/support-chat/support-chat.component').then(mod => mod.SupportChatComponent),
+    canActivate: [authGuard]
+  },
 
   // Fallback redirect
   {
