@@ -45,7 +45,7 @@ export class ChatService {
   ): Observable<SendChatMessageResponse> {
     const request: SendChatMessageRequest = { message, orderId };
     return this.apiService.post<SendChatMessageResponse>(
-      '/Pharma/Support/SendMessage',
+      '/Pharma/User/SendOrderMessage',
       { body: request }
     );
   }
