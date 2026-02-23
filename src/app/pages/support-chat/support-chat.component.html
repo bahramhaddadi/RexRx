@@ -45,7 +45,7 @@
         </div>
 
         <!-- Empty State -->
-        <div *ngIf="!isLoadingMessages && messages.length === 0 && !errorMessage" class="empty-state">
+        <div *ngIf="!isLoadingMessages && !hasMessages && !errorMessage" class="empty-state">
           <div class="empty-icon">
             <i class="pi pi-comments"></i>
           </div>
@@ -59,41 +59,74 @@
           {{ errorMessage }}
         </div>
 
-        <!-- Date-grouped Messages -->
+        <!-- Date-grouped Messages from API -->
         <ng-container *ngIf="!isLoadingMessages">
-          <ng-container *ngFor="let group of getDateGroups()">
+          <ng-container *ngFor="let group of messageGroups">
+
             <!-- Date Separator -->
             <div class="date-separator">
-              <span>{{ group.date }}</span>
+              <span>{{ group.dateOnly }}</span>
             </div>
 
             <!-- Messages in Group -->
-            <div
-              *ngFor="let msg of group.messages"
-              class="message-row"
-              [class.message-row--user]="msg.senderType === 'user'"
-              [class.message-row--support]="msg.senderType === 'support'"
-            >
-              <!-- Support Avatar -->
-              <div *ngIf="msg.senderType === 'support'" class="message-avatar">
-                <p-avatar icon="pi pi-headphones" shape="circle" size="normal" styleClass="support-avatar-sm" />
+            <ng-container *ngFor="let msg of group.messages">
+
+              <!-- System Message -->
+              <div *ngIf="isSystemMessage(msg)" class="system-message">
+                <span>{{ msg.message }}</span>
               </div>
 
-              <!-- Bubble -->
-              <div class="message-bubble">
-                <span *ngIf="msg.senderType === 'support'" class="message-sender">{{ msg.senderName }}</span>
-                <p class="message-text">{{ msg.message }}</p>
-                <div class="message-meta">
-                  <span class="message-time">{{ formatTime(msg.createdAt) }}</span>
-                  <i
-                    *ngIf="msg.senderType === 'user'"
-                    class="pi message-read-icon"
-                    [class.pi-check-circle]="msg.isRead"
-                    [class.pi-check]="!msg.isRead"
-                  ></i>
+              <!-- Doctor / User Message -->
+              <div
+                *ngIf="!isSystemMessage(msg)"
+                class="message-row"
+                [class.message-row--user]="isUserMessage(msg)"
+                [class.message-row--support]="!isUserMessage(msg)"
+              >
+                <!-- Support/Doctor Avatar -->
+                <div *ngIf="!isUserMessage(msg)" class="message-avatar">
+                  <img
+                    *ngIf="msg.senderImageUrl"
+                    [src]="msg.senderImageUrl"
+                    [alt]="msg.senderName"
+                    class="avatar-img"
+                  />
+                  <p-avatar
+                    *ngIf="!msg.senderImageUrl"
+                    icon="pi pi-user"
+                    shape="circle"
+                    size="normal"
+                    styleClass="support-avatar-sm"
+                  />
+                </div>
+
+                <!-- Bubble -->
+                <div class="message-bubble">
+                  <span *ngIf="!isUserMessage(msg)" class="message-sender">{{ msg.senderName }}</span>
+                  <p class="message-text">{{ msg.message }}</p>
+                  <div class="message-meta">
+                    <span class="message-time">{{ formatTime(msg.messageDate) }}</span>
+                  </div>
+                </div>
+
+                <!-- User Avatar -->
+                <div *ngIf="isUserMessage(msg)" class="message-avatar message-avatar--user">
+                  <img
+                    *ngIf="msg.senderImageUrl"
+                    [src]="msg.senderImageUrl"
+                    [alt]="msg.senderName"
+                    class="avatar-img"
+                  />
+                  <p-avatar
+                    *ngIf="!msg.senderImageUrl"
+                    icon="pi pi-user"
+                    shape="circle"
+                    size="normal"
+                  />
                 </div>
               </div>
-            </div>
+
+            </ng-container>
           </ng-container>
         </ng-container>
 

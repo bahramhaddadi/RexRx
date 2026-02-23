@@ -17,14 +17,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AvatarModule } from 'primeng/avatar';
-import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 
 // Local
 import { PageLayoutComponent } from '../../components/page-layout/page-layout.component';
 import { ChatService } from '../../services/chat.service';
-import { ChatMessage } from '../../models/chat.model';
+import { ChatMessage, MessageGroup } from '../../models/chat.model';
 
 @Component({
   selector: 'app-support-chat',
@@ -37,7 +36,6 @@ import { ChatMessage } from '../../models/chat.model';
     InputTextareaModule,
     ProgressSpinnerModule,
     AvatarModule,
-    BadgeModule,
     TooltipModule,
     SkeletonModule,
     PageLayoutComponent
@@ -52,7 +50,7 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
   private readonly chatService = inject(ChatService);
 
   orderId: string | null = null;
-  messages: ChatMessage[] = [];
+  messageGroups: MessageGroup[] = [];
   messageInput = '';
   isLoadingMessages = false;
   isSending = false;
@@ -90,10 +88,10 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
     this.isLoadingMessages = true;
     this.errorMessage = '';
 
-    this.chatService.getMessages(this.orderId, 0, 50).subscribe({
+    this.chatService.getMessages(this.orderId).subscribe({
       next: (response) => {
-        if (response.errorCode === 0 && response.body) {
-          this.messages = response.body.list || [];
+        if (response.body) {
+          this.messageGroups = response.body.messageGroups || [];
           this.shouldScrollToBottom = true;
         } else {
           this.errorMessage = response.errorMessage || 'Failed to load messages.';
@@ -110,12 +108,15 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
   private pollNewMessages(): void {
     if (this.isSending || this.isLoadingMessages) return;
 
-    this.chatService.getMessages(this.orderId, 0, 50).subscribe({
+    this.chatService.getMessages(this.orderId).subscribe({
       next: (response) => {
-        if (response.errorCode === 0 && response.body) {
-          const newMessages = response.body.list || [];
-          if (newMessages.length !== this.messages.length) {
-            this.messages = newMessages;
+        if (response.body) {
+          const newGroups = response.body.messageGroups || [];
+          // Count total messages to detect new ones
+          const newTotal = newGroups.reduce((sum, g) => sum + g.messages.length, 0);
+          const currentTotal = this.messageGroups.reduce((sum, g) => sum + g.messages.length, 0);
+          if (newTotal !== currentTotal) {
+            this.messageGroups = newGroups;
             this.shouldScrollToBottom = true;
           }
         }
@@ -132,15 +133,11 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
     this.errorMessage = '';
 
     this.chatService.sendMessage(text, this.orderId).subscribe({
-      next: (response) => {
-        if (response.errorCode === 0 && response.body) {
-          this.messages = [...this.messages, response.body];
-          this.messageInput = '';
-          this.shouldScrollToBottom = true;
-        } else {
-          this.errorMessage = response.errorMessage || 'Failed to send message.';
-        }
+      next: () => {
+        this.messageInput = '';
         this.isSending = false;
+        // Reload to get updated groups from server
+        this.loadMessages();
       },
       error: () => {
         this.errorMessage = 'Failed to send message. Please try again.';
@@ -154,6 +151,14 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  isUserMessage(msg: ChatMessage): boolean {
+    return msg.senderTypeId === 5;
+  }
+
+  isSystemMessage(msg: ChatMessage): boolean {
+    return msg.senderTypeId === 0;
   }
 
   private scrollToBottom(): void {
@@ -171,33 +176,8 @@ export class SupportChatComponent implements OnInit, OnDestroy, AfterViewChecked
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   }
 
-  formatDate(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) return 'Today';
-    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
-
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  /** Groups messages by date for date separators */
-  getDateGroups(): { date: string; messages: ChatMessage[] }[] {
-    const groups: { [date: string]: ChatMessage[] } = {};
-
-    for (const msg of this.messages) {
-      const dateKey = new Date(msg.createdAt).toDateString();
-      if (!groups[dateKey]) groups[dateKey] = [];
-      groups[dateKey].push(msg);
-    }
-
-    return Object.entries(groups).map(([, messages]) => ({
-      date: this.formatDate(messages[0].createdAt),
-      messages
-    }));
+  get hasMessages(): boolean {
+    return this.messageGroups.some(g => g.messages.length > 0);
   }
 
   get skeletonRows(): number[] {
