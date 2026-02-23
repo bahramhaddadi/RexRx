@@ -222,6 +222,19 @@
   }
 }
 
+// ─── System Message ──────────────────────────────────────────────────────────
+.system-message {
+  align-self: center;
+  background: var(--surface-200, #e5e5e5);
+  color: var(--text-color-secondary);
+  font-size: $font-size-xs;
+  padding: 4px 14px;
+  border-radius: 20px;
+  text-align: center;
+  margin: $spacing-xs 0;
+  max-width: 80%;
+}
+
 // ─── Message Row ─────────────────────────────────────────────────────────────
 .message-row {
   display: flex;
@@ -239,6 +252,14 @@
     flex-direction: row-reverse;
     margin-left: auto;
   }
+}
+
+.avatar-img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .message-avatar {

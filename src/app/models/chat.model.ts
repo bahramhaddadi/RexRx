@@ -1,53 +1,42 @@
 /**
- * Chat message sender type
+ * Sender type IDs as returned by the API
+ * 0 = System Generic Message
+ * 1 = Doctor Assigned
+ * 3 = Doctor Message
+ * 5 = User Message
  */
-export type MessageSenderType = 'user' | 'support';
+export type SenderTypeId = 0 | 1 | 3 | 5;
 
 /**
- * A single chat message
+ * A single chat message matching the API response structure
  */
 export interface ChatMessage {
   id: number;
-  message: string;
-  senderType: MessageSenderType;
+  orderId: string;
+  senderId: string;
+  senderTypeId: SenderTypeId;
+  senderType: string;
   senderName: string;
-  createdAt: string; // ISO date string
-  isRead: boolean;
+  senderImageUrl: string;
+  message: string;
+  messageDate: string; // ISO date string
+  unreadMessages: number;
 }
 
 /**
- * Chat / support ticket info
+ * A group of messages under a single date, as returned by the API
  */
-export interface ChatTicket {
-  id: number;
-  orderId: string | null;
-  subject: string;
-  status: 'open' | 'closed' | 'pending';
-  createdAt: string;
-  lastMessageAt: string;
-  unreadCount: number;
+export interface MessageGroup {
+  dateOnly: string; // e.g. "3 Feb"
+  messages: ChatMessage[];
 }
 
 /**
- * Request to get chat messages
- */
-export interface GetChatMessagesRequest {
-  orderId?: string | null;
-  pageNumber: number;
-  pageSize: number;
-}
-
-/**
- * Response from get chat messages
+ * Response from GetOrderMessages endpoint
  */
 export interface GetChatMessagesResponse {
   body: {
-    list: ChatMessage[];
-    totalRecords: number;
-    pageNumber: number;
-    pageSize: number;
-    subject: string;
-    orderId: string | null;
+    messageGroups: MessageGroup[];
   };
   errorCode: number;
   errorMessage: string | null;
@@ -66,26 +55,6 @@ export interface SendChatMessageRequest {
  */
 export interface SendChatMessageResponse {
   body: ChatMessage;
-  errorCode: number;
-  errorMessage: string | null;
-}
-
-/**
- * Request to get user chat tickets list
- */
-export interface GetChatTicketsRequest {
-  pageNumber: number;
-  pageSize: number;
-}
-
-/**
- * Response from get chat tickets
- */
-export interface GetChatTicketsResponse {
-  body: {
-    list: ChatTicket[];
-    totalRecords: number;
-  };
   errorCode: number;
   errorMessage: string | null;
 }
