@@ -29,8 +29,8 @@ export class ChatService {
   ): Observable<GetChatMessagesResponse> {
     const request: GetChatMessagesRequest = { orderId, pageNumber, pageSize };
     return this.apiService.post<GetChatMessagesResponse>(
-      '/Pharma/Support/GetMessages',
-      { body: request }
+      '/Pharma/User/GetOrderMessages',
+      { body: request.orderId }
     );
   }
 
@@ -45,7 +45,7 @@ export class ChatService {
   ): Observable<SendChatMessageResponse> {
     const request: SendChatMessageRequest = { message, orderId };
     return this.apiService.post<SendChatMessageResponse>(
-      '/Pharma/Support/SendMessage',
+      '/Pharma/User/SendOrderMessage',
       { body: request }
     );
   }
