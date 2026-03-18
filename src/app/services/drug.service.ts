@@ -119,7 +119,7 @@ export class DrugService {
     };
 
     return this.apiService.post<ApiResponse<RelatedDrug[]>>(
-      '/Pharma/Drug/GetRecommendedDrugsV2',
+      '/Pharma/Drug/GetRecommendedDrugsV3',
       request
     );
   }
