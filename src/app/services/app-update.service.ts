@@ -40,12 +40,9 @@ export class AppUpdateService {
     // Wait for app to stabilize before checking for updates
     this.appRef.isStable
       .pipe(first((isStable) => isStable))
-      .subscribe((event: NavigationEnd) => {
+      .subscribe() => {
         // Check for updates every 30 seconds
         interval(30000).subscribe(() => {
-          gtag('config','G-1ZN21TM14E',{
-            page_path: event.urlAfterRedirects
-          });
           this.swUpdate.checkForUpdate().then(() => {
             console.log('Checked for updates');
           }).catch(err => {
