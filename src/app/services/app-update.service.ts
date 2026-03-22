@@ -1,6 +1,9 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, first, interval } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+
+declare let gtag: Function;
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +40,12 @@ export class AppUpdateService {
     // Wait for app to stabilize before checking for updates
     this.appRef.isStable
       .pipe(first((isStable) => isStable))
-      .subscribe(() => {
+      .subscribe((event: NavigationEnd) => {
         // Check for updates every 30 seconds
         interval(30000).subscribe(() => {
+          gtag('config','G-1ZN21TM14E',{
+            page_path: event.urlAfterRedirects
+          });
           this.swUpdate.checkForUpdate().then(() => {
             console.log('Checked for updates');
           }).catch(err => {
