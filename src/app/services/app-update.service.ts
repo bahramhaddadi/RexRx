@@ -40,7 +40,7 @@ export class AppUpdateService {
     // Wait for app to stabilize before checking for updates
     this.appRef.isStable
       .pipe(first((isStable) => isStable))
-      .subscribe() => {
+      .subscribe(() => {
         // Check for updates every 30 seconds
         interval(30000).subscribe(() => {
           this.swUpdate.checkForUpdate().then(() => {
