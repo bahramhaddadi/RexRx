@@ -24,6 +24,41 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/reset-password-request/reset-password-request.component').then(mod => mod.ResetPasswordRequestComponent),
     canActivate: [guestGuard]
   },
+  {
+    path: 'tadalafil',
+    loadComponent: () => import('./pages/tadalafil/tadalafil.component').then(mod => mod.TadalafilComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'sildenafil',
+    loadComponent: () => import('./pages/sildenafil/sildenafil.component').then(mod => mod.SildenafilComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'ozempic',
+    loadComponent: () => import('./pages/ozempic/ozempic.component').then(mod => mod.OzempicComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'mounjaro',
+    loadComponent: () => import('./pages/mounjaro/mounjaro.component').then(mod => mod.MounjaroComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'wegovy',
+    loadComponent: () => import('./pages/wegovy/wegovy.component').then(mod => mod.WegovyComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'finasteride-minoxidil',
+    loadComponent: () => import('./pages/finasteride-minoxidil/finasteride-minoxidil.component').then(mod => mod.FinasterideMinoxidilComponent),
+    pathMatch: 'full'
+  },
+  {
+    path: 'truvada',
+    loadComponent: () => import('./pages/truvada/truvada.component').then(mod => mod.TruvadaComponent),
+    pathMatch: 'full'
+  },
 
 
   // Public route (accessible to everyone)

@@ -4,6 +4,7 @@ export interface Drug {
   brandName: string;
   note: string;
   imageURL: string;
+  infoURL: string;
   isGeneric: boolean;
   categoryID: number;
   categoryName: string;

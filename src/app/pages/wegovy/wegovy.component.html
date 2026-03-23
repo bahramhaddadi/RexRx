@@ -1,0 +1,106 @@
+<app-page-layout [showHeader]="true" [showBackButton]="true" [backButtonLabel]="'Back to Category'" backgroundColor="var(--surface-50)">
+
+<div class="home-page min-h-screen bg-gray-50 p-6">
+  <div style="padding-left: 10px;padding-right: 10px;">
+    <h1 class="text-3xl font-bold mb-4 mt-2 text-blue-600">Wegovy (Semaglutide) Information</h1>
+    <div class="content-container">
+     <img class="rounded-image shadow-lg" src="https://devicemanagementsystem-dxenggarbhe6a2ac.canadacentral-01.azurewebsites.net/images/Wegovy-300.jpeg" alt="Mounjaro Canada">
+    </div>
+    <div class="content-container flex gap-4 mb-4 mt-2">
+      <p-button label="Start Consultation" (onClick)="onStartConsultation()" styleClass="signup-button"></p-button>
+    </div>
+
+    <section class="mb-4">
+      <h2 class="text-xl font-semibold mb-1">What is Wegovy?</h2>
+      <p class="text-gray-700">
+        Wegovy is a prescription medication containing semaglutide, specifically approved for
+        chronic weight management in adults with obesity or overweight conditions with related
+        health risks.
+      </p>
+    </section>
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">How It Works</h3>
+      <p class="text-gray-700">
+        Wegovy is a GLP-1 receptor agonist that helps regulate appetite, reduce food intake,
+        and slow gastric emptying, leading to sustained weight loss over time.
+      </p>
+    </section>
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">Common Uses</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>Chronic weight management</li>
+        <li>Obesity treatment</li>
+        <li>Weight-related health risk reduction</li>
+      </ul>
+    </section>
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">Dosage</h3>
+      <p class="text-gray-700">
+        Wegovy is administered as a once-weekly injection. The dose is gradually increased
+        over several weeks, typically reaching a maintenance dose of 2.4 mg weekly.
+      </p>
+    </section>
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">Side Effects</h3>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>Nausea</li>
+        <li>Vomiting</li>
+        <li>Diarrhea</li>
+        <li>Constipation</li>
+        <li>Abdominal discomfort</li>
+      </ul>
+    </section>
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">Warnings</h3>
+      <p class="text-gray-700">
+        Wegovy may not be suitable for individuals with a history of thyroid cancer or certain
+        endocrine disorders. Always consult a healthcare provider before starting treatment.
+      </p>
+    </section> 
+
+    <section class="mb-4">
+      <h3 class="text-xl font-semibold mb-1">Disclaimer</h3>
+      <p class="text-sm text-gray-500">
+        This page is for informational purposes only and does not replace professional medical advice.
+      </p>
+    </section>
+
+    <div class="content-container flex gap-4 mb-4 mt-3">
+      <p-button label="Start Consultation" (onClick)="onStartConsultation()" styleClass="signup-button"></p-button>
+    </div>
+
+    <section>
+      <div class="categories-grid">
+        <div class="category-card">
+          Online assessment
+          Fill out a secure form about your symptoms. A Canadian doctor creates your personalized plan.
+        </div>
+        <div class="category-card">
+          Free, discreet delivery
+          Treatments ship quickly in plain packaging. Fast, safe, and private so only you know.
+        </div>
+        <div class="category-card">
+          24/7 support team
+          Message your doctor anytime. Get answers, support, and plan updates when needed.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Product",
+ "name": "Wegovy (Semaglutide)",
+ "description": "Weight loss medication using GLP-1 receptor agonist",
+ "brand": "Generic"
+}
+</script>
+
+</app-page-layout>

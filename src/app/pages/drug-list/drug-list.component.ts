@@ -83,7 +83,9 @@ export class DrugListComponent implements OnInit {
    * Handles drug card click - navigates to dose selection page
    */
   onDrugClick(drug: Drug): void {
-    this.router.navigate(['/drug-doses'], {
+    let navUrl = '/drug-doses'; 
+    if(drug.infoURL.length>0) { navUrl = '/' + drug.infoURL.trim(); } 
+    this.router.navigate([navUrl], {
       queryParams: {
         eid: drug.eid,
         name: drug.title
