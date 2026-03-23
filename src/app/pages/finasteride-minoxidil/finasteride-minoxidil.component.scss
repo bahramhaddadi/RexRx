@@ -1,0 +1,523 @@
+@import "../../../styles/variables";
+
+// Modern Pharmacy Sign-Up Page Design
+.home-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;  /* horizontal center */
+  align-items: center;      /* vertical center */
+}
+
+.rounded-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 10%;
+  object-fit: cover;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-card {
+  background: $white;
+  border: 2px solid $gray-200;
+  padding: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #2563EB;
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.12);
+    transform: translateY(-4px);
+
+    .card-action {
+      color: #2563EB;
+
+      i {
+        transform: translateX(4px);
+      }
+    }
+
+    .card-image img,
+    .card-image .image-placeholder {
+      transform: scale(1.05);
+    }
+  }
+
+  .card-image {
+    height: 180px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+
+      i {
+        font-size: 4rem;
+        color: #2563EB;
+        opacity: 0.3;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 1.25rem;
+
+    h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $gray-900;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      font-size: 0.875rem;
+      color: $gray-600;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $gray-700;
+      transition: color 0.2s ease;
+
+      i {
+        font-size: 0.8rem;
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+}
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
+}
+
+.signup-card {
+  background-color: $white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  border: 1px solid $gray-200;
+  padding: $spacing-xl;
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.header-logo {
+  width: 56px;
+  height: 56px;
+  border-color: linear-gradient(90deg, #0452fa 0%, #9adcff 100%);;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto $spacing-sm;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+  position: relative;
+
+  i {
+    font-size: 28px;
+    color: $white;
+  }
+
+  .logo-plus {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 18px;
+    background: #10B981;
+    border-radius: 50%;
+    padding: 2px;
+    border: 2px solid $white;
+  }
+}
+
+.signup-title {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 $spacing-xs 0;
+  color: $gray-900;
+  font-family: $font-family-heading;
+}
+
+.signup-subtitle {
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  color: $gray-600;
+}
+
+.login-link {
+  color: #2563EB;
+  text-decoration: none;
+  margin-left: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color $transition-base;
+
+  &:hover {
+    color: #10B981;
+    text-decoration: underline;
+  }
+}
+
+.signup-form {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+
+  > * {
+    flex: 1 1 calc(50% - ($spacing-md / 2));
+    min-width: 180px;
+  }
+}
+
+.source-row {
+  align-items: center;
+}
+
+.field {
+  position: relative;
+}
+
+.source-label label {
+  font-size: $font-size-base;
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+  font-family: $font-family-base;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 2px solid $gray-200;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-family: $font-family-base;
+  transition: all 0.3s ease;
+  background: $white;
+  color: $gray-900;
+
+  &:hover {
+    border-color: $gray-300;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+::ng-deep .input-field-password {
+  width: 100%;
+}
+
+::ng-deep .input-field-password .p-password-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid $gray-200;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
+
+  &:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+}
+
+::ng-deep .custom-calendar {
+  width: 100%;
+}
+
+::ng-deep .custom-calendar .p-inputtext {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid $gray-200;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
+
+  &:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+}
+
+::ng-deep .custom-dropdown {
+  width: 100%;
+}
+
+::ng-deep .custom-dropdown .p-dropdown {
+  width: 100%;
+  border: 2px solid $gray-200;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
+
+  &:focus,
+  &.p-focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: $spacing-md 0;
+}
+
+::ng-deep .continue-button {
+  font-size: 15px;
+  padding: 11px 28px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2563EB 0%, #10B981 100%);
+  border: none;
+  color: $white;
+  border-radius: 10px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.terms-container {
+  text-align: center;
+  font-size: 11px;
+  color: $gray-600;
+  line-height: 1.5;
+}
+
+.terms-text {
+  margin: 0 0 6px 0;
+}
+
+.privacy-text {
+  margin: 0;
+  font-size: 10px;
+}
+
+.terms-link {
+  color: #2563EB;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color $transition-base;
+
+  &:hover {
+    color: #10B981;
+    text-decoration: underline;
+  }
+}
+
+// CAPTCHA Styles
+.captcha-container {
+  margin-bottom: $spacing-sm;
+}
+
+.captcha-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-sm;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 10px;
+  padding: $spacing-sm;
+  border: 2px solid $gray-200;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $gray-300;
+  }
+}
+
+.captcha-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: $border-radius-sm;
+}
+
+.captcha-loading {
+  padding: $spacing-lg;
+  text-align: center;
+  color: $gray-600;
+  font-size: $font-size-sm;
+}
+
+::ng-deep .captcha-refresh-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+
+  .p-button {
+    background: $white;
+    border: 2px solid $gray-200;
+    color: #2563EB;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &:hover:not(:disabled) {
+      background: #2563EB;
+      border-color: #2563EB;
+      color: $white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+
+      .p-button-icon {
+        transform: rotate(180deg);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .p-button-icon {
+      transition: transform 0.4s ease;
+    }
+  }
+}
+
+.captcha-input {
+  text-align: center;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0.1em;
+}
+
+// Message Styles
+::ng-deep .p-message {
+  margin-bottom: $spacing-lg;
+  width: 100%;
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .signup-card {
+    padding: $spacing-xl;
+  }
+
+  .signup-title {
+    font-size: $font-size-2xl;
+  }
+
+  .form-row {
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+
+    > * {
+      flex: 1 1 100%;
+    }
+  }
+
+  .source-row {
+    > * {
+      flex: 1 1 100%;
+    }
+  }
+
+  .source-label label {
+    display: block;
+    margin-bottom: $spacing-xs;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .signup-container {
+    padding: $spacing-md;
+  }
+
+  .signup-card {
+    padding: $spacing-lg;
+  }
+
+  .signup-title {
+    font-size: $font-size-xl;
+  }
+
+  .signup-subtitle {
+    margin-bottom: $spacing-lg;
+  }
+
+  ::ng-deep .continue-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
